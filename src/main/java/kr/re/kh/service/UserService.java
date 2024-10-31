@@ -124,6 +124,7 @@ public class UserService {
         newUser.setActive(false);
         newUser.setEmailVerified(true);
         newUser.setName(registerRequest.getName());
+        newUser.addRoles(getRolesForNewUser(false));
         return newUser;
     }
 
@@ -136,6 +137,7 @@ public class UserService {
         Set<Role> newUserRoles = new HashSet<>(roleService.findAll());
         if (!isToBeMadeAdmin) {
             newUserRoles.removeIf(Role::isAdminRole);
+            newUserRoles.removeIf(Role::isUserRole);
         }
         log.info("Setting user roles: " + newUserRoles);
         return newUserRoles;

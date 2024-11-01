@@ -43,7 +43,7 @@ spring:
   #      mode: always
   jpa:
     .hibernate:
-      ddl-auto: create
+      ddl-auto: none
     .generate-ddl: false
     .show-sql: true
     .database-platform: org.hibernate.dialect.Oracle12cDialect

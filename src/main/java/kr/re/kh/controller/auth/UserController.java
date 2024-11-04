@@ -27,6 +27,11 @@ public class UserController {
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @GetMapping("/test")
+    public String test(){
+        return String.valueOf(userService.findById(1L));
+    }
+
     /**
      * 현재 사용자의 프로필 리턴
      * @param currentUser

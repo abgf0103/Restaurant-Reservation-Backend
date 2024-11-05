@@ -1,6 +1,6 @@
 server:
   port: 8080
-  address=: 192.168.30.15
+  # address=: 192.168.30.15
   compression:
     enabled: true
   tomcat:
@@ -28,7 +28,7 @@ spring:
 #    url: ENC(-gL+MfIBpcqeppb9FauYZLazjQUNLQBVs8kdA6rqrpaLLvD4eK2ueaxn5xILCUO/D9jF+fyMJyz8=)
 #    username: ENC(FDovxwuzSqKFIByhxGOQoQ==)
 #    password: ENC(EFTlYROOJqqEUDRXV22oGg==)
-    url: jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
+    url: jdbc:log4jdbc:oracle:thin:@192.168.30.15:1521:xe
     username: C##FIN
     password: C##FIN
     type: com.zaxxer.hikari.HikariDataSource

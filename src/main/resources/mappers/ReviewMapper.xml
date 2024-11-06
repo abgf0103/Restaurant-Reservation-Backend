@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.re.kh.mapper.ReviewMapper">
+
+    <!-- 리뷰 목록 -->
+    <select id="selectReview" parameterType="SearchHelper" resultType="Review">
+        SELECT
+        review_id AS reviewId
+        , user_id AS userId
+        , store_id AS storeId
+        , rating
+        , review_comment AS reviewComment
+        , created_at AS createdAt
+        , updated_at AS updatedAt
+        , "LIKE" AS likeCount
+        FROM review
+        <where>
+            <if test="searchCode != null and searchCode != ''">
+                AND store_id = #{searchCode}
+            </if>
+            <if test="searchKeyword != null and searchKeyword != '' and searchType != null and searchType != ''">
+                AND ${searchType} LIKE '%' || #{searchKeyword} || '%'
+            </if>
+        </where>
+        ORDER BY review_id DESC
+    </select>
+
+    <!-- 리뷰 목록 카운트 -->
+    <select id="countReview" parameterType="SearchHelper" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+        <where>
+            <if test="searchCode != null and searchCode != ''">
+                AND store_id = #{searchCode}
+            </if>
+            <if test="searchKeyword != null and searchKeyword != '' and searchType != null and searchType != ''">
+                AND ${searchType} LIKE '%' || #{searchKeyword} || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 리뷰 저장 -->
+    <insert id="reviewSave" parameterType="Review" useGeneratedKeys="true" keyProperty="reviewId" keyColumn="REVIEW_ID">
+        INSERT INTO review (user_id, store_id, rating, review_comment, created_at, updated_at)
+        VALUES (
+        #{userId}
+        , #{storeId}
+        , #{rating}
+        , #{reviewComment}
+        , CURRENT_TIMESTAMP
+        , CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <!-- 리뷰 조회 -->
+    <select id="reviewInfo" parameterType="Long" resultType="Review">
+        SELECT
+        review_id AS reviewId
+        , user_id AS userId
+        , store_id AS storeId
+        , rating
+        , review_comment AS reviewComment
+        , created_at AS createdAt
+        , updated_at AS updatedAt
+        , "LIKE" AS likeCount
+        FROM review
+        WHERE review_id = #{reviewId}
+    </select>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="deleteReview" parameterType="Long">
+        DELETE FROM review
+        WHERE review_id = #{reviewId}
+    </delete>
+
+</mapper>

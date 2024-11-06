@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.re.kh.mapper.FileMapMapper">
+
+
+    <!--회원 생성-->
+    <insert id="memberJoin" parameterType="kr.re.kh.mapper.MemberVO">
+        INSERT INTO MEMBERSHIP (
+            email,
+            email_verified,
+            username,
+            password,
+            name,
+            isActive,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{email},
+            #{emailVerified},
+            #{username},
+            #{password},
+            #{name},
+            #{active},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <!-- 회원 조회 by ID -->
+    <select id="selectMemberById" parameterType="Long" resultType="kr.re.kh.model.vo.MemberVO">
+        SELECT
+        member_id AS memberId,
+        email,
+        email_verified AS emailVerified,
+        username,
+        password,
+        name,
+        active,
+        created_at AS createdAt,
+        updated_at AS updatedAt
+        FROM MEMBERSHIP
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 모든 회원 조회 -->
+    <select id="selectAllMembers" resultType="kr.re.kh.model.vo.MemberVO">
+        SELECT
+        member_id AS memberId,
+        email,
+        email_verified AS emailVerified,
+        username,
+        password,
+        name,
+        active,
+        created_at AS createdAt,
+        updated_at AS updatedAt
+        FROM MEMBERSHIP
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="updateMember" parameterType="kr.re.kh.model.vo.MemberVO">
+        UPDATE MEMBERSHIP
+        <set>
+            <if test="email != null">email = #{email},</if>
+            <if test="emailVerified != null">email_verified = #{emailVerified},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="active != null">active = #{active},</if>
+            updated_at = #{updatedAt}
+        </set>
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!-- 회원 삭제 (비활성화) -->
+    <update id="deleteMember" parameterType="Long">
+        UPDATE MEMBERSHIP
+        SET active = false,
+        updated_at = CURRENT_TIMESTAMP
+        WHERE member_id = #{memberId}
+    </update>
+
+</mapper>

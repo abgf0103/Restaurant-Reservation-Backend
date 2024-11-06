@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemberVO {
 
-    private Long memberId;
-    private String email;
-    private boolean emailVerified;
-    private String username;
-    private String password;
-    private String name;
-    private boolean active;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Long memberId; // 회원 아이디
+    private String email;  // 회원 이메일
+    private boolean emailVerified; // e-mail 인증
+    private String username; //회원 이름
+    private String password; //비밀번호
+    private String name; // 닉네임
+    private boolean isActive; //계정 활성화
+    private LocalDateTime createdAt; //가입시간
+    private LocalDateTime updatedAt; //수정시간
 
 }

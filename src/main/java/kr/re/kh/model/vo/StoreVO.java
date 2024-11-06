@@ -15,6 +15,6 @@ public class StoreVO {
     private String storeName;   //가게명
     private String address;     //주소
     private String storeHours;  //영업시간
-
-
+    private String storeStatus; //가게 상태 (준비중, 영업중)
+    private String phone;       //가게 연락처
 }

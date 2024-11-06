@@ -11,17 +11,10 @@ import java.util.List;
 @ToString
 public class MenuVO {
 
-    private Long id;
-    private int depth;
-    private String menuIcon;
-    private String menuLink;
+    private Long menuId;
+    private Long storeId;
     private String menuName;
-    private Long parentId;
-    private boolean isActive;
-    private boolean roleUser;
-    private boolean roleAdmin;
-    private boolean roleSystem;
-
-    private List<MenuVO> children;
+    private String description;
+    private int price;
 
 }

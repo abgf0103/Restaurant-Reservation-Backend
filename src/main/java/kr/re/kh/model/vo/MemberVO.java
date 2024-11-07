@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemberVO {
 
-    private Long memberId; // 회원 아이디
+    private Long userId; // 회원 아이디
     private String email;  // 회원 이메일
     private boolean emailVerified; // e-mail 인증
     private String username; //회원 이름

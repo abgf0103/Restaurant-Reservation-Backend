@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.re.kh.mapper.FileMapMapper">
+<mapper namespace="kr.re.kh.mapper.MemberMapper">
 
 
     <!--회원 생성-->
-    <insert id="memberJoin" parameterType="kr.re.kh.mapper.MemberVO">
+    <insert id="memberJoin" parameterType="MemberVO">
         INSERT INTO MEMBERSHIP (
             email,
             email_verified,
@@ -27,7 +27,7 @@
     </insert>
 
     <!-- 회원 조회 by ID -->
-    <select id="selectMemberById" parameterType="Long" resultType="kr.re.kh.model.vo.MemberVO">
+    <select id="selectMemberById" parameterType="Long" resultType="MemberVO">
         SELECT
         member_id AS memberId,
         email,
@@ -43,23 +43,23 @@
     </select>
 
     <!-- 모든 회원 조회 -->
-    <select id="selectAllMembers" resultType="kr.re.kh.model.vo.MemberVO">
+    <select id="selectAllMembers" resultType="MemberVO">
         SELECT
-        member_id AS memberId,
+        user_id AS userId,
         email,
-        email_verified AS emailVerified,
+        is_email_verified AS isEmailVerified,
         username,
         password,
         name,
-        active,
+        is_active AS isActive,
         created_at AS createdAt,
         updated_at AS updatedAt
-        FROM MEMBERSHIP
+        FROM USERS
         ORDER BY created_at DESC
     </select>
 
     <!-- 회원 정보 수정 -->
-    <update id="updateMember" parameterType="kr.re.kh.model.vo.MemberVO">
+    <update id="updateMember" parameterType="MemberVO">
         UPDATE MEMBERSHIP
         <set>
             <if test="email != null">email = #{email},</if>

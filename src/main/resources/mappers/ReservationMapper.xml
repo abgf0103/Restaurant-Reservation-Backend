@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.re.kh.mapper.ReservationMapper">
+
+    <!-- 예약 저장 -->
+    <insert id="insertReservation">
+        INSERT INTO reservation (
+        user_id,
+        store_id,
+        party_size,
+        reserve_status,
+        created_at,
+        updated_at
+        ) VALUES (
+        #{userId},
+        #{storeId},
+        #{partySize},
+        #{reserveStatus},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!-- 모든 예약 조회 -->
+    <select id="selectAllReservation" parameterType="SearchHelper" resultType="StoreVO">
+        SELECT *
+        FROM RESERVE
+    </select>
+
+    <!-- 특정 예약 조회 by ID -->
+    <select id="findReservationById" resultType="kr.re.kh.model.vo.ReservationVO">
+        SELECT * FROM reservation
+        WHERE reservation_id = #{reservationId}
+    </select>
+
+    <!-- 특정 사용자의 모든 예약 조회 -->
+    <select id="findAllReservationsByUserId" resultType="kr.re.kh.model.vo.ReservationVO">
+        SELECT * FROM reservation
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 특정 가게의 모든 예약 조회 -->
+    <select id="findAllReservationsByStoreId" resultType="kr.re.kh.model.vo.ReservationVO">
+        SELECT * FROM reservation
+        WHERE store_id = #{storeId}
+    </select>
+
+    <!-- 예약 업데이트 -->
+    <update id="updateReservation">
+        UPDATE reservation
+        SET party_size = #{partySize},
+            reserve_status = #{reserveStatus},
+            updated_at = NOW()
+        WHERE reservation_id = #{reservationId}
+    </update>
+
+    <!-- 예약 상태 업데이트 (가게 회원) -->
+    <update id="updateReservationStatus">
+        UPDATE reservation
+        SET reserve_status = #{status},
+            updated_at = NOW()
+        WHERE reservation_id = #{reservationId}
+    </update>
+
+    <!-- 예약 삭제 -->
+    <delete id="deleteReservation">
+        DELETE FROM reservation
+        WHERE reservation_id = #{reservationId}
+    </delete>
+
+</mapper>

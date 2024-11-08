@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/store")
+@RequestMapping("/api/store")
 @Slf4j
 public class StoreController {
     private final StoreService storeService;
@@ -35,7 +35,7 @@ public class StoreController {
     }
 
     @ApiOperation("가게 삭제")
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public void deleteStore(Long storeId) {
         storeService.deleteStore(storeId);
     }

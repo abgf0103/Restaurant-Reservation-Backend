@@ -30,14 +30,16 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest) {
-        // 인증된 사용자 정보를 통해 리뷰 객체 생성
         Long userID = currentUser.getId();
+        String username = currentUser.getUsername();  // USERNAME 가져오기
         Review review = Review.builder()
-                .userId(userID)  // 인증된 사용자의 ID를 사용
+                .userId(userID)
                 .storeId(reviewRequest.getStoreId())
                 .rating(reviewRequest.getRating())
                 .reviewComment(reviewRequest.getReviewComment())
+                .username(username)  // USERNAME 저장
                 .build();
+
         log.info(reviewRequest.toString());
         log.info(review.toString());
         reviewMapper.reviewSave(review);
@@ -56,3 +58,4 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.deleteReview(reviewId);
     }
 }
+

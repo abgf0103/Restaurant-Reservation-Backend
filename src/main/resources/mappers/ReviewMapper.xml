@@ -5,14 +5,15 @@
     <!-- 리뷰 목록 -->
     <select id="selectReview" parameterType="SearchHelper" resultType="Review">
         SELECT
-        review_id AS reviewId
-        , user_id AS userId
-        , store_id AS storeId
-        , rating
-        , review_comment AS reviewComment
-        , created_at AS createdAt
-        , updated_at AS updatedAt
-        , "LIKE" AS likeCount
+        review_id AS reviewId,
+        user_id AS userId,
+        store_id AS storeId,
+        rating,
+        review_comment AS reviewComment,
+        created_at AS createdAt,
+        updated_at AS updatedAt,
+        "LIKE" AS likeCount,
+        username  <!-- 추가된 부분: USERNAME -->
         FROM review
         <where>
             <if test="searchCode != null and searchCode != ''">
@@ -24,6 +25,7 @@
         </where>
         ORDER BY review_id DESC
     </select>
+
 
     <!-- 리뷰 목록 카운트 -->
     <select id="countReview" parameterType="SearchHelper" resultType="int">
@@ -41,16 +43,18 @@
 
     <!-- 리뷰 저장 -->
     <insert id="reviewSave" parameterType="Review" useGeneratedKeys="true" keyProperty="reviewId" keyColumn="REVIEW_ID">
-        INSERT INTO review (user_id, store_id, rating, review_comment, created_at, updated_at)
+        INSERT INTO review (user_id, store_id, rating, review_comment, created_at, updated_at, username)
         VALUES (
-        #{userId}
-        , #{storeId}
-        , #{rating}
-        , #{reviewComment}
-        , CURRENT_TIMESTAMP
-        , CURRENT_TIMESTAMP
+        #{userId},
+        #{storeId},
+        #{rating},
+        #{reviewComment},
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP,
+        #{username} <!-- USERNAME 추가 -->
         )
     </insert>
+
 
     <!-- 리뷰 조회 -->
     <select id="reviewInfo" parameterType="Long" resultType="Review">

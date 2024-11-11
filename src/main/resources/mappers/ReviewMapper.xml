@@ -26,6 +26,23 @@
         ORDER BY review_id DESC
     </select>
 
+    <!-- 리뷰 목록 (사용자별) -->
+    <select id="selectReviewsByUserId" parameterType="Long" resultType="Review">
+        SELECT
+        review_id AS reviewId,
+        user_id AS userId,
+        store_id AS storeId,
+        rating,
+        review_comment AS reviewComment,
+        created_at AS createdAt,
+        updated_at AS updatedAt,
+        username
+        FROM review
+        WHERE user_id = #{userId}
+        ORDER BY review_id DESC
+    </select>
+
+
 
     <!-- 리뷰 목록 카운트 -->
     <select id="countReview" parameterType="SearchHelper" resultType="int">

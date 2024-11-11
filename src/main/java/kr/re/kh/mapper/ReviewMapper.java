@@ -22,5 +22,6 @@ public interface ReviewMapper {
 
     void deleteReview(Long reviewId);
 
+    List<Review> selectReviewsByUserId(Long userId);
 }
 

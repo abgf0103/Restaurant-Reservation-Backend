@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 리뷰 관련 API를 처리하는 Controller
  */
@@ -32,6 +34,16 @@ public class ReviewController {
     public ResponseEntity<?> reviewList(@ModelAttribute SearchHelper request) {
         return ResponseEntity.ok(reviewService.selectReview(request));
     }
+
+    @ApiOperation("내가 작성한 리뷰 목록 조회")
+    @GetMapping("/my-reviews")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getMyReviews(@CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId();
+        List<Review> reviews = reviewService.getReviewsByUserId(userId);
+        return ResponseEntity.ok(reviews);
+    }
+
 
     @ApiOperation("리뷰 상세 조회")
     @GetMapping("/view/{id}")

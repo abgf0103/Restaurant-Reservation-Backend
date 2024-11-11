@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,12 @@ public class ReviewServiceImpl implements ReviewService {
         response.put("count", reviewMapper.countReview(searchHelper));
         return response;
     }
+
+    @Override
+    public List<Review> getReviewsByUserId(Long userId) {
+        return reviewMapper.selectReviewsByUserId(userId);
+    }
+
 
     @Override
     public void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest) {

@@ -6,6 +6,7 @@ import kr.re.kh.model.vo.Review;
 import kr.re.kh.model.vo.SearchHelper;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface ReviewService {
 
@@ -16,5 +17,8 @@ public interface ReviewService {
     HashMap<String, Object> reviewInfo(Long reviewId);
 
     void deleteReview(Long reviewId);
+
+    public List<Review> getReviewsByUserId(Long userId);
+
 
 }

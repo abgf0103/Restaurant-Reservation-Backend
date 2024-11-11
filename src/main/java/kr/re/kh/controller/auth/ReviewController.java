@@ -44,6 +44,15 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    @ApiOperation("리뷰 수정")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> updateReview(@PathVariable Long id, @RequestBody ReviewRequest reviewRequest) {
+        reviewService.updateReview(id, reviewRequest);
+        return ResponseEntity.ok(new ApiResponse(true, "리뷰가 수정되었습니다."));
+    }
+
+
 
     @ApiOperation("리뷰 상세 조회")
     @GetMapping("/view/{id}")

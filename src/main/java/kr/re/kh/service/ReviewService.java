@@ -20,5 +20,9 @@ public interface ReviewService {
 
     public List<Review> getReviewsByUserId(Long userId);
 
+    void updateReview(Long reviewId, ReviewRequest reviewRequest);
+
+
+
 
 }

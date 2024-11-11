@@ -1,5 +1,6 @@
 package kr.re.kh.service.impl;
 
+import kr.re.kh.exception.ResourceNotFoundException;
 import kr.re.kh.mapper.ReviewMapper;
 import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.payload.request.ReviewRequest;
@@ -33,6 +34,22 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getReviewsByUserId(Long userId) {
         return reviewMapper.selectReviewsByUserId(userId);
     }
+
+    @Override
+    public void updateReview(Long reviewId, ReviewRequest reviewRequest) {
+        // 해당 reviewId를 찾아서 Review를 업데이트
+        Review review = reviewMapper.reviewInfo(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "reviewId", reviewId));
+
+        review.setRating(reviewRequest.getRating());
+        review.setReviewComment(reviewRequest.getReviewComment());
+        review.setStoreId(reviewRequest.getStoreId());
+
+        reviewMapper.updateReview(review);
+    }
+
+
+
 
 
     @Override

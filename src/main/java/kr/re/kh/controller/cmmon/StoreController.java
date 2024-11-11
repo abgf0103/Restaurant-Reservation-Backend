@@ -39,4 +39,11 @@ public class StoreController {
     public void deleteStore(Long storeId) {
         storeService.deleteStore(storeId);
     }
+
+    @ApiOperation("가게 정보 조회")
+    @GetMapping("/view?storeId={storeId}")
+    public StoreVO viewStore(@PathVariable Long storeId) {
+        return storeService.viewStore(storeId);
+    }
+
 }

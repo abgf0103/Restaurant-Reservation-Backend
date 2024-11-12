@@ -56,6 +56,11 @@ public class StoreServiceImpl implements StoreService {
         storeMapper.deleteStore(storeId);
     }
 
+    /**
+     * 가게 조회
+     * @param storeId
+     * @return
+     */
     @Override
     public StoreVO viewStore(Long storeId) {
         return storeMapper.viewStore(storeId);

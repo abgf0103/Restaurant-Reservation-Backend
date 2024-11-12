@@ -125,6 +125,7 @@ public class UserService {
         newUser.setEmailVerified(true);
         newUser.setName(registerRequest.getName());
         newUser.addRoles(getRolesForNewUser(false));
+        newUser.setPhone(registerRequest.getPhone());
         return newUser;
     }
 
@@ -251,6 +252,7 @@ public class UserService {
     }
 
     public boolean saveUser(UserRegisterRequest registrationRequest) {
+        log.info(registrationRequest.toString());
         if (registrationRequest.getId() == 0) {
             // 저장
             if (registrationRequest.getUsername().isBlank()) {
@@ -273,6 +275,8 @@ public class UserService {
             }
             boolean usernameExists = userRepository.existsByUsername(registrationRequest.getUsername());
             boolean emailExists = userRepository.existsByEmail(registrationRequest.getEmail());
+            log.info(String.valueOf(usernameExists));
+            log.info(String.valueOf(emailExists));
             if (usernameExists) {
                 throw new BadRequestException("이미 사용중인 아이디입니다.");
             } else if (emailExists) {
@@ -293,6 +297,8 @@ public class UserService {
                     roleName = "ADMIN";
                 }
                 user.addRoles(getUserRoles(roleName));
+                user.setPhone(registrationRequest.getPhone());
+                log.info(user.toString());
                 userRepository.save(user);
                 return true;
             }
@@ -315,6 +321,7 @@ public class UserService {
             user.setName(registrationRequest.getName());
             user.setActive(registrationRequest.isActive());
             user.setEmailVerified(true);
+            user.setPhone(registrationRequest.getPhone());
             String roleNum = registrationRequest.getRoleNum();
             String roleName = "USER";
             if (roleNum.equals("3")) {

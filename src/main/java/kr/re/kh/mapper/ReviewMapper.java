@@ -14,7 +14,7 @@ public interface ReviewMapper {
 
     int countReview(SearchHelper searchHelper);
 
-    void reviewSave(Review review);
+    void reviewSave(Review review);  // REVIEW에 USERNAME 포함
 
     Optional<Review> reviewInfo(Long reviewId);
 
@@ -22,4 +22,6 @@ public interface ReviewMapper {
 
     void deleteReview(Long reviewId);
 
+    List<Review> selectReviewsByUserId(Long userId);
 }
+

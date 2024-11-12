@@ -1,5 +1,6 @@
 package kr.re.kh.service.impl;
 
+import kr.re.kh.exception.ResourceNotFoundException;
 import kr.re.kh.mapper.ReviewMapper;
 import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.payload.request.ReviewRequest;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,15 +31,39 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<Review> getReviewsByUserId(Long userId) {
+        return reviewMapper.selectReviewsByUserId(userId);
+    }
+
+    @Override
+    public void updateReview(Long reviewId, ReviewRequest reviewRequest) {
+        // 해당 reviewId를 찾아서 Review를 업데이트
+        Review review = reviewMapper.reviewInfo(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "reviewId", reviewId));
+
+        review.setRating(reviewRequest.getRating());
+        review.setReviewComment(reviewRequest.getReviewComment());
+        review.setStoreId(reviewRequest.getStoreId());
+
+        reviewMapper.updateReview(review);
+    }
+
+
+
+
+
+    @Override
     public void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest) {
-        // 인증된 사용자 정보를 통해 리뷰 객체 생성
         Long userID = currentUser.getId();
+        String username = currentUser.getUsername();  // USERNAME 가져오기
         Review review = Review.builder()
-                .userId(userID)  // 인증된 사용자의 ID를 사용
+                .userId(userID)
                 .storeId(reviewRequest.getStoreId())
                 .rating(reviewRequest.getRating())
                 .reviewComment(reviewRequest.getReviewComment())
+                .username(username)  // USERNAME 저장
                 .build();
+
         log.info(reviewRequest.toString());
         log.info(review.toString());
         reviewMapper.reviewSave(review);
@@ -56,3 +82,4 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.deleteReview(reviewId);
     }
 }
+

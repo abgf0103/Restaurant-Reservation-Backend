@@ -23,5 +23,6 @@ public class Review {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;  // UPDATED_AT
     private Integer likeCount;    // LIKE (LIKES)
-
+    private String username;      // 추가된 USERNAME 필드
 }
+

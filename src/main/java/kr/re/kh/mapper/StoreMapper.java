@@ -13,4 +13,5 @@ public interface StoreMapper {
     void updateStore(StoreVO storeVO);
     void deleteStore(Long storeId);
 
+    StoreVO viewStore(Long storeId);
 }

@@ -48,4 +48,11 @@
         WHERE STORE_ID = #{storeId}
     </delete>
 
+    <!-- 가게 조회 -->
+    <select id="viewStore"
+            parameterType="Long">
+        SELECT *
+        FROM STORE
+        WHERE STORE_ID = #{storeId}
+    </select>
 </mapper>

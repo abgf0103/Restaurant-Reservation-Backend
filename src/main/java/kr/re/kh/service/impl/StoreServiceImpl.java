@@ -55,4 +55,9 @@ public class StoreServiceImpl implements StoreService {
     public void deleteStore(Long storeId) {
         storeMapper.deleteStore(storeId);
     }
+
+    @Override
+    public StoreVO viewStore(Long storeId) {
+        return storeMapper.viewStore(storeId);
+    }
 }

@@ -10,4 +10,6 @@ public interface StoreService {
     List<StoreVO> selectAllStore();
     void updateStore(StoreVO store);
     void deleteStore(Long storeId);
+
+    StoreVO viewStore(Long storeId);
 }

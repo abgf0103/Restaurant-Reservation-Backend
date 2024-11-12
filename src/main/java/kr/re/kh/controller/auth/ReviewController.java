@@ -14,22 +14,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 리뷰 관련 API를 처리하는 Controller
  */
 @RestController
 @RequestMapping("/api/review")
+@CrossOrigin(origins = "http://localhost:3000") // React 앱의 URL
 @Slf4j
 @AllArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    /**
-     * 리뷰 목록 조회
-     * @param request 검색 조건
-     * @return 리뷰 목록과 카운트
-     */
     @ApiOperation("리뷰 목록 조회")
     @GetMapping("/list")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
@@ -37,11 +35,25 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.selectReview(request));
     }
 
-    /**
-     * 리뷰 상세 조회
-     * @param id 리뷰 ID
-     * @return 리뷰 상세 정보
-     */
+    @ApiOperation("내가 작성한 리뷰 목록 조회")
+    @GetMapping("/my-reviews")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getMyReviews(@CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId();
+        List<Review> reviews = reviewService.getReviewsByUserId(userId);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @ApiOperation("리뷰 수정")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> updateReview(@PathVariable Long id, @RequestBody ReviewRequest reviewRequest) {
+        reviewService.updateReview(id, reviewRequest);
+        return ResponseEntity.ok(new ApiResponse(true, "리뷰가 수정되었습니다."));
+    }
+
+
+
     @ApiOperation("리뷰 상세 조회")
     @GetMapping("/view/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
@@ -49,26 +61,14 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.reviewInfo(id));
     }
 
-    /**
-     * 리뷰 저장
-     * @param currentUser 인증된 사용자
-     * @param reviewRequest 리뷰 요청 데이터
-     * @return 저장된 결과
-     */
     @ApiOperation("리뷰 저장")
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> reviewSave(@CurrentUser CustomUserDetails currentUser, @RequestBody ReviewRequest reviewRequest) {
-        // 인증된 사용자 정보와 리뷰 요청을 기반으로 리뷰 저장
         reviewService.saveReview(currentUser, reviewRequest);
         return ResponseEntity.ok(new ApiResponse(true, "저장 되었습니다."));
     }
 
-    /**
-     * 리뷰 삭제
-     * @param id 리뷰 ID
-     * @return 삭제된 결과
-     */
     @ApiOperation("리뷰 삭제")
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")

@@ -41,7 +41,7 @@ public class StoreController {
     }
 
     @ApiOperation("가게 정보 조회")
-    @GetMapping("/view?storeId={storeId}")
+    @GetMapping("/view/{storeId}")
     public StoreVO viewStore(@PathVariable Long storeId) {
         return storeService.viewStore(storeId);
     }

@@ -21,4 +21,6 @@ public class StoreVO {
     private String phone;               //가게 연락처
     private LocalDateTime createdAt;    //등록 시간
     private LocalDateTime updatedAt;    //수정 시간
+    private String description;         //가게 소개글
+
 }

@@ -54,6 +54,7 @@ public class StoreController {
         return storeService.viewStore(storeId);
     }
 
+    @ApiOperation("내 가게 조회")
     @GetMapping("/mystore")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     //사업자 사용자만 요청 가능하게 수정
@@ -61,6 +62,12 @@ public class StoreController {
         Long userId = currentUser.getId();
         List<StoreVO> myStores = storeService.selectMyStoreByUserId(userId);
         return ResponseEntity.ok(myStores);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchStore(@ModelAttribute StoreVO storeVO) {
+
+        return null;
     }
 
 }

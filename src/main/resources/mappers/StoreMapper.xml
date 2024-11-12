@@ -6,6 +6,12 @@
     <select id="selectAllStore" parameterType="SearchHelper" resultType="StoreVO">
         SELECT *
         FROM STORE
+<!--        <where>-->
+<!--            <if test="searchKeyword != null and searchKeyword != '' and searchType != null and searchType != ''">-->
+<!--                AND S.STORE_NAME LIKE || #{searchKeyword} || '%'-->
+<!--            </if>-->
+<!--        </where>-->
+--         ORDER BY S.STORE_ID DESC
     </select>
 
     <!-- 가게 등록 -->
@@ -60,6 +66,7 @@
         WHERE STORE_ID = #{storeId}
     </select>
 
+    <!-- 내 가게 조회 -->
     <select id="selectMyStoreByUserId"
             parameterType="Long"
             resultType="StoreVO">
@@ -67,4 +74,11 @@
         FROM STORE
         WHERE USER_ID = #{userId}
     </select>
+
+    <!-- 가게 검색 -->
+    <select id="searchStore">
+        SELECT
+    </select>
+
+
 </mapper>

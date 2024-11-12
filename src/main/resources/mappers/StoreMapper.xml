@@ -59,4 +59,12 @@
         FROM STORE
         WHERE STORE_ID = #{storeId}
     </select>
+
+    <select id="selectMyStoreByUserId"
+            parameterType="Long"
+            resultType="StoreVO">
+        SELECT *
+        FROM STORE
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>

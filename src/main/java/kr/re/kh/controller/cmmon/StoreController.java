@@ -1,12 +1,20 @@
 package kr.re.kh.controller.cmmon;
 
 import io.swagger.annotations.ApiOperation;
+import kr.re.kh.annotation.CurrentUser;
+import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.vo.StoreVO;
 import kr.re.kh.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * 가게 정보 Controller
+ */
 @RestController
 @RequestMapping("/api/store")
 @Slf4j
@@ -44,6 +52,15 @@ public class StoreController {
     @GetMapping("/view/{storeId}")
     public StoreVO viewStore(@PathVariable Long storeId) {
         return storeService.viewStore(storeId);
+    }
+
+    @GetMapping("/mystore")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    //사업자 사용자만 요청 가능하게 수정
+    public ResponseEntity<?> getMyStore(@CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId();
+        List<StoreVO> myStores = storeService.selectMyStoreByUserId(userId);
+        return ResponseEntity.ok(myStores);
     }
 
 }

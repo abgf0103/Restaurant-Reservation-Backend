@@ -12,4 +12,6 @@ public interface StoreService {
     void deleteStore(Long storeId);
 
     StoreVO viewStore(Long storeId);
+
+    List<StoreVO> selectMyStoreByUserId(Long userId);
 }

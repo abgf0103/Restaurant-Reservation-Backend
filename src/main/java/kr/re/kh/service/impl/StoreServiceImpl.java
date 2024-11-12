@@ -65,4 +65,10 @@ public class StoreServiceImpl implements StoreService {
     public StoreVO viewStore(Long storeId) {
         return storeMapper.viewStore(storeId);
     }
+
+
+    @Override
+    public List<StoreVO> selectMyStoreByUserId(Long userId) {
+        return storeMapper.selectMyStoreByUserId(userId);
+    }
 }

@@ -27,5 +27,8 @@ public interface ReviewService {
     void unlikeReview(Long reviewId, Long userId);
 
     boolean isReviewLikedByUser(Long reviewId, Long userId);
+
+    // 새로운 메서드: username으로 리뷰 조회
+    HashMap<String, Object> getReviewsByUsername(String username);
 }
 

@@ -52,8 +52,6 @@ public class ReviewController {
         return ResponseEntity.ok(new ApiResponse(true, "리뷰가 수정되었습니다."));
     }
 
-
-
     @ApiOperation("리뷰 상세 조회")
     @GetMapping("/view/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
@@ -72,8 +70,70 @@ public class ReviewController {
     @ApiOperation("리뷰 삭제")
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
-    public ResponseEntity<?> reviewDelete(@PathVariable Long id) {
-        reviewService.deleteReview(id);
-        return ResponseEntity.ok(new ApiResponse(true, "삭제 되었습니다."));
+    public ResponseEntity<?> deleteReview(@PathVariable Long id,
+                                          @RequestParam Long userId, // 쿼리 파라미터로 userId 받기
+                                          @CurrentUser CustomUserDetails currentUser) {
+        // 요청을 받았을 때 로그 출력
+        System.out.println("리뷰 삭제 요청 received");
+        System.out.println("리뷰 ID: " + id);
+        System.out.println("사용자 ID: " + userId);
+        System.out.println("현재 사용자 ID (JWT): " + currentUser.getId());
+
+
+        // 사용자 정보 검증
+        if (!currentUser.getId().equals(userId)) {
+            return ResponseEntity.status(403).body(new ApiResponse(false, "사용자 권한이 일치하지 않습니다."));
+        }
+
+        try {
+            reviewService.deleteReview(id, userId);
+            return ResponseEntity.ok(new ApiResponse(true, "리뷰가 성공적으로 삭제되었습니다."));
+        } catch (Exception e) {
+            e.printStackTrace(); // 오류 발생 시 스택 트레이스를 출력하여 디버깅
+            return ResponseEntity.status(500).body(new ApiResponse(false, "리뷰 삭제에 실패했습니다."));
+        }
+    }
+
+
+
+
+    @ApiOperation("리뷰 좋아요")
+    @PostMapping("/like/{reviewId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> likeReview(@PathVariable Long reviewId, @CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId(); // 로그인된 사용자 ID
+
+        // 리뷰 좋아요 처리
+        boolean result = reviewService.likeReview(reviewId, userId);
+        return ResponseEntity.ok(new ApiResponse(result, result ? "좋아요 처리되었습니다." : "이미 추가한 좋아요 입니다."));
+    }
+
+    @ApiOperation("리뷰 좋아요 취소")
+    @DeleteMapping("/unlike/{reviewId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> unlikeReview(@PathVariable Long reviewId, @CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId(); // 로그인된 사용자 ID
+
+        try {
+            // 리뷰 좋아요 취소 처리
+            reviewService.unlikeReview(reviewId, userId);
+            return ResponseEntity.ok(new ApiResponse(true, "좋아요 취소되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "좋아요 취소 중 오류 발생: " + e.getMessage()));
+        }
+    }
+
+    @ApiOperation("리뷰 좋아요 상태 확인")
+    @GetMapping("/likes/status")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getLikeStatus(@RequestParam Long reviewId, @CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId(); // 로그인된 사용자의 ID
+
+        // 좋아요 상태 확인
+        boolean isLiked = reviewService.isReviewLikedByUser(reviewId, userId);
+
+        return ResponseEntity.ok(isLiked);
     }
 }
+
+

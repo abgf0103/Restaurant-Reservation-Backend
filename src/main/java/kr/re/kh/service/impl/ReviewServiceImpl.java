@@ -1,5 +1,6 @@
 package kr.re.kh.service.impl;
 
+import kr.re.kh.exception.BadRequestException;
 import kr.re.kh.exception.ResourceNotFoundException;
 import kr.re.kh.mapper.ReviewMapper;
 import kr.re.kh.model.CustomUserDetails;
@@ -32,12 +33,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getReviewsByUserId(Long userId) {
-        return reviewMapper.selectReviewsByUserId(userId);
+        List<Review> reviews = reviewMapper.selectReviewsByUserId(userId);
+
+        // 각 리뷰에 대한 좋아요 수를 설정
+        for (Review review : reviews) {
+            int likeCount = reviewMapper.countLikes(review.getReviewId(), userId); // 현재 사용자가 좋아요를 눌렀는지 체크
+            review.setLikeCount(likeCount); // Review 객체에 likeCount 설정
+        }
+
+        return reviews;
     }
 
     @Override
     public void updateReview(Long reviewId, ReviewRequest reviewRequest) {
-        // 해당 reviewId를 찾아서 Review를 업데이트
         Review review = reviewMapper.reviewInfo(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", "reviewId", reviewId));
 
@@ -47,10 +55,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewMapper.updateReview(review);
     }
-
-
-
-
 
     @Override
     public void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest) {
@@ -78,8 +82,40 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId, Long userId) {
+        // 1. REVIEW_LIKE 테이블에서 해당 리뷰의 좋아요 데이터 삭제
+        reviewMapper.deleteReviewLikes(reviewId);
+
+        // 2. REVIEW 테이블에서 해당 리뷰 삭제
         reviewMapper.deleteReview(reviewId);
     }
-}
 
+    @Override
+    public boolean likeReview(Long reviewId, Long userId) {
+        // 이미 좋아요를 눌렀는지 체크
+        int count = reviewMapper.countLikes(reviewId, userId);
+        if (count == 0) {
+            // 좋아요 추가
+            reviewMapper.likeReview(reviewId, userId);
+            // REVIEW 테이블의 LIKE 컬럼 업데이트
+            reviewMapper.incrementLikeCount(reviewId);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void unlikeReview(Long reviewId, Long userId) {
+        // 좋아요 취소
+        reviewMapper.unlikeReview(reviewId, userId);
+        // REVIEW 테이블의 LIKE 수 감소
+        reviewMapper.decrementLikeCount(reviewId);
+    }
+
+    @Override
+    public boolean isReviewLikedByUser(Long reviewId, Long userId) {
+        int count = reviewMapper.countLikes(reviewId, userId);
+        return count > 0;
+    }
+}

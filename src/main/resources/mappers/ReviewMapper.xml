@@ -144,6 +144,21 @@
         WHERE review_id = #{reviewId}
     </update>
 
+    <!-- 새로운 쿼리: username으로 리뷰 목록 조회 -->
+    <select id="getReviewsByUsername" parameterType="String" resultType="Review">
+        SELECT
+        review_id AS reviewId,
+        user_id AS userId,
+        store_id AS storeId,
+        rating,
+        review_comment AS reviewComment,
+        created_at AS createdAt,
+        updated_at AS updatedAt,
+        username
+        FROM review
+        WHERE username = #{username}
+        ORDER BY created_at DESC
+    </select>
 
 
 </mapper>

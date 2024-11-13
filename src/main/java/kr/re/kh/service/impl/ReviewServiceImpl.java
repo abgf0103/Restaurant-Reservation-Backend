@@ -118,4 +118,13 @@ public class ReviewServiceImpl implements ReviewService {
         int count = reviewMapper.countLikes(reviewId, userId);
         return count > 0;
     }
+
+    // 새로운 메서드: username으로 리뷰 조회
+    @Override
+    public HashMap<String, Object> getReviewsByUsername(String username) {
+        HashMap<String, Object> response = new HashMap<>();
+        List<Review> reviews = reviewMapper.getReviewsByUsername(username); // Mapper 호출
+        response.put("data", reviews); // 리뷰 목록을 'data'로 반환
+        return response;
+    }
 }

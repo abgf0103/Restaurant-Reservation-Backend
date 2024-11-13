@@ -42,5 +42,8 @@ public interface ReviewMapper {
 
     // REVIEW 테이블의  LIKE 수 감소
     void decrementLikeCount(Long reviewId);  // LIKE 수를 1 감소
+
+    // 새로운 메서드: username으로 리뷰 조회
+    List<Review> getReviewsByUsername(String username);
 }
 

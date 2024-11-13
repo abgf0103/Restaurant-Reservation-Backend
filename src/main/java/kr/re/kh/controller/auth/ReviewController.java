@@ -134,6 +134,15 @@ public class ReviewController {
 
         return ResponseEntity.ok(isLiked);
     }
+
+    //  username으로 특정 사용자의 리뷰 조회
+    @ApiOperation("특정 사용자 리뷰 목록 조회 (username 기준)")
+    @GetMapping("/view-by-username/{username}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getReviewsByUsername(@PathVariable String username) {
+        log.info("Fetching reviews for username: " + username); // 로그 추가
+        return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
+    }
 }
 
 

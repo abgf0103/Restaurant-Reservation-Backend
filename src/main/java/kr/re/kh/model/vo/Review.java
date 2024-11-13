@@ -25,4 +25,3 @@ public class Review {
     private Integer likeCount;    // LIKE (LIKES)
     private String username;      // 추가된 USERNAME 필드
 }
-

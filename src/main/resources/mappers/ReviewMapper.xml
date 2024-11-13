@@ -95,10 +95,55 @@
         WHERE review_id = #{reviewId}
     </select>
 
+    <!-- 리뷰 좋아요 삭제 -->
+    <delete id="deleteReviewLikes" parameterType="Long">
+        DELETE FROM review_like
+        WHERE review_id = #{reviewId}
+    </delete>
+
     <!-- 리뷰 삭제 -->
     <delete id="deleteReview" parameterType="Long">
         DELETE FROM review
         WHERE review_id = #{reviewId}
     </delete>
+
+
+    <!-- 리뷰 좋아요 추가 -->
+    <insert id="likeReview" parameterType="map">
+        INSERT INTO review_like (review_id, user_id)
+        VALUES (#{reviewId}, #{userId})
+    </insert>
+
+    <!-- 리뷰 좋아요 취소 -->
+    <delete id="unlikeReview" parameterType="map">
+        DELETE FROM review_like
+        WHERE review_id = #{reviewId} AND user_id = #{userId}
+    </delete>
+
+    <!-- 리뷰 좋아요 존재 여부 확인 -->
+    <select id="countLikes" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM review_like
+        WHERE review_id = #{reviewId} AND user_id = #{userId}
+    </select>
+
+    <!-- 좋아요 수 증가 -->
+    <update id="incrementLikeCount" parameterType="Long">
+        UPDATE review
+        SET "LIKE" = "LIKE" + 1
+        WHERE review_id = #{reviewId}
+    </update>
+
+    <!-- 좋아요 수 감소 -->
+    <update id="decrementLikeCount" parameterType="Long">
+        UPDATE review
+        SET "LIKE" = CASE
+        WHEN "LIKE" > 0 THEN "LIKE" - 1
+        ELSE 0
+        END
+        WHERE review_id = #{reviewId}
+    </update>
+
+
 
 </mapper>

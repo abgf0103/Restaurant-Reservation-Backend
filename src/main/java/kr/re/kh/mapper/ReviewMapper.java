@@ -20,8 +20,27 @@ public interface ReviewMapper {
 
     void updateReview(Review review);
 
+    // 리뷰 좋아요 삭제
+    void deleteReviewLikes(Long reviewId);
+
+    // 리뷰 삭제
     void deleteReview(Long reviewId);
 
     List<Review> selectReviewsByUserId(Long userId);
+
+    // 좋아요 추가
+    void likeReview(Long reviewId, Long userId);
+
+    // 좋아요 취소
+    void unlikeReview(Long reviewId, Long userId);
+
+    // 좋아요 존재 여부 확인
+    int countLikes(Long reviewId, Long userId);
+
+    // REVIEW 테이블의 LIKE 수 증가
+    void incrementLikeCount(Long reviewId);  // REVIEW 테이블의 LIKE 수 증가
+
+    // REVIEW 테이블의  LIKE 수 감소
+    void decrementLikeCount(Long reviewId);  // LIKE 수를 1 감소
 }
 

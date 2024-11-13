@@ -16,13 +16,16 @@ public interface ReviewService {
 
     HashMap<String, Object> reviewInfo(Long reviewId);
 
-    void deleteReview(Long reviewId);
+    void deleteReview(Long reviewId, Long userId);
 
-    public List<Review> getReviewsByUserId(Long userId);
+    List<Review> getReviewsByUserId(Long userId);
 
     void updateReview(Long reviewId, ReviewRequest reviewRequest);
 
+    boolean likeReview(Long reviewId, Long userId);
 
+    void unlikeReview(Long reviewId, Long userId);
 
-
+    boolean isReviewLikedByUser(Long reviewId, Long userId);
 }
+

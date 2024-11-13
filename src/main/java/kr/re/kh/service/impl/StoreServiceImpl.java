@@ -57,6 +57,43 @@ public class StoreServiceImpl implements StoreService {
     }
 
     /**
+     * 가게 이름 중복 조회
+     * @param storeName
+     * @return
+     */
+    @Override
+    public boolean hasStoreName(String storeName) {
+        return storeMapper.hasStoreName(storeName);
+    }
+
+    /**
+     * 가게 등록 수락(관리자)
+     * @param storeId
+     */
+    @Override
+    public void acceptStoreRegister(Long storeId) {
+        storeMapper.acceptStoreRegister(storeId);
+    }
+
+    /**
+     * 가게 삭제 요청(사업자)
+     * @param storeId
+     */
+    @Override
+    public void requestStoreDelete(Long storeId) {
+        storeMapper.requestStoreDelete(storeId);
+    }
+
+    /**
+     * 가게 삭제 수락(관리자)
+     * @param storeId
+     */
+    @Override
+    public void acceptStoreDelete(Long storeId) {
+        storeMapper.acceptStoreDelete(storeId);
+    }
+
+    /**
      * 가게 조회
      * @param storeId
      * @return

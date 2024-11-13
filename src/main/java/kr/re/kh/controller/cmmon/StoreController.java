@@ -64,6 +64,32 @@ public class StoreController {
         return ResponseEntity.ok(myStores);
     }
 
+    @ApiOperation("가게 이름 중복 조회")
+    @GetMapping("/hasStoreName")
+    public boolean hasStoreName(@RequestParam String storeName) {
+        return storeService.hasStoreName(storeName);
+    }
+
+    @ApiOperation("가게 등록 수락(관리자)")
+    @GetMapping("/acceptStoreRegister")
+    public void acceptStoreRegister(@RequestParam Long storeId) {
+        storeService.acceptStoreRegister(storeId);
+    }
+
+    @ApiOperation("가게 삭제 요청(사업자)")
+    @GetMapping("/requestStoreDelete")
+    public void requestStoreDelete(@RequestParam Long storeId) {
+        storeService.requestStoreDelete(storeId);
+    }
+
+    @ApiOperation("가게 삭제 수락(관리자)")
+    @GetMapping("/acceptStoreDelete")
+    public void acceptStoreDelete(@RequestParam Long storeId) {
+        storeService.acceptStoreDelete(storeId);
+    }
+
+
+    @ApiOperation("검색")
     @PostMapping("/search")
     public ResponseEntity<?> searchStore(@ModelAttribute StoreVO storeVO) {
 

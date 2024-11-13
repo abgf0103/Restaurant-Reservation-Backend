@@ -12,6 +12,7 @@
         R.review_comment AS reviewComment,
         R.created_at AS createdAt,
         R.updated_at AS updatedAt,
+        R."LIKE" AS likeCount,
         R.username,
         S.store_name AS storeName  <!-- STORE 테이블에서 store_name을 가져옴 -->
         FROM review R
@@ -39,9 +40,10 @@
         R.created_at AS createdAt,
         R.updated_at AS updatedAt,
         R.username,
-        S.store_name AS storeName  <!-- STORE 테이블에서 store_name을 가져옴 -->
+        R."LIKE" AS likeCount,  <!-- LIKE 컬럼을 likeCount로 별칭 지정 -->
+        S.store_name AS storeName
         FROM review R
-        LEFT JOIN store S ON R.store_id = S.store_id  <!-- STORE 테이블과 조인 -->
+        LEFT JOIN store S ON R.store_id = S.store_id
         <where>
             AND R.user_id = #{userId}
         </where>
@@ -85,6 +87,8 @@
         #{username} <!-- USERNAME 추가 -->
         )
     </insert>
+
+
 
 
     <!-- 리뷰 조회 -->

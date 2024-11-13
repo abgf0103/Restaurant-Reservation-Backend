@@ -30,5 +30,7 @@ public interface ReviewService {
 
     // 새로운 메서드: username으로 리뷰 조회
     HashMap<String, Object> getReviewsByUsername(String username);
+
+
 }
 

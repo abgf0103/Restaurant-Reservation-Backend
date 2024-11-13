@@ -16,6 +16,7 @@ public class Review {
     private Long reviewId;        // REVIEW_ID
     private Long userId;          // USER_ID
     private Long storeId;         // STORE_ID
+    private String storeName;     // 추가된 storeName 필드
     private Double rating;        // RATING
     private String reviewComment; // REVIEW_COMMENT
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -23,5 +24,6 @@ public class Review {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;  // UPDATED_AT
     private Integer likeCount;    // LIKE (LIKES)
-    private String username;      // 추가된 USERNAME 필드
+    private String username;      // USERNAME (사용자 이름)
+
 }

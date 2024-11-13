@@ -13,8 +13,12 @@ public interface StoreMapper {
     void updateStore(StoreVO storeVO);                  //가게 수정
     void deleteStore(Long storeId);                     //가게 삭제
 
-    StoreVO viewStore(Long storeId);                    //가게ID로 가게 조회
+    boolean hasStoreName(String storeName);             //가게 이름 중복 조회
+    void acceptStoreRegister(Long storeId);             //가게 등록 수락(관리자)
+    void requestStoreDelete(Long storeId);              //가게 삭제 요청(사업자)
+    void acceptStoreDelete(Long storeId);               //가게 삭제 수락(관리자)
 
+    StoreVO viewStore(Long storeId);                    //가게ID로 가게 조회
     List<StoreVO> selectMyStoreByUserId(Long userId);   //유저ID로 가게 조회
 
 }

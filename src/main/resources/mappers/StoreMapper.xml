@@ -6,12 +6,13 @@
     <select id="selectAllStore" parameterType="SearchHelper" resultType="StoreVO">
         SELECT *
         FROM STORE
+        WHERE IS_ACTIVE = 1
 <!--        <where>-->
 <!--            <if test="searchKeyword != null and searchKeyword != '' and searchType != null and searchType != ''">-->
 <!--                AND S.STORE_NAME LIKE || #{searchKeyword} || '%'-->
 <!--            </if>-->
 <!--        </where>-->
---         ORDER BY S.STORE_ID DESC
+        ORDER BY STORE_ID DESC
     </select>
 
     <!-- 가게 등록 -->
@@ -38,15 +39,15 @@
             parameterType="StoreVO">
         UPDATE STORE
             <set>
-                <if test="storeName != null">STORE_NAME = {storeName}, </if>
-                <if test="storeName != null">ADDRESS = {address}, </if>
-                <if test="storeName != null">STORE_HOURS = {storeHours}, </if>
-                <if test="storeName != null">STORE_STATUS = {storeStatus}, </if>
-                <if test="storeName != null">PHONE = {phone}, </if>
-                <if test="storeName != null">DESCRIPTION = {description}, </if>
-                UPDATED_AT = #{updatedAt}
+                <if test="storeName != null">STORE_NAME = #{storeName}, </if>
+                <if test="address != null">ADDRESS = #{address}, </if>
+                <if test="storeHours != null">STORE_HOURS = #{storeHours}, </if>
+                <if test="storeStatus != null">STORE_STATUS = #{storeStatus}, </if>
+                <if test="phone != null">PHONE = #{phone}, </if>
+                <if test="description != null">DESCRIPTION = #{description}, </if>
+                UPDATED_AT = CURRENT_TIMESTAMP
             </set>
---         WHERE STORE_ID = #{storeId};
+        WHERE STORE_ID = #{storeId}
     </update>
 
 
@@ -57,13 +58,50 @@
         WHERE STORE_ID = #{storeId}
     </delete>
 
-    <!-- 가게 조회 -->
+
+
+    <!-- 가게 등록/수정시 가게 이름 체크를 위한 가게 이름 중복 조회(삭제처리된 가게이름은 제외) -->
+    <select id="hasStoreName"
+            parameterType="String"
+            resultType="boolean">
+        SELECT COUNT(*)
+        FROM STORE
+        WHERE STORE_NAME = #{storeName} AND IS_ACTIVE IN (0, 1)
+    </select>
+
+    <!-- 가게등록 요청 수락(관리자) -->
+    <update id="acceptStoreRegister"
+            parameterType="Long">
+        UPDATE STORE
+        SET IS_ACTIVE = 1   --가게 활성화
+        WHERE STORE_ID = #{storeId}
+    </update>
+    
+    <!-- 가게삭제 요청(사업자) -->
+    <update id="requestStoreDelete"
+            parameterType="Long">
+        UPDATE STORE
+        SET IS_ACTIVE = 2   --가게 비활성화(삭제요청)
+        WHERE STORE_ID = #{storeId}
+    </update>
+
+    <!-- 가게삭제 요청 수락(관리자) -->
+    <update id="acceptStoreDelete"
+            parameterType="Long">
+        UPDATE STORE
+        SET IS_ACTIVE = 3   --가게 삭제처리
+        WHERE STORE_ID = #{storeId}
+    </update>
+
+
+
+    <!-- 특정 가게 조회 -->
     <select id="viewStore"
             parameterType="Long"
             resultType="StoreVO">
         SELECT *
         FROM STORE
-        WHERE STORE_ID = #{storeId}
+        WHERE STORE_ID = #{storeId} AND IS_ACTIVE = 1
     </select>
 
     <!-- 내 가게 조회 -->
@@ -72,8 +110,10 @@
             resultType="StoreVO">
         SELECT *
         FROM STORE
-        WHERE USER_ID = #{userId}
+        WHERE USER_ID = #{userId} AND IS_ACTIVE = 1
     </select>
+
+
 
     <!-- 가게 검색 -->
     <select id="searchStore">

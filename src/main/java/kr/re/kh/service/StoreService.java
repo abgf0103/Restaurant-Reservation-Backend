@@ -6,12 +6,16 @@ import kr.re.kh.model.vo.StoreVO;
 import java.util.List;
 
 public interface StoreService {
-    void insertStore(StoreVO store);
-    List<StoreVO> selectAllStore();
-    void updateStore(StoreVO store);
-    void deleteStore(Long storeId);
+    void insertStore(StoreVO store);                    //가게 등록
+    List<StoreVO> selectAllStore();                     //모든 가게 조회
+    void updateStore(StoreVO store);                    //가게 수정
+    void deleteStore(Long storeId);                     //가게 삭제
 
-    StoreVO viewStore(Long storeId);
+    boolean hasStoreName(String storeName);             //가게 이름 중복 조회
+    void acceptStoreRegister(Long storeId);             //가게 등록 수락(관리자)
+    void requestStoreDelete(Long storeId);              //가게 삭제 요청(사업자)
+    void acceptStoreDelete(Long storeId);               //가게 삭제 수락(관리자)
 
-    List<StoreVO> selectMyStoreByUserId(Long userId);
+    StoreVO viewStore(Long storeId);                    //특정 가게 조회
+    List<StoreVO> selectMyStoreByUserId(Long userId);   //내 가게 조회
 }

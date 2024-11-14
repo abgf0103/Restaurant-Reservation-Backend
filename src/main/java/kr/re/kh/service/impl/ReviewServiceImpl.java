@@ -127,4 +127,11 @@ public class ReviewServiceImpl implements ReviewService {
         response.put("data", reviews); // 리뷰 목록을 'data'로 반환
         return response;
     }
+
+    @Override
+    public boolean reserveStatusCheck(Long userId, Long storeId) {
+        // 예약 상태를 조회할 Mapper 호출
+        int count = reviewMapper.checkReserveStatus(userId, storeId);
+        return count > 0;  // 예약이 있고, 상태가 2인 경우 리뷰 작성 가능
+    }
 }

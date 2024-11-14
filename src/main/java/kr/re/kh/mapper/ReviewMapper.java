@@ -46,6 +46,9 @@ public interface ReviewMapper {
     // 새로운 메서드: username으로 리뷰 조회
     List<Review> getReviewsByUsername(String username);
 
+    // 특정 userId와 storeId에 대한 예약 상태 체크 (새로운 메서드)
+    int checkReserveStatus(Long userId, Long storeId);
+
 
 }
 

@@ -69,6 +69,15 @@
         WHERE STORE_NAME = #{storeName} AND IS_ACTIVE IN (0, 1)
     </select>
 
+    <!-- 가게 이름으로 가게 ID 조회 -->
+    <select id="findStoreIdByStoreName"
+            parameterType="String"
+            resultType="Long">
+        SELECT STORE_ID
+        FROM STORE
+        WHERE STORE_NAME = #{storeName} AND IS_ACTIVE IN (0, 1)
+    </select>
+
     <!-- 가게등록 요청 수락(관리자) -->
     <update id="acceptStoreRegister"
             parameterType="Long">

@@ -12,6 +12,8 @@ public interface StoreService {
     void deleteStore(Long storeId);                     //가게 삭제
 
     boolean hasStoreName(String storeName);             //가게 이름 중복 조회
+    Long findStoreIdByStoreName(String storeName);
+
     void acceptStoreRegister(Long storeId);             //가게 등록 수락(관리자)
     void requestStoreDelete(Long storeId);              //가게 삭제 요청(사업자)
     void acceptStoreDelete(Long storeId);               //가게 삭제 수락(관리자)

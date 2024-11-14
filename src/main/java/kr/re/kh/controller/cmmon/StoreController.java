@@ -70,6 +70,12 @@ public class StoreController {
         return storeService.hasStoreName(storeName);
     }
 
+    @ApiOperation("가게 이름으로 가게 ID 조회")
+    @GetMapping("/findStoreIdByStoreName")
+    public Long findStoreIdByStoreName(@RequestParam String storeName) {
+        return storeService.findStoreIdByStoreName(storeName);
+    }
+
     @ApiOperation("가게 등록 수락(관리자)")
     @GetMapping("/acceptStoreRegister")
     public void acceptStoreRegister(@RequestParam Long storeId) {

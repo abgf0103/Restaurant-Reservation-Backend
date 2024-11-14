@@ -66,6 +66,11 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.hasStoreName(storeName);
     }
 
+    @Override
+    public Long findStoreIdByStoreName(String storeName) {
+        return storeMapper.findStoreIdByStoreName(storeName);
+    }
+
     /**
      * 가게 등록 수락(관리자)
      * @param storeId

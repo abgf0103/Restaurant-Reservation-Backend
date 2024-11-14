@@ -2,7 +2,6 @@ package kr.re.kh.service.impl;
 
 import kr.re.kh.mapper.ReservationMapper;
 import kr.re.kh.model.vo.ReservationVO;
-import kr.re.kh.model.vo.StoreVO;
 import kr.re.kh.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Optional<ReservationVO> getReservationById(Long reservationId) {
-        return reservationMapper.findReservationById(reservationId);
+    public Optional<ReservationVO> getReservationById(Long reserveId) {
+        return reservationMapper.findReservationById(reserveId);
     }
 
     @Override
@@ -46,18 +45,18 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void updateReservationStatus(Long reservationId, String status) {
-        reservationMapper.updateReservationStatus(reservationId, status);
+    public void updateReservationStatus(Long reserveId, String status) {
+        reservationMapper.updateReservationStatus(reserveId, status);
     }
 
     @Override
-    public void deleteReservation(Long reservationId) {
-        reservationMapper.deleteReservation(reservationId);
+    public void deleteReservation(Long reserveId) {
+        reservationMapper.deleteReservation(reserveId);
     }
 
     @Override
-    public List<ReservationVO> selectAllReservation() {
-        return reservationMapper.selectAllReservation();
+    public boolean isReservationOwner(Long reserveId, Long userId) {
+        Optional<ReservationVO> reservation = reservationMapper.findReservationById(reserveId);
+        return reservation.map(res -> res.getUserId().equals(userId)).orElse(false);
     }
-
 }

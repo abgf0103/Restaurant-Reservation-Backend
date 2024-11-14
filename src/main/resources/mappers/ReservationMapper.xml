@@ -7,22 +7,23 @@
 
     <!-- 예약 저장 -->
     <insert id="insertReservation">
-        INSERT INTO reservation (
+        INSERT INTO RESERVE (
         user_id,
         store_id,
+        reserve_date,
         party_size,
-        reserve_status,
         created_at,
         updated_at
         ) VALUES (
         #{userId},
         #{storeId},
+        #{reserveDate},
         #{partySize},
-        #{reserveStatus},
-        NOW(),
-        NOW()
+        SYSDATE,
+        SYSDATE
         )
     </insert>
+
 
     <!-- 모든 예약 조회 -->
     <select id="selectAllReservation" parameterType="SearchHelper" resultType="StoreVO">
@@ -32,43 +33,34 @@
 
     <!-- 특정 예약 조회 by ID -->
     <select id="findReservationById" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM reservation
-        WHERE reservation_id = #{reservationId}
+        SELECT * FROM RESERVE
+        WHERE reserve_id = #{reserveId}
     </select>
 
     <!-- 특정 사용자의 모든 예약 조회 -->
     <select id="findAllReservationsByUserId" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM reservation
+        SELECT * FROM RESERVE
         WHERE user_id = #{userId}
     </select>
 
     <!-- 특정 가게의 모든 예약 조회 -->
     <select id="findAllReservationsByStoreId" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM reservation
+        SELECT * FROM RESERVE
         WHERE store_id = #{storeId}
     </select>
 
-    <!-- 예약 업데이트 -->
-    <update id="updateReservation">
-        UPDATE reservation
-        SET party_size = #{partySize},
-            reserve_status = #{reserveStatus},
-            updated_at = NOW()
-        WHERE reservation_id = #{reservationId}
-    </update>
-
     <!-- 예약 상태 업데이트 (가게 회원) -->
     <update id="updateReservationStatus">
-        UPDATE reservation
+        UPDATE RESERVE
         SET reserve_status = #{status},
-            updated_at = NOW()
-        WHERE reservation_id = #{reservationId}
+            updated_at = SYSDATE
+        WHERE reserve_id = #{reserveId}
     </update>
 
     <!-- 예약 삭제 -->
     <delete id="deleteReservation">
-        DELETE FROM reservation
-        WHERE reservation_id = #{reservationId}
+        DELETE FROM RESERVE
+        WHERE reserve_id = #{reserveId}
     </delete>
 
 </mapper>

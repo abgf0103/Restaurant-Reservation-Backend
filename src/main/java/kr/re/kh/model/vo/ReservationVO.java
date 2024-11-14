@@ -3,6 +3,7 @@ package kr.re.kh.model.vo;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,15 +13,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ReservationVO {
-    private Long reservationId;   // 예약 ID
-    private Long userId;          // 사용자 ID
-    private Long storeId;         // 가게 ID
-    private int partySize;        // 인원 수
-    private String reserveStatus; // 예약 상태
+    private Long reserveId;    // 예약 ID
+    private Long userId;           // 사용자 ID
+    private Long storeId;          // 가게 ID
+    private int partySize;         // 인원 수
+    private String reserveStatus;  // 예약 상태
+    private LocalDate reserveDate; // 예약 날짜
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;  // 생성일시
-
+    private LocalDateTime createdAt;  // CREATED_AT
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;  // 수정일시
+    private LocalDateTime updatedAt;  // UPDATED_AT
 }

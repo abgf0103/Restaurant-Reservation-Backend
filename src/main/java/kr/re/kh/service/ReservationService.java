@@ -9,7 +9,7 @@ public interface ReservationService {
 
     void createReservation(ReservationVO reservation);
 
-    Optional<ReservationVO> getReservationById(Long reservationId);
+    Optional<ReservationVO> getReservationById(Long reserved);
 
     List<ReservationVO> getAllReservationsByUserId(Long userId);
 
@@ -17,9 +17,9 @@ public interface ReservationService {
 
     void updateReservation(ReservationVO reservation);
 
-    void updateReservationStatus(Long reservationId, String status);
+    void updateReservationStatus(Long reserveId, String status);
 
-    void deleteReservation(Long reservationId);
+    void deleteReservation(Long reserveId);
 
-    List<ReservationVO> selectAllReservation();
+    boolean isReservationOwner(Long reserveId, Long userId); // 사용자 권한 확인 메서드
 }

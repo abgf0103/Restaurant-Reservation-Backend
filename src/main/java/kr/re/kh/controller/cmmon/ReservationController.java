@@ -1,68 +1,80 @@
 package kr.re.kh.controller.cmmon;
 
+import kr.re.kh.annotation.CurrentUser;
+import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.vo.ReservationVO;
+import kr.re.kh.model.payload.response.ApiResponse;
 import kr.re.kh.service.ReservationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/reservations") // 예약 생성
+@RequestMapping("/api/reservations")
+@Slf4j
+@AllArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @Autowired
-    public ReservationController(ReservationService reservationService) {
-        this.reservationService = reservationService;
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> createReservation(@RequestBody ReservationVO reservation) {
+    // 예약 생성
+    @PostMapping("/save")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> createReservation(@RequestBody ReservationVO reservation,
+                                               @CurrentUser CustomUserDetails currentUser) {
+        reservation.setUserId(currentUser.getId());  // 현재 로그인한 사용자의 ID 설정
         reservationService.createReservation(reservation);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ApiResponse(true, "예약이 생성되었습니다."));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> storeList(@ModelAttribute ReservationVO reservationVO) {
-        return ResponseEntity.ok(reservationService.selectAllReservation());
+    // 사용자의 모든 예약 조회
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<List<ReservationVO>> getUserReservations(@CurrentUser CustomUserDetails currentUser) {
+        List<ReservationVO> reservations = reservationService.getAllReservationsByUserId(currentUser.getId());
+        return ResponseEntity.ok(reservations);
     }
 
-    @GetMapping("/{reservationId}") // 예약 ID로 예약 조회
-    public ResponseEntity<ReservationVO> getReservationById(@PathVariable Long reservationId) {
-        Optional<ReservationVO> reservation = reservationService.getReservationById(reservationId);
+    // 가게 ID로 모든 예약 조회 (가게 측에서 사용)
+    @GetMapping("/store/{storeId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<List<ReservationVO>> getAllReservationsByStoreId(@PathVariable Long storeId) {
+        List<ReservationVO> reservations = reservationService.getAllReservationsByStoreId(storeId);
+        return ResponseEntity.ok(reservations);
+    }
+
+    // 예약 ID로 특정 예약 조회
+    @GetMapping("/view/{reserveId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getReservationById(@PathVariable Long reserveId,
+                                                @CurrentUser CustomUserDetails currentUser) {
+        Optional<ReservationVO> reservation = reservationService.getReservationById(reserveId);
         return reservation.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/user/{userId}") // 사용자 ID로 모든 예약 조회
-    public List<ReservationVO> getAllReservationsByUserId(@PathVariable Long userId) {
-        return reservationService.getAllReservationsByUserId(userId);
+    // 예약 상태 업데이트 (가게 회원 전용)
+    @PutMapping("/update-status/{reserveId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,
+                                                     @RequestBody String status) {
+        reservationService.updateReservationStatus(reserveId, status);
+        return ResponseEntity.ok(new ApiResponse(true, "예약 상태가 업데이트되었습니다."));
     }
 
-    @GetMapping("/store/{storeId}") // 가게 ID로 모든 예약 조회
-    public List<ReservationVO> getAllReservationsByStoreId(@PathVariable Long storeId) {
-        return reservationService.getAllReservationsByStoreId(storeId);
-    }
-
-    @PutMapping("/{reservationId}") // 예약 정보 업데이트
-    public ResponseEntity<Void> updateReservation(@PathVariable Long reservationId, @RequestBody ReservationVO reservation) {
-        reservation.setReservationId(reservationId);
-        reservationService.updateReservation(reservation);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{reservationId}/status") // 예약 상태 업데이트
-    public ResponseEntity<Void> updateReservationStatus(@PathVariable Long reservationId, @RequestBody String status) {
-        reservationService.updateReservationStatus(reservationId, status);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{reservationId}") // 예약 삭제
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
-        reservationService.deleteReservation(reservationId);
-        return ResponseEntity.noContent().build();
+    // 예약 삭제
+    @DeleteMapping("/delete/{reserveId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long reserveId,
+                                               @CurrentUser CustomUserDetails currentUser) {
+        if (!reservationService.isReservationOwner(reserveId, currentUser.getId())) {
+            return ResponseEntity.status(403).body(new ApiResponse(false, "권한이 없습니다."));
+        }
+        reservationService.deleteReservation(reserveId);
+        return ResponseEntity.ok(new ApiResponse(true, "예약이 삭제되었습니다."));
     }
 }

@@ -28,4 +28,10 @@ public class CategoryController {
     public ResponseEntity<?> getCategoryList(@ModelAttribute CategoryVO categoryVO) {
         return ResponseEntity.ok(categoryService.getCategoryList());
     }
+
+    @ApiOperation("가게 ID로 카테고리 조회")
+    @GetMapping("/getCategoryIdByStoreId")
+    public Long getCategoryByStoreId(Long storeId) {
+        return categoryService.getCategoryIdByStoreId(storeId);
+    }
 }

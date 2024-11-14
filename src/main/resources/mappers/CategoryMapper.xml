@@ -11,7 +11,14 @@
         ORDER BY CATEGORY_ID
     </select>
 
-
-
+    <!-- 가게ID로 가게 카테고리ID 조회 -->
+    <select id="getCategoryIdByStoreId"
+            parameterType="Long"
+            resultType="Long"
+            >
+        SELECT CATEGORY_ID
+        FROM STORE_CATEGORY
+        WHERE STORE_ID = #{storeId}
+    </select>
 
 </mapper>

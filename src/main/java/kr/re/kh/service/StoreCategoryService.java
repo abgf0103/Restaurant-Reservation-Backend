@@ -15,27 +15,43 @@ import java.util.Optional;
 public class StoreCategoryService {
     private final StoreCategoryVORepository storeCategoryVORepository;
 
+
     @Autowired
     public StoreCategoryService(StoreCategoryVORepository storeCategoryVORepository) {
         this.storeCategoryVORepository = storeCategoryVORepository;
     }
 
-    // StoreCategory 저장
+
+    /**
+     * StoreCategory 저장
+     * @param storeCategoryVO
+     * @return
+     */
     public StoreCategoryVO save(StoreCategoryVO storeCategoryVO) {
         return storeCategoryVORepository.save(storeCategoryVO);
     }
 
-    // StoreCategory 전체 조회
+    /**
+     * StoreCategory 전체 조회
+     * @return
+     */
     public List<StoreCategoryVO> findAll() {
         return storeCategoryVORepository.findAll();
     }
 
-    // StoreCategory ID로 조회
+    /**
+     * StoreCategory ID로 조회
+     * @param id
+     * @return
+     */
     public Optional<StoreCategoryVO> findById(Long id) {
         return storeCategoryVORepository.findById(id);
     }
 
-    // StoreCategory 삭제
+    /**
+     * StoreCategory 삭제
+     * @param id
+     */
     public void deleteById(Long id) {
         storeCategoryVORepository.deleteById(id);
     }

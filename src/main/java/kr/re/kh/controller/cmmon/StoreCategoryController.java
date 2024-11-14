@@ -28,10 +28,12 @@ public class StoreCategoryController {
     }
 
     // StoreCategory 전체 조회
+    @ApiOperation("가게 목록 조회")
     @GetMapping("/list")
     public ResponseEntity<List<StoreCategoryVO>> getAll() {
         List<StoreCategoryVO> categories = storeCategoryService.findAll();
         return ResponseEntity.ok(categories);
     }
+
 
 }

@@ -13,12 +13,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ReservationVO {
-    private Long reserveId;    // 예약 ID
+    private Long reserveId;        // 예약 ID
     private Long userId;           // 사용자 ID
     private Long storeId;          // 가게 ID
     private int partySize;         // 인원 수
     private String reserveStatus;  // 예약 상태
     private LocalDate reserveDate; // 예약 날짜
+    private String storeName;      // 가게 이름
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;  // CREATED_AT

@@ -45,5 +45,7 @@ public interface ReviewMapper {
 
     // 새로운 메서드: username으로 리뷰 조회
     List<Review> getReviewsByUsername(String username);
+
+
 }
 

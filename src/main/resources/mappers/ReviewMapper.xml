@@ -14,6 +14,7 @@
         R.updated_at AS updatedAt,
         R."LIKE" AS likeCount,
         R.username,
+        R.RESERVE_ID,
         S.store_name AS storeName  <!-- STORE 테이블에서 store_name을 가져옴 -->
         FROM review R
         JOIN store S ON R.store_id = S.store_id  <!-- STORE 테이블과 조인 -->
@@ -41,7 +42,8 @@
         R.updated_at AS updatedAt,
         R.username,
         R."LIKE" AS likeCount,  <!-- LIKE 컬럼을 likeCount로 별칭 지정 -->
-        S.store_name AS storeName
+        S.store_name AS storeName,
+        R.RESERVE_ID
         FROM review R
         LEFT JOIN store S ON R.store_id = S.store_id
         <where>
@@ -76,7 +78,7 @@
 
     <!-- 리뷰 저장 -->
     <insert id="reviewSave" parameterType="Review" useGeneratedKeys="true" keyProperty="reviewId" keyColumn="REVIEW_ID">
-        INSERT INTO review (user_id, store_id, rating, review_comment, created_at, updated_at, username)
+        INSERT INTO review (user_id, store_id, rating, review_comment, created_at, updated_at, username, reserve_id)
         VALUES (
         #{userId},
         #{storeId},
@@ -84,10 +86,10 @@
         #{reviewComment},
         CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP,
-        #{username} <!-- USERNAME 추가 -->
+        #{username}, -- USERNAME 추가
+        #{reserveId}
         )
     </insert>
-
 
 
 
@@ -182,5 +184,24 @@
 
     </select>
 
+    <!-- 특정 사용자의 매장에 대한 중복 리뷰 확인 -->
+    <select id="countReviewsByUserAndStore" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND reserve_id = #{reserveId}
+    </select>
+
+    <!-- 예약 ID 자동 조회 -->
+    <select id="getReserveId" parameterType="map" resultType="Long">
+        SELECT reserve_id
+        FROM reserve
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND reserve_status = 2  -- 완료된 예약만
+        AND reserve_date =
+
+    </select>
 
 </mapper>

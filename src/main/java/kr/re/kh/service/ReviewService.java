@@ -33,6 +33,8 @@ public interface ReviewService {
 
     boolean reserveStatusCheck(Long userId, Long storeId);  // 예약 상태 체크 메서드 추가
 
+    boolean isReviewExist(Long userId, Long storeId, Long reserveId);  // 중복 리뷰 확인 메서드 추가
+
 
 }
 

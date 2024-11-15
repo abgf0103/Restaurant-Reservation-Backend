@@ -4,42 +4,42 @@
 
 
     <!--회원 생성-->
-    <insert id="memberJoin" parameterType="MemberVO">
-        INSERT INTO MEMBERSHIP (
+    <insert id="insertMember" parameterType="MemberVO" >
+        INSERT INTO USERS (
             email,
-            email_verified,
+            is_email_verified,
             username,
             password,
             name,
-            isActive,
+            is_active,
             created_at,
             updated_at
         ) VALUES (
             #{email},
-            #{emailVerified},
+            0,
             #{username},
             #{password},
             #{name},
-            #{active},
-            #{createdAt},
-            #{updatedAt}
+            0,
+            sysdate,
+            sysdate
         )
     </insert>
 
     <!-- 회원 조회 by ID -->
     <select id="selectMemberById" parameterType="Long" resultType="MemberVO">
         SELECT
-        member_id AS memberId,
+        user_id AS userId,
         email,
-        email_verified AS emailVerified,
+        is_email_verified AS isEmailVerified,
         username,
         password,
         name,
-        active,
+        is_active AS isActive,
         created_at AS createdAt,
         updated_at AS updatedAt
-        FROM MEMBERSHIP
-        WHERE member_id = #{memberId}
+        FROM USERS
+        WHERE user_id = #{userId}
     </select>
 
     <!-- 모든 회원 조회 -->
@@ -60,25 +60,26 @@
 
     <!-- 회원 정보 수정 -->
     <update id="updateMember" parameterType="MemberVO">
-        UPDATE MEMBERSHIP
+        UPDATE USERS
         <set>
             <if test="email != null">email = #{email},</if>
-            <if test="emailVerified != null">email_verified = #{emailVerified},</if>
-            <if test="username != null">username = #{username},</if>
+            <if test="emailVerified != null">is_email_verified = #{emailVerified},</if>
             <if test="password != null">password = #{password},</if>
             <if test="name != null">name = #{name},</if>
-            <if test="active != null">active = #{active},</if>
-            updated_at = #{updatedAt}
+            updated_at = CURRENT_TIMESTAMP
         </set>
-        WHERE member_id = #{memberId}
+        WHERE user_id = #{userId}
+        AND  is_active = 1
     </update>
 
     <!-- 회원 삭제 (비활성화) -->
     <update id="deleteMember" parameterType="Long">
-        UPDATE MEMBERSHIP
-        SET active = false,
-        updated_at = CURRENT_TIMESTAMP
-        WHERE member_id = #{memberId}
+        UPDATE USERS
+        <set>
+            is_active = 0,
+            updated_at = CURRENT_TIMESTAMP
+        </set>
+        WHERE user_id = #{userId}
     </update>
 
 </mapper>

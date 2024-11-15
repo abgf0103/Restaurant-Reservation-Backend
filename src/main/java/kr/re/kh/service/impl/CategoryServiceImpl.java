@@ -25,4 +25,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryVO> getCategoryList() {
         return categoryMapper.getCategoryList();
     }
+
+    @Override
+    public Long getCategoryIdByStoreId(Long storeId) {
+        return categoryMapper.getCategoryIdByStoreId(storeId);
+    }
 }

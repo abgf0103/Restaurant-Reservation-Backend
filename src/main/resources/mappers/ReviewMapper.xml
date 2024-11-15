@@ -173,5 +173,14 @@
         ORDER BY R.created_at DESC
     </select>
 
+    <select id="checkReserveStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM reserve
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND reserve_status = 2
+
+    </select>
+
 
 </mapper>

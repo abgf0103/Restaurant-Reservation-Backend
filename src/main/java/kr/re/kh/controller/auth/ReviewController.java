@@ -10,6 +10,7 @@ import kr.re.kh.model.vo.SearchHelper;
 import kr.re.kh.service.ReviewService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,16 @@ public class ReviewController {
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> reviewSave(@CurrentUser CustomUserDetails currentUser, @RequestBody ReviewRequest reviewRequest) {
+        Long userId = currentUser.getId();
+        Long storeId = reviewRequest.getStoreId();
+
+        // 예약 상태 확인 (리뷰를 작성할 수 있는 상태인지 체크)
+        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
+        if (!canWriteReview) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 2여야 합니다."));
+        }
+
+        // 리뷰 저장 로직
         reviewService.saveReview(currentUser, reviewRequest);
         return ResponseEntity.ok(new ApiResponse(true, "저장 되었습니다."));
     }
@@ -93,8 +104,6 @@ public class ReviewController {
             return ResponseEntity.status(500).body(new ApiResponse(false, "리뷰 삭제에 실패했습니다."));
         }
     }
-
-
 
 
     @ApiOperation("리뷰 좋아요")
@@ -144,7 +153,19 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
     }
 
+    // 예약 상태 체크 (storeId, userId를 받아서 예약 상태가 '완료'인지 확인)
+    @GetMapping("/check-reserve-status")
+    public ResponseEntity<Boolean> checkReserveStatus(@RequestParam Long storeId, @RequestParam Long userId) {
+        try {
+            // 예약 상태가 완료(2)인 경우만 리뷰 작성 가능
+            boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
+            return ResponseEntity.ok(canWriteReview);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
 
+
+    }
 }
 
 

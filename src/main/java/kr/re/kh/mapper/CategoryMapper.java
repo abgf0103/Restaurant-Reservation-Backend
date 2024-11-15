@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper {
     List<CategoryVO> getCategoryList();
+
+    Long getCategoryIdByStoreId(Long storeId);
 }

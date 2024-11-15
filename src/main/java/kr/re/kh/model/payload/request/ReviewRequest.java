@@ -13,5 +13,6 @@ public class ReviewRequest {
     private Long storeId;         // STORE_ID
     private Double rating;        // RATING
     private String reviewComment; // REVIEW_COMMENT
+    private Long reserveId;  // RESERVE_ID
 
 }

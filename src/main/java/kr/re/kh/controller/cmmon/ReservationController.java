@@ -49,7 +49,7 @@ public class ReservationController {
 
     @PutMapping("/{reservationId}") // 예약 정보 업데이트
     public ResponseEntity<Void> updateReservation(@PathVariable Long reservationId, @RequestBody ReservationVO reservation) {
-        reservation.setReservationId(reservationId);
+        reservation.setReserveId(reservationId);
         reservationService.updateReservation(reservation);
         return ResponseEntity.ok().build();
     }

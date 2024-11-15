@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ReservationVO {
-    private Long reservationId;   // 예약 ID
+    private Long reserveId;   // 예약 ID
     private Long userId;          // 사용자 ID
     private Long storeId;         // 가게 ID
     private int partySize;        // 인원 수
@@ -23,4 +23,7 @@ public class ReservationVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;  // 수정일시
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reserveDate;  // 예약일시
 }

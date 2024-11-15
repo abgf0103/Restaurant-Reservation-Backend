@@ -25,5 +25,6 @@ public class Review {
     private LocalDateTime updatedAt;  // UPDATED_AT
     private Integer likeCount;    // LIKE (LIKES)
     private String username;      // USERNAME (사용자 이름)
+    private Long reserveId;
 
 }

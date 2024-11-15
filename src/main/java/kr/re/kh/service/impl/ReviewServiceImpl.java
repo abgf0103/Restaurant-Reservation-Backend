@@ -59,17 +59,26 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest) {
         Long userID = currentUser.getId();
-        String username = currentUser.getUsername();  // USERNAME 가져오기
+        String username = currentUser.getUsername();
+
+        // 클라이언트로부터 전달된 reserveId를 그대로 사용
+        Long reserveId = reviewRequest.getReserveId();
+
+        // 리뷰 객체 생성
         Review review = Review.builder()
                 .userId(userID)
                 .storeId(reviewRequest.getStoreId())
                 .rating(reviewRequest.getRating())
                 .reviewComment(reviewRequest.getReviewComment())
-                .username(username)  // USERNAME 저장
+                .username(username)
+                .reserveId(reserveId)  // 클라이언트로부터 전달받은 reserveId 추가
                 .build();
 
+        // 로그 출력
         log.info(reviewRequest.toString());
         log.info(review.toString());
+
+        // 리뷰 저장
         reviewMapper.reviewSave(review);
     }
 
@@ -133,5 +142,12 @@ public class ReviewServiceImpl implements ReviewService {
         // 예약 상태를 조회할 Mapper 호출
         int count = reviewMapper.checkReserveStatus(userId, storeId);
         return count > 0;  // 예약이 있고, 상태가 2인 경우 리뷰 작성 가능
+    }
+
+    @Override
+    public boolean isReviewExist(Long userId, Long storeId, Long reserveId) {
+        // 예약이 존재하고 해당 예약에 이미 리뷰가 작성된 경우
+        int count = reviewMapper.countReviewsByUserAndStore(userId, storeId, reserveId);
+        return count > 0;
     }
 }

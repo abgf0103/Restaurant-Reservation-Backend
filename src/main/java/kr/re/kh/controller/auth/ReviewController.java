@@ -66,11 +66,18 @@ public class ReviewController {
     public ResponseEntity<?> reviewSave(@CurrentUser CustomUserDetails currentUser, @RequestBody ReviewRequest reviewRequest) {
         Long userId = currentUser.getId();
         Long storeId = reviewRequest.getStoreId();
+        Long reserveId = reviewRequest.getReserveId(); // 클라이언트로부터 전달받은 reserveId
 
         // 예약 상태 확인 (리뷰를 작성할 수 있는 상태인지 체크)
         boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
         if (!canWriteReview) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 2여야 합니다."));
+        }
+
+        // 리뷰가 이미 존재하는지 중복 체크
+        boolean isReviewExist = reviewService.isReviewExist(userId, storeId, reserveId);
+        if (isReviewExist) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "이미 리뷰를 작성한 예약입니다."));
         }
 
         // 리뷰 저장 로직
@@ -153,18 +160,22 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
     }
 
-    // 예약 상태 체크 (storeId, userId를 받아서 예약 상태가 '완료'인지 확인)
+    // 예약 상태 체크 (리뷰 작성 여부 확인)
+    @ApiOperation("리뷰 작성 가능 여부 체크")
     @GetMapping("/check-reserve-status")
-    public ResponseEntity<Boolean> checkReserveStatus(@RequestParam Long storeId, @RequestParam Long userId) {
-        try {
-            // 예약 상태가 완료(2)인 경우만 리뷰 작성 가능
-            boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
-            return ResponseEntity.ok(canWriteReview);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+    public ResponseEntity<ApiResponse> checkReserveStatus(@RequestParam Long storeId, @RequestParam Long userId) {
+        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
+        if (!canWriteReview) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 완료(2)이어야 합니다."));
         }
+        return ResponseEntity.ok(new ApiResponse(true, "리뷰 작성 가능"));
+    }
 
-
+    @ApiOperation("중복 리뷰 체크")
+    @GetMapping("/check-exist")
+    public ResponseEntity<Boolean> checkExist(@RequestParam Long storeId, @RequestParam Long userId, @RequestParam Long reserveId) {
+        boolean isExist = reviewService.isReviewExist(userId, storeId, reserveId);
+        return ResponseEntity.ok(isExist);
     }
 }
 

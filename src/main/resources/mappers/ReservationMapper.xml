@@ -38,7 +38,7 @@
 
     <!-- 특정 사용자의 모든 예약 조회 -->
     <select id="findAllReservationsByUserId" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM reservation
+        SELECT * FROM reserve
         WHERE user_id = #{userId}
     </select>
 

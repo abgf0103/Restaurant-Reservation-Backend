@@ -181,6 +181,7 @@
         WHERE user_id = #{userId}
         AND store_id = #{storeId}
         AND reserve_status = 2
+        AND reserve_id = #{reserveId}
 
     </select>
 

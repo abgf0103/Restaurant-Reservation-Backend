@@ -69,7 +69,7 @@ public class ReviewController {
         Long reserveId = reviewRequest.getReserveId(); // 클라이언트로부터 전달받은 reserveId
 
         // 예약 상태 확인 (리뷰를 작성할 수 있는 상태인지 체크)
-        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
+        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId, reserveId);
         if (!canWriteReview) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 2여야 합니다."));
         }
@@ -163,10 +163,10 @@ public class ReviewController {
     // 예약 상태 체크 (리뷰 작성 여부 확인)
     @ApiOperation("리뷰 작성 가능 여부 체크")
     @GetMapping("/check-reserve-status")
-    public ResponseEntity<ApiResponse> checkReserveStatus(@RequestParam Long storeId, @RequestParam Long userId) {
-        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId);
+    public ResponseEntity<ApiResponse> checkReserveStatus(@RequestParam Long storeId, @RequestParam Long userId ,@RequestParam Long reserveId) {
+        boolean canWriteReview = reviewService.reserveStatusCheck(userId, storeId, reserveId);
         if (!canWriteReview) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 완료(2)이어야 합니다."));
+            return ResponseEntity.ok(new ApiResponse(false, "리뷰 작성 전에 해당 매장의 예약 상태를 확인하세요. 예약 상태가 완료(2)이어야 합니다."));
         }
         return ResponseEntity.ok(new ApiResponse(true, "리뷰 작성 가능"));
     }

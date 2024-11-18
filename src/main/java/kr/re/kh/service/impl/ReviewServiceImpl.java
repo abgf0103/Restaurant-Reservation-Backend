@@ -138,9 +138,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean reserveStatusCheck(Long userId, Long storeId) {
+    public boolean reserveStatusCheck(Long userId, Long storeId, Long reserveId) {
         // 예약 상태를 조회할 Mapper 호출
-        int count = reviewMapper.checkReserveStatus(userId, storeId);
+        int count = reviewMapper.checkReserveStatus(userId, storeId, reserveId);
         return count > 0;  // 예약이 있고, 상태가 2인 경우 리뷰 작성 가능
     }
 

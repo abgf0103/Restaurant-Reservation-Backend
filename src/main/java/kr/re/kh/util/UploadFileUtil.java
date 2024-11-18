@@ -31,7 +31,7 @@ public class UploadFileUtil {
 
 
         try {
-            List<String> typeList = Arrays.asList("image/gif", "image/jpg", "image/jpeg", "image/png", "image/bmp", "application/pdf", "application/xml", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/x-tika-ooxml", "video/mp4", "video/quicktime");
+            List<String> typeList = Arrays.asList("image/gif", "image/jpg", "image/jpeg", "image/png", "image/bmp", "application/pdf", "application/xml", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/x-tika-ooxml", "video/mp4", "video/quicktime", "text/html", "text/plain");
 
             String mimeType = new Tika().detect(file);
 

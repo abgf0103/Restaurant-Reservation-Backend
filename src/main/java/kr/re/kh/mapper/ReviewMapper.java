@@ -47,7 +47,7 @@ public interface ReviewMapper {
     List<Review> getReviewsByUsername(String username);
 
     // 특정 userId와 storeId에 대한 예약 상태 체크 (새로운 메서드)
-    int checkReserveStatus(Long userId, Long storeId);
+    int checkReserveStatus(Long userId, Long storeId, Long reserveId);
 
     // 특정 사용자의 매장에 대한 중복 리뷰 확인
     int countReviewsByUserAndStore(Long userId, Long storeId, Long reserveId);

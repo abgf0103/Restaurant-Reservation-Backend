@@ -250,7 +250,7 @@ public class UserService {
      * @return
      */
     public boolean checkPassword(String password, String encodedPassword) {
-        return passwordEncoder.matches(password, encodedPassword);
+        return passwordEncoder.matches(password, encodedPassword);//
     }
 
     public boolean checkPassword(Long userId, String password) {

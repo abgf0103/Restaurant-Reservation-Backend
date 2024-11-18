@@ -99,7 +99,7 @@
         public ResponseEntity<?> verifyPassword(@RequestBody UserRegisterRequest request) {
             // 요청에서 id와 password를 가져옵니다.
             Long userId = request.getId();
-            String password = request.getPassword();
+            String password = request.getPassword();//
 
             // 사용자 정보를 가져옵니다.
             Optional<User> userOpt = userService.findById(userId);

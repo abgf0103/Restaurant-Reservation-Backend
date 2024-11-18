@@ -94,5 +94,32 @@
                 return ResponseEntity.ok(response);
             }
         }
+        // 수정 창 가기 전에 비밀번호 확인
+        @PostMapping("/user/checkUserEdit")
+        public ResponseEntity<?> verifyPassword(@RequestBody UserRegisterRequest request) {
+            // 요청에서 id와 password를 가져옵니다.
+            Long userId = request.getId();
+            String password = request.getPassword();
+
+            // 사용자 정보를 가져옵니다.
+            Optional<User> userOpt = userService.findById(userId);
+
+            if (!userOpt.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse(false, "사용자를 찾을 수 없습니다.", null, null));
+            }
+
+            User user = userOpt.get();
+
+            // 비밀번호 비교
+            boolean passwordMatches = userService.checkPassword(password, user.getPassword());
+
+            if (passwordMatches) {
+                return ResponseEntity.ok(new ApiResponse(true, "비밀번호가 일치합니다.", null, null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(false, "비밀번호가 일치하지 않습니다.", null, null));
+            }
+        }
 
     }

@@ -52,6 +52,7 @@ public class UserService {
     private final UserDeviceService userDeviceService;
     private final RefreshTokenService refreshTokenService;
 
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -240,6 +241,25 @@ public class UserService {
      */
     public boolean usernameAlreadyExists(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+
+    /**
+     * '비밀번호 재확인 / 정보수정 들어갈때 사용
+     * @param
+     * @return
+     */
+    public boolean checkPassword(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
+    }
+
+    public boolean checkPassword(Long userId, String password) {
+            Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new BadRequestException("사용자를 찾을 수 없습니다.");
+        }
+                User user = userOpt.get();
+        return checkPassword(password, user.getPassword());
     }
 
     /**

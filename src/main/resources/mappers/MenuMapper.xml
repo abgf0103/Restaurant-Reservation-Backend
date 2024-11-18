@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.re.kh.mapper.MenuMapper">
+
+    <!--  메뉴 추가  -->
+    <insert id="insertMenu"
+            parameterType="MenuVO">
+        INSERT INTO MENU (STORE_ID
+                         , MENU_NAME
+                         , PRICE
+                        <if test="description != null"> , DESCRIPTION</if>
+        )
+        VALUES(#{storeId}
+            , #{menuName}
+            , #{price}
+        <if test="description != null">, #{description}</if>
+        )
+    </insert>
+
+    <!--  메뉴 수정  -->
+    <update id="updateMenu"
+            parameterType="MenuVO">
+        UPDATE MENU
+        <set>
+            <if test="menuName != null">MENU_NAME = #{menuName}, </if>
+            <if test="description != null">DESCRIPTION = #{description}, </if>
+            <if test="price != null">PRICE = #{price}, </if>
+            UPDATED_AT = CURRENT_TIMESTAMP
+        </set>
+        WHERE MENU_ID = #{menuId}
+    </update>
+
+    <!-- 메뉴 삭제(사업자) -->
+    <update id="deleteMenu"
+            parameterType="Long">
+        UPDATE MENU
+        SET STATUS = 0              --메뉴 비활성화
+        WHERE MENU_ID = #{menuId}
+    </update>
+
+    <!--가게 ID로 메뉴 리스트 조회-->
+    <select id="getMenuListByStoreId"
+            parameterType="SearchHelper"
+            resultType="MenuVO">
+    SELECT *
+    FROM MENU
+    WHERE STORE_ID = #{storeId}
+    </select>
+
+</mapper>

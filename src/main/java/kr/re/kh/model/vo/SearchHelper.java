@@ -14,14 +14,20 @@ public class SearchHelper {
     private String searchType;
     private int size = Integer.parseInt(AppConstants.DEFAULT_PAGE_SIZE);
     private int page = Integer.parseInt(AppConstants.DEFAULT_PAGE_NUMBER);
+    private Long storeId;
+    private Long userId;
+    private Long reserveId;
 
     @Builder
-    public SearchHelper(String searchCode, String searchKeyword, String searchType, int size, int page) {
+    public SearchHelper(String searchCode, String searchKeyword, String searchType, int size, int page, Long storeId, Long userId, Long reserveId) {
         this.searchCode = searchCode;
         this.searchKeyword = searchKeyword;
         this.searchType = searchType;
         this.size = size;
         this.page = page;
+        this.storeId = storeId;
+        this.userId = userId;
+        this.reserveId = reserveId;
     }
 
 }

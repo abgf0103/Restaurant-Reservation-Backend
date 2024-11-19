@@ -3,6 +3,7 @@ package kr.re.kh.mapper;
 import kr.re.kh.model.vo.UploadFile;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 

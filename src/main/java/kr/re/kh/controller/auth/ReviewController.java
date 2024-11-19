@@ -22,7 +22,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/review")
-@CrossOrigin(origins = "http://localhost:3000") // React 앱의 URL
 @Slf4j
 @AllArgsConstructor
 public class ReviewController {
@@ -81,22 +80,24 @@ public class ReviewController {
         }
 
         // 리뷰 저장 로직
-        reviewService.saveReview(currentUser, reviewRequest);
-        return ResponseEntity.ok(new ApiResponse(true, "저장 되었습니다."));
+        //reviewService.saveReview(currentUser, reviewRequest);
+        return ResponseEntity.ok(reviewService.saveReview(currentUser, reviewRequest));
     }
 
     @ApiOperation("리뷰 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{reviewId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
-    public ResponseEntity<?> deleteReview(@PathVariable Long id,
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId,
+                                          @RequestParam Long reserveId, // 쿼리 파라미터로 reserveId 받기
                                           @RequestParam Long userId, // 쿼리 파라미터로 userId 받기
                                           @CurrentUser CustomUserDetails currentUser) {
+
         // 요청을 받았을 때 로그 출력
         System.out.println("리뷰 삭제 요청 received");
-        System.out.println("리뷰 ID: " + id);
+        System.out.println("리뷰 ID: " + reviewId);
+        System.out.println("예약 ID: " + reserveId);
         System.out.println("사용자 ID: " + userId);
         System.out.println("현재 사용자 ID (JWT): " + currentUser.getId());
-
 
         // 사용자 정보 검증
         if (!currentUser.getId().equals(userId)) {
@@ -104,13 +105,14 @@ public class ReviewController {
         }
 
         try {
-            reviewService.deleteReview(id, userId);
+            reviewService.deleteReview(reviewId, reserveId, userId);
             return ResponseEntity.ok(new ApiResponse(true, "리뷰가 성공적으로 삭제되었습니다."));
         } catch (Exception e) {
             e.printStackTrace(); // 오류 발생 시 스택 트레이스를 출력하여 디버깅
             return ResponseEntity.status(500).body(new ApiResponse(false, "리뷰 삭제에 실패했습니다."));
         }
     }
+
 
 
     @ApiOperation("리뷰 좋아요")

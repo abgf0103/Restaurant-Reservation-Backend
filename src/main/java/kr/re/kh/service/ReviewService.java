@@ -12,11 +12,11 @@ public interface ReviewService {
 
     HashMap<String, Object> selectReview(SearchHelper searchHelper);
 
-    void saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest);
+    List<HashMap<String, Object>> saveReview(CustomUserDetails currentUser, ReviewRequest reviewRequest);
 
     HashMap<String, Object> reviewInfo(Long reviewId);
 
-    void deleteReview(Long reviewId, Long userId);
+    void deleteReview(Long reviewId, Long userId, Long reserveId);
 
     List<Review> getReviewsByUserId(Long userId);
 

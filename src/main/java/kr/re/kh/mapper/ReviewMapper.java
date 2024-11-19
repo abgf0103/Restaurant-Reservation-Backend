@@ -2,8 +2,10 @@ package kr.re.kh.mapper;
 
 import kr.re.kh.model.vo.Review;
 import kr.re.kh.model.vo.SearchHelper;
+import kr.re.kh.model.vo.UploadFile;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +14,14 @@ public interface ReviewMapper {
 
     List<Review> selectReview(SearchHelper searchHelper);
 
-    int countReview(SearchHelper searchHelper);
+    // 리뷰와 파일 정보를 함께 조회하는 새로운 메서드
+    List<UploadFile> selectReviewsWithFiles(SearchHelper searchHelper);
+
+    List<Review> selectReviewsByUserId(Long userId);
 
     void reviewSave(Review review);  // REVIEW에 USERNAME 포함
+
+    void insertFileMap(HashMap<String, Object> map);
 
     Optional<Review> reviewInfo(Long reviewId);
 
@@ -26,7 +33,10 @@ public interface ReviewMapper {
     // 리뷰 삭제
     void deleteReview(Long reviewId);
 
-    List<Review> selectReviewsByUserId(Long userId);
+    // 리뷰 첨부파일 삭제
+    void deleteReviewFiles(Long reserveId);
+
+
 
     // 좋아요 추가
     void likeReview(Long reviewId, Long userId);
@@ -52,7 +62,6 @@ public interface ReviewMapper {
     // 특정 사용자의 매장에 대한 중복 리뷰 확인
     int countReviewsByUserAndStore(Long userId, Long storeId, Long reserveId);
 
-    // 예약 ID를 자동으로 조회
-    Long getReserveId(Long userId, Long storeId, String reserveDate);
+
 }
 

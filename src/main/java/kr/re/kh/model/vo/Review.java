@@ -4,6 +4,7 @@ import lombok.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +27,6 @@ public class Review {
     private Integer likeCount;    // LIKE (LIKES)
     private String username;      // USERNAME (사용자 이름)
     private Long reserveId;
+    private List<UploadFile> files;   // 파일 정보 리스트 (파일명 등)
 
 }

@@ -16,16 +16,20 @@ package kr.re.kh.service;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.exception.BadRequestException;
 import kr.re.kh.exception.UserLogoutException;
+import kr.re.kh.mapper.UserMapper;
 import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.Role;
 import kr.re.kh.model.User;
 import kr.re.kh.model.UserDevice;
+import kr.re.kh.model.payload.DeviceInfo;
 import kr.re.kh.model.payload.request.LogOutRequest;
 import kr.re.kh.model.payload.request.RegistrationRequest;
 import kr.re.kh.model.payload.request.UserRegisterRequest;
 import kr.re.kh.model.payload.response.PagedResponse;
 import kr.re.kh.model.payload.response.UserListResponse;
 import kr.re.kh.model.payload.response.UserResponse;
+import kr.re.kh.model.vo.DeviceType;
+import kr.re.kh.repository.RoleRepository;
 import kr.re.kh.repository.UserRepository;
 import kr.re.kh.util.ModelMapper;
 import kr.re.kh.util.ValidatePageNumberAndSize;
@@ -51,6 +55,7 @@ public class UserService {
     private final RoleService roleService;
     private final UserDeviceService userDeviceService;
     private final RefreshTokenService refreshTokenService;
+    private final UserMapper userMapper;
 
 
     public List<User> findAll() {
@@ -260,6 +265,25 @@ public class UserService {
         }
                 User user = userOpt.get();
         return checkPassword(password, user.getPassword());
+    }
+
+    /**
+     *  회원탈퇴
+     */
+    public boolean deleteUser(Long userId ) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            userMapper.removeUserDivice(userId);
+            userMapper.removeRefreshToken(userId);
+
+            // 사용자 삭제 처리
+            userMapper.removeUser(userId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

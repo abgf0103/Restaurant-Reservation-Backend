@@ -8,4 +8,12 @@
         WHERE STORE_ID = 2
     </select>
 
+    <update id="removeUser" parameterType="Long">
+        UPDATE USERS
+        SET IS_ACTIVE = 0
+        WHERE USER_ID=#{user_id}
+    </update>
+
+
+
 </mapper>

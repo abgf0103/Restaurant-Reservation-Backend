@@ -119,7 +119,7 @@
             resultType="StoreVO">
         SELECT *
         FROM STORE
-        WHERE USER_ID = #{userId} AND IS_ACTIVE = 1
+        WHERE USER_ID = #{userId}
     </select>
 
 

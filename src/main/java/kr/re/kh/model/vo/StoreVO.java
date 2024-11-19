@@ -22,5 +22,5 @@ public class StoreVO {
     private LocalDateTime createdAt;    //등록 시간
     private LocalDateTime updatedAt;    //수정 시간
     private String description;         //가게 소개글
-
+    private Long isActive;              //가게 활성화 여부
 }

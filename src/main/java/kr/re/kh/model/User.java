@@ -41,6 +41,10 @@ public class User extends DateAudit {
     @NullOrNotBlank(message = "전화번호는 필수 항목입니다.")
     private String phone;
 
+    @Column(name = "BUSINESS_NUM")
+    @NullOrNotBlank(message = "사업자번호는 필수 항목입니다.")
+    private String businessNum;
+
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
 
@@ -157,5 +161,11 @@ public class User extends DateAudit {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getBusinessNum() {return this.businessNum;}
+
+    public void setBusinessNum(String businessNum) {
+        this.businessNum = businessNum;
     }
 }

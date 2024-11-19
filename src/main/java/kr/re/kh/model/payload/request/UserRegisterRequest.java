@@ -18,5 +18,6 @@ public class UserRegisterRequest {
     private String roleNum;
     private boolean active;
     private String phone;
+    private String businessNum;
 
 }

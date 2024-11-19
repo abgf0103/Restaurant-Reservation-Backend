@@ -330,6 +330,7 @@ public class UserService {
                 user.setName(registrationRequest.getName());
                 user.setActive(registrationRequest.isActive());
                 user.setEmailVerified(true);
+                user.setBusinessNum(registrationRequest.getBusinessNum());
                 String roleNum = registrationRequest.getRoleNum();
                 String roleName = "USER";
                 if (roleNum.equals("3")) {
@@ -363,6 +364,7 @@ public class UserService {
             user.setActive(registrationRequest.isActive());
             user.setEmailVerified(true);
             user.setPhone(registrationRequest.getPhone());
+            user.setBusinessNum(registrationRequest.getBusinessNum());
             String roleNum = registrationRequest.getRoleNum();
             String roleName = "USER";
             if (roleNum.equals("3")) {

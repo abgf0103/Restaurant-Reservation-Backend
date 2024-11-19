@@ -37,4 +37,6 @@ public class RegistrationRequest {
     private String name;
 
     private String phone;
+
+    private String businessNum;
 }

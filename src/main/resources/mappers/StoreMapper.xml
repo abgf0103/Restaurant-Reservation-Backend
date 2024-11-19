@@ -122,6 +122,16 @@
         WHERE USER_ID = #{userId}
     </select>
 
+    <!--  카테고리로 가게 조회  -->
+    <select id="selectStoreByCategoryId"
+            parameterType="Long"
+            resultType="StoreVO">
+        SELECT S.*
+        FROM STORE S
+                 JOIN STORE_CATEGORY SC
+                      ON S.STORE_ID = SC.STORE_ID
+        WHERE SC.CATEGORY_ID = #{categoryId} AND S.IS_ACTIVE = 1
+    </select>
 
 
     <!-- 가게 검색 -->

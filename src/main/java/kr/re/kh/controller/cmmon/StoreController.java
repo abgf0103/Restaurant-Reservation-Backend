@@ -94,6 +94,13 @@ public class StoreController {
         storeService.acceptStoreDelete(storeId);
     }
 
+    @ApiOperation("카테고리ID로 가게 조회")
+    @GetMapping("/selectStoreByCategoryId")
+    public ResponseEntity<?> selectStoreByCategoryId(@RequestParam Long categoryId) {
+        List<StoreVO> storeList = storeService.selectStoreByCategoryId(categoryId);
+        return ResponseEntity.ok(storeList);
+    }
+
 
     @ApiOperation("검색")
     @PostMapping("/search")

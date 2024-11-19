@@ -108,9 +108,23 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.viewStore(storeId);
     }
 
-
+    /**
+     * 유저ID로 가게 조회 (내 가게 조회)
+     * @param userId
+     * @return
+     */
     @Override
     public List<StoreVO> selectMyStoreByUserId(Long userId) {
         return storeMapper.selectMyStoreByUserId(userId);
+    }
+
+    /**
+     * 카테고리ID로 가게 조회
+     * @param storeId
+     * @return
+     */
+    @Override
+    public List<StoreVO> selectStoreByCategoryId(Long storeId) {
+        return storeMapper.selectStoreByCategoryId(storeId);
     }
 }

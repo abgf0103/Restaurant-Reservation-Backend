@@ -12,14 +12,12 @@
         store_id,
         reserve_date,
         party_size,
-        created_at,
-        updated_at
+        created_at
         ) VALUES (
         #{userId},
         #{storeId},
         #{reserveDate},
         #{partySize},
-        SYSDATE,
         SYSDATE
         )
     </insert>

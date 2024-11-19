@@ -275,9 +275,6 @@ public class UserService {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
 
-            userMapper.removeUserDivice(userId);
-            userMapper.removeRefreshToken(userId);
-
             // 사용자 삭제 처리
             userMapper.removeUser(userId);
             return true;

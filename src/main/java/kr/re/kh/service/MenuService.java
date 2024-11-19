@@ -9,6 +9,7 @@ public interface MenuService {
     void insertMenu(MenuVO menuVO);
     void updateMenu(MenuVO menuVO);
     void deleteMenu(Long menuId);
+    MenuVO getMenuById(Long menuId);
 
     List<MenuVO> getMenuListByStoreId(Long storeId);
 }

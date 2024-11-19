@@ -30,6 +30,15 @@
         WHERE MENU_ID = #{menuId}
     </update>
 
+    <!-- 메뉴 조회 -->
+    <select id="getMenuById"
+            parameterType="Long"
+            resultType="MenuVO">
+        SELECT *
+        FROM MENU
+        WHERE MENU_ID = #{menuId}
+    </select>
+
     <!-- 메뉴 삭제(사업자) -->
     <update id="deleteMenu"
             parameterType="Long">

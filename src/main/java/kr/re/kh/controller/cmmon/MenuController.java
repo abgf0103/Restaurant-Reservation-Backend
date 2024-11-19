@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/menu")
+@RequestMapping("/api/store/menu")
 @Slf4j
 public class MenuController {
     private final MenuService menuService;
@@ -25,6 +25,12 @@ public class MenuController {
     @PostMapping("/insert")
     public void insertMenu(@RequestBody MenuVO menuVO) {
         menuService.insertMenu(menuVO);
+    }
+
+    @ApiOperation("메뉴 정보 조회")
+    @GetMapping("/getMenuById")
+    public MenuVO getMenuById(@RequestParam Long menuId) {
+        return menuService.getMenuById(menuId);
     }
 
     @ApiOperation("메뉴 수정")

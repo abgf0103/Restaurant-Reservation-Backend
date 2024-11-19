@@ -18,7 +18,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
-     * 가게 추가
+     * 메뉴 추가
      * @param menuVO
      */
     @Override
@@ -27,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
-     * 가게 수정
+     * 메뉴 수정
      * @param menuVO
      */
     @Override
@@ -36,12 +36,22 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
-     * 가게 삭제 (status를 변경)
+     * 메뉴 삭제 (status를 변경)
      * @param menuId
      */
     @Override
     public void deleteMenu(Long menuId) {
         menuMapper.deleteMenu(menuId);
+    }
+
+    /**
+     * 메뉴 조회
+     * @param menuId
+     * @return
+     */
+    @Override
+    public MenuVO getMenuById(Long menuId) {
+        return menuMapper.getMenuById(menuId);
     }
 
     /**

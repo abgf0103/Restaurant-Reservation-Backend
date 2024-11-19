@@ -53,7 +53,7 @@
             resultType="MenuVO">
     SELECT *
     FROM MENU
-    WHERE STORE_ID = #{storeId}
+    WHERE STORE_ID = #{storeId} AND STATUS = 1
     </select>
 
 </mapper>

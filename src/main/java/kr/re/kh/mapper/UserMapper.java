@@ -9,4 +9,6 @@ public interface UserMapper {
 
     Long isManagerByUserId(Long userId);
     Long isAdminByUserId(Long userId);
+
+    Long insertManager(Long userId,Long isManager);
     }

@@ -33,5 +33,17 @@
                     ON UA.USER_ID = U.USER_ID
         WHERE UA.USER_ID = #{userId}
     </select>
+    
+    
+    <insert id="insertManager"
+            parameterType="Long"
+           >
+        INSERT INTO MANAGER
+        (USER_ID, IS_MANAGER)
+        VALUES (
+        #{userId},
+        #{isManager}
+        )
+    </insert>
 
 </mapper>

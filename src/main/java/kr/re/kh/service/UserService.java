@@ -342,6 +342,7 @@ public class UserService {
                 user.setPhone(registrationRequest.getPhone());
                 log.info(user.toString());
                 userRepository.save(user);
+                userMapper.insertManager(user.getId(), registrationRequest.getBusinessNum().isEmpty() ? 0 : 1L);
                 return true;
             }
         } else if (registrationRequest.getId() > 0) {
@@ -381,10 +382,13 @@ public class UserService {
     }
 
     public Long isManagerByUserId(Long userId) {
+
         return userMapper.isManagerByUserId(userId);
     }
 
     public Long isAdminByUserId(Long userId){
         return userMapper.isAdminByUserId(userId);
     }
+
+
 }

@@ -20,6 +20,8 @@ public interface ReviewService {
 
     List<Review> getReviewsByUserId(Long userId);
 
+    HashMap<String, Object> getReviewsByUsername(String username);
+
     void updateReview(Long reviewId, ReviewRequest reviewRequest);
 
     boolean likeReview(Long reviewId, Long userId);
@@ -27,9 +29,6 @@ public interface ReviewService {
     void unlikeReview(Long reviewId, Long userId);
 
     boolean isReviewLikedByUser(Long reviewId, Long userId);
-
-    // 새로운 메서드: username으로 리뷰 조회
-    HashMap<String, Object> getReviewsByUsername(String username);
 
     boolean reserveStatusCheck(Long userId, Long storeId, Long reserveId);  // 예약 상태 체크 메서드 추가
 

@@ -71,6 +71,32 @@ public class ReviewServiceImpl implements ReviewService {
         return reviews;
     }
 
+    @Override
+    public HashMap<String, Object> getReviewsByUsername(String username) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        // 리뷰 목록을 username 기준으로 조회
+        List<Review> reviews = reviewMapper.getReviewsByUsername(username);
+
+        // 각 리뷰에 대해 파일 정보 조회
+        for (Review review : reviews) {
+            // 파일 정보 조회를 위한 SearchHelper 생성
+            SearchHelper s = SearchHelper.builder()
+                    .username(username)  // username 기준으로 파일 정보 조회
+                    .reserveId(review.getReserveId())  // 리뷰의 reserveId 사용
+                    .build();
+
+            // 리뷰에 대한 파일 정보 조회
+            List<UploadFile> reviewFiles = reviewMapper.selectReviewsWithFiles(s);
+            review.setFiles(reviewFiles);  // 리뷰에 파일 리스트 추가
+        }
+
+        response.put("data", reviews);  // 결과를 'data'로 반환
+        return response;
+    }
+
+
+
 
 
     @Override
@@ -177,14 +203,7 @@ public class ReviewServiceImpl implements ReviewService {
         return count > 0;
     }
 
-    // 새로운 메서드: username으로 리뷰 조회
-    @Override
-    public HashMap<String, Object> getReviewsByUsername(String username) {
-        HashMap<String, Object> response = new HashMap<>();
-        List<Review> reviews = reviewMapper.getReviewsByUsername(username); // Mapper 호출
-        response.put("data", reviews); // 리뷰 목록을 'data'로 반환
-        return response;
-    }
+
 
     @Override
     public boolean reserveStatusCheck(Long userId, Long storeId, Long reserveId) {

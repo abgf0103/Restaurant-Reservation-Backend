@@ -44,6 +44,15 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    //  username으로 특정 사용자의 리뷰 조회
+    @ApiOperation("특정 사용자 리뷰 목록 조회 (username 기준)")
+    @GetMapping("/view-by-username/{username}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> getReviewsByUsername(@PathVariable String username) {
+        log.info("Fetching reviews for username: " + username); // 로그 추가
+        return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
+    }
+
     @ApiOperation("리뷰 수정")
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
@@ -153,14 +162,7 @@ public class ReviewController {
         return ResponseEntity.ok(isLiked);
     }
 
-    //  username으로 특정 사용자의 리뷰 조회
-    @ApiOperation("특정 사용자 리뷰 목록 조회 (username 기준)")
-    @GetMapping("/view-by-username/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
-    public ResponseEntity<?> getReviewsByUsername(@PathVariable String username) {
-        log.info("Fetching reviews for username: " + username); // 로그 추가
-        return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
-    }
+
 
     // 예약 상태 체크 (리뷰 작성 여부 확인)
     @ApiOperation("리뷰 작성 가능 여부 체크")

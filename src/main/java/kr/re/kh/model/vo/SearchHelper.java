@@ -17,9 +17,10 @@ public class SearchHelper {
     private Long storeId;
     private Long userId;
     private Long reserveId;
+    private String username;
 
     @Builder
-    public SearchHelper(String searchCode, String searchKeyword, String searchType, int size, int page, Long storeId, Long userId, Long reserveId) {
+    public SearchHelper(String searchCode, String searchKeyword, String searchType, int size, int page, Long storeId, Long userId, Long reserveId, String username) {
         this.searchCode = searchCode;
         this.searchKeyword = searchKeyword;
         this.searchType = searchType;
@@ -28,6 +29,7 @@ public class SearchHelper {
         this.storeId = storeId;
         this.userId = userId;
         this.reserveId = reserveId;
+        this.username = username;
     }
 
 }

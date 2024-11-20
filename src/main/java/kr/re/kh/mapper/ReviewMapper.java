@@ -36,8 +36,6 @@ public interface ReviewMapper {
     // 리뷰 첨부파일 삭제
     void deleteReviewFiles(Long reserveId);
 
-
-
     // 좋아요 추가
     void likeReview(Long reviewId, Long userId);
 

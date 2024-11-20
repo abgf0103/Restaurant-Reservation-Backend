@@ -102,11 +102,10 @@ public class StoreController {
     }
 
 
-    @ApiOperation("검색")
-    @PostMapping("/search")
-    public ResponseEntity<?> searchStore(@ModelAttribute StoreVO storeVO) {
-
-        return null;
+    @ApiOperation("키워드로 가게 검색")
+    @GetMapping("/search")
+    public ResponseEntity<?> searchStore(@RequestParam String searchKeyword) {
+        return ResponseEntity.ok(storeService.searchStore(searchKeyword));
     }
 
 }

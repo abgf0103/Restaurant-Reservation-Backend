@@ -127,4 +127,14 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreVO> selectStoreByCategoryId(Long storeId) {
         return storeMapper.selectStoreByCategoryId(storeId);
     }
+
+    /**
+     * 키워드로 가게 검색
+     * @param searchKeyword
+     * @return
+     */
+    @Override
+    public List<StoreVO> searchStore(String searchKeyword) {
+        return storeMapper.searchStore(searchKeyword);
+    }
 }

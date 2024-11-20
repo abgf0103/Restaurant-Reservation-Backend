@@ -104,7 +104,7 @@
 
 
 
-    <!-- 특정 가게 조회 -->
+    <!-- 가게를 가게ID로 조회 -->
     <select id="viewStore"
             parameterType="Long"
             resultType="StoreVO">
@@ -135,8 +135,13 @@
 
 
     <!-- 가게 검색 -->
-    <select id="searchStore">
-        SELECT
+    <select id="searchStore"
+            parameterType="String"
+            resultType="StoreVO">
+        SELECT *
+        FROM STORE
+        WHERE STORE_NAME LIKE '%' || #{searchKeyword} || '%'
+           OR DESCRIPTION LIKE '%' || #{searchKeyword} || '%'
     </select>
 
 

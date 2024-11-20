@@ -294,6 +294,11 @@ public class UserService {
 
     public boolean saveUser(UserRegisterRequest registrationRequest) {
         log.info(registrationRequest.toString());
+
+        String businessNum = registrationRequest.getBusinessNum();
+        if (businessNum == null || businessNum.isEmpty()){
+            registrationRequest.setBusinessNum(null);
+        }
         if (registrationRequest.getId() == 0) {
             // 저장
             if (registrationRequest.getUsername().isBlank()) {
@@ -314,6 +319,7 @@ public class UserService {
             if (!Objects.equals(registrationRequest.getPassword(), registrationRequest.getPasswordConfirm())) {
                 throw new BadRequestException("비밀번호가 일치하지 않습니다.");
             }
+
             boolean usernameExists = userRepository.existsByUsername(registrationRequest.getUsername());
             boolean emailExists = userRepository.existsByEmail(registrationRequest.getEmail());
             log.info(String.valueOf(usernameExists));
@@ -342,7 +348,8 @@ public class UserService {
                 user.setPhone(registrationRequest.getPhone());
                 log.info(user.toString());
                 userRepository.save(user);
-                userMapper.insertManager(user.getId(), registrationRequest.getBusinessNum().isEmpty() ? 0 : 1L);
+                log.info(registrationRequest.toString());
+                userMapper.insertManager(user.getId(), registrationRequest.getBusinessNum() == null ? 0 : 1L);
                 return true;
             }
         } else if (registrationRequest.getId() > 0) {

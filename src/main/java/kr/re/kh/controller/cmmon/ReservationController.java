@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reservations")
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @AllArgsConstructor
 public class ReservationController {
@@ -28,9 +29,15 @@ public class ReservationController {
     public ResponseEntity<?> createReservation(@RequestBody ReservationVO reservation,
                                                @CurrentUser CustomUserDetails currentUser) {
         reservation.setUserId(currentUser.getId());  // 현재 로그인한 사용자의 ID 설정
+
+        if (reservation.getReserveDate() == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "예약 날짜와 시간이 필요합니다."));
+        }
+
         reservationService.createReservation(reservation);
         return ResponseEntity.ok(new ApiResponse(true, "예약이 생성되었습니다."));
     }
+
 
     // 사용자의 모든 예약 조회
     @GetMapping("/user")

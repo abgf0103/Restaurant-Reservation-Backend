@@ -383,4 +383,8 @@ public class UserService {
     public Long isManagerByUserId(Long userId) {
         return userMapper.isManagerByUserId(userId);
     }
+
+    public Long isAdminByUserId(Long userId){
+        return userMapper.isAdminByUserId(userId);
+    }
 }

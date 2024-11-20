@@ -8,4 +8,5 @@ public interface UserMapper {
     void removeUser(Long userId);
 
     Long isManagerByUserId(Long userId);
+    Long isAdminByUserId(Long userId);
     }

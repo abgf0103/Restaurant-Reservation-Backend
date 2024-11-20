@@ -24,4 +24,14 @@
         WHERE U.USER_ID = #{userId}
     </select>
 
+    <select id="isAdminByUserId"
+            parameterType="Long"
+            resultType="Long">
+        SELECT ROLE_ID
+        FROM USER_AUTHORITY UA
+                JOIN USERS U
+                    ON UA.USER_ID = U.USER_ID
+        WHERE UA.USER_ID = #{userId}
+    </select>
+
 </mapper>

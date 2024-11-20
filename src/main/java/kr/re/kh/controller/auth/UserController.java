@@ -71,4 +71,9 @@ public class UserController {
         return userService.isManagerByUserId(userId);
     }
 
+    @ApiOperation("어드민인지 확인")
+    @GetMapping("/isAdminByUserId")
+    public Long isAdminByUserId(@RequestParam Long userId) {
+        return userService.isAdminByUserId(userId);
+    }
 }

@@ -1,5 +1,6 @@
 package kr.re.kh.controller.auth;
 
+import io.swagger.annotations.ApiOperation;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.event.OnUserLogoutSuccessEvent;
 import kr.re.kh.model.CustomUserDetails;
@@ -62,6 +63,12 @@ public class UserController {
         OnUserLogoutSuccessEvent logoutSuccessEvent = new OnUserLogoutSuccessEvent(customUserDetails.getEmail(), credentials.toString(), logOutRequest);
         applicationEventPublisher.publishEvent(logoutSuccessEvent);
         return ResponseEntity.ok(new ApiResponse(true, "로그아웃 되었습니다."));
+    }
+
+    @ApiOperation("사업자인지 확인")
+    @GetMapping("/isManagerByUserId")
+    public Long isManagerByuserId(@RequestParam Long userId) {
+        return userService.isManagerByUserId(userId);
     }
 
 }

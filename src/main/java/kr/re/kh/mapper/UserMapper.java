@@ -7,4 +7,5 @@ public interface UserMapper {
     String test ();
     void removeUser(Long userId);
 
+    Long isManagerByUserId(Long userId);
     }

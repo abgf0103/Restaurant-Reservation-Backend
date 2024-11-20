@@ -379,4 +379,8 @@ public class UserService {
             throw new BadRequestException("잘못된 요청입니다.");
         }
     }
+
+    public Long isManagerByUserId(Long userId) {
+        return userMapper.isManagerByUserId(userId);
+    }
 }

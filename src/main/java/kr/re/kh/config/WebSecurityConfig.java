@@ -119,6 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/api/member/save").permitAll()
                 .antMatchers("/**/api/file/view/**").permitAll()
                 .antMatchers("/**/api/store/list").permitAll()
+                .antMatchers("/**/api/category/list").permitAll()
                 .antMatchers("/**/api/member/user/findID").permitAll()
                 .antMatchers("/**/api/member/user/findPassword").permitAll()
                 .antMatchers("/**/user/signup").permitAll()

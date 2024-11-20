@@ -33,7 +33,9 @@
     <select id="selectReviewsWithFiles" parameterType="SearchHelper" resultType="UploadFile">
         SELECT
         uf.FILE_DIR AS fileDir,
-        uf.SAVE_FILE_NAME AS saveFileName
+        uf.SAVE_FILE_NAME AS saveFileName,
+        uf.id,
+        uf.FILE_TARGET
         FROM UPLOAD_FILE uf
         INNER JOIN REVIEW_FILE_MAP rf ON rf.FILE_ID = uf.ID
         INNER JOIN REVIEW r ON r.STORE_ID = rf.STORE_ID
@@ -48,7 +50,7 @@
                 AND rf.RESERVE_ID = #{reserveId}
             </if>
         </where>
-        GROUP BY uf.FILE_DIR, uf.SAVE_FILE_NAME
+        GROUP BY uf.FILE_DIR, uf.SAVE_FILE_NAME, uf.id, uf.FILE_TARGET
     </select>
 
 
@@ -118,6 +120,7 @@
         , user_id AS userId
         , store_id AS storeId
         , rating
+        , reserve_id
         , review_comment AS reviewComment
         , created_at AS createdAt
         , updated_at AS updatedAt
@@ -147,8 +150,15 @@
     <!-- REVIEW_FILE_MAP에서 관련 파일 삭제 -->
     <delete id="deleteReviewFiles" parameterType="Long">
         DELETE FROM REVIEW_FILE_MAP
-        WHERE RESERVE_ID = #{reserveId}  <!-- reserveId를 기준으로 파일 삭제 -->
+        WHERE RESERVE_ID = #{reserveId} <!-- reserveId를 기준으로 파일 삭제 -->
     </delete>
+
+    <select id="getFileIdsByReserveId" parameterType="Long" resultType="Long">
+        SELECT FILE_ID
+        FROM REVIEW_FILE_MAP
+        WHERE RESERVE_ID = #{reserveId}
+    </select>
+
 
 
 
@@ -232,7 +242,8 @@
         FROM reserve
         WHERE user_id = #{userId}
         AND store_id = #{storeId}
-        AND reserve_status = 2  -- 완료된 예약만
+        AND reserve_status = 2  -- 완료된
+        예약만
         AND reserve_date =
     </select>
 

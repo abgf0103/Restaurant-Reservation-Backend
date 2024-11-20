@@ -99,4 +99,9 @@
 
     </delete>
 
+    <delete id="deleteOneFiles" parameterType="Long">
+        DELETE FROM REVIEW_FILE_MAP
+        WHERE RESERVE_ID = #{reserveId} AND FILE_ID = #{id}
+    </delete>
+
 </mapper>

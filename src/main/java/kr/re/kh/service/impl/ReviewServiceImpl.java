@@ -2,13 +2,17 @@ package kr.re.kh.service.impl;
 
 import kr.re.kh.exception.BadRequestException;
 import kr.re.kh.exception.ResourceNotFoundException;
+import kr.re.kh.mapper.FileMapMapper;
 import kr.re.kh.mapper.ReviewMapper;
+import kr.re.kh.mapper.UploadFileMapper;
 import kr.re.kh.model.CustomUserDetails;
+import kr.re.kh.model.payload.request.FileDeleteRequest;
 import kr.re.kh.model.payload.request.ReviewRequest;
 import kr.re.kh.model.vo.Review;
 import kr.re.kh.model.vo.SearchHelper;
 import kr.re.kh.model.vo.UploadFile;
 import kr.re.kh.service.ReviewService;
+import kr.re.kh.service.UploadFileService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewMapper reviewMapper;
+    private final UploadFileMapper uploadFileMapper;
 
     @Override
     public HashMap<String, Object> selectReview(SearchHelper searchHelper) {
@@ -69,6 +74,27 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return reviews;
+    }
+
+    @Override
+    public HashMap<String, Object> reviewInfo(Long reviewId) {
+        HashMap<String, Object> response = new HashMap<>();
+        Optional<Review> review = reviewMapper.reviewInfo(reviewId);
+
+        // 리뷰가 존재할 경우 파일 정보 추가
+        review.ifPresent(value -> {
+            // 리뷰의 reserveId를 기준으로 파일 정보 조회
+            SearchHelper s = SearchHelper.builder()
+                    .reserveId(value.getReserveId())  // 리뷰의 reserveId 사용
+                    .build();
+
+            // 리뷰에 관련된 파일 정보 조회
+            List<UploadFile> reviewFiles = reviewMapper.selectReviewsWithFiles(s);
+            value.setFiles(reviewFiles);  // 리뷰에 파일 정보 추가
+            response.put("data", value);  // 리뷰와 파일 정보 함께 반환
+        });
+
+        return response;
     }
 
     @Override
@@ -138,39 +164,67 @@ public class ReviewServiceImpl implements ReviewService {
         return fileListMap;
     }
 
-    @Override
-    public HashMap<String, Object> reviewInfo(Long reviewId) {
-        HashMap<String, Object> response = new HashMap<>();
-        Optional<Review> review = reviewMapper.reviewInfo(reviewId);
-        review.ifPresent(value -> response.put("data", value));
-        return response;
-    }
+
 
     @Override
     public void updateReview(Long reviewId, ReviewRequest reviewRequest) {
+        // 기존 리뷰 정보를 가져옴
         Review review = reviewMapper.reviewInfo(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", "reviewId", reviewId));
 
+        // 리뷰 수정
         review.setRating(reviewRequest.getRating());
         review.setReviewComment(reviewRequest.getReviewComment());
         review.setStoreId(reviewRequest.getStoreId());
 
+        // 리뷰 업데이트
         reviewMapper.updateReview(review);
+
+        // 파일 수정 로직 추가
+        if (reviewRequest.getFiles() != null && !reviewRequest.getFiles().isEmpty()) {
+            // 파일맵 저장
+            List<HashMap<String, Object>> fileListMap = new ArrayList<>();
+            for (Long fileId : reviewRequest.getFiles()) {
+                HashMap<String, Object> fileMap = new HashMap<>();
+                fileMap.put("userId", review.getUserId());
+                fileMap.put("storeId", review.getStoreId());
+                fileMap.put("reserveId", review.getReserveId());
+                fileMap.put("fileId", fileId);
+                reviewMapper.insertFileMap(fileMap);
+                fileListMap.add(fileMap);
+            }
+        }
     }
 
     @Override
-    public void deleteReview(Long reviewId, Long reserveId, Long userId ) {
+    public void deleteReview(Long reviewId, Long reserveId, Long userId) {
         // 로그로 받은 값 확인
         log.info("리뷰 삭제 요청 - reviewId: {}, reserveId: {}, userId: {} ", reviewId, reserveId, userId);
 
         // 1. REVIEW_LIKE 테이블에서 해당 리뷰의 좋아요 데이터 삭제
         reviewMapper.deleteReviewLikes(reviewId);
 
-        // 2. REVIEW 테이블에서 해당 리뷰 삭제
-        reviewMapper.deleteReview(reviewId);
+        // 2. REVIEW_FILE_MAP에서 삭제될 FILE_ID값을, 해당 FILE_ID에 대응되는 UPLOAD_FILE 테이블의 ID값에다가  설정
+        List<Long> fileIdsToDelete = reviewMapper.getFileIdsByReserveId(reserveId); // reserveId에 해당하는 FILE_ID 목록을 가져옵니다.
+
+        log.info("삭제할 FILE_ID 목록: {}", fileIdsToDelete);
 
         // 3. REVIEW_FILE_MAP 테이블에서 관련된 파일 삭제
-        reviewMapper.deleteReviewFiles(reserveId);
+        reviewMapper.deleteReviewFiles(reserveId); // 리뷰와 관련된 파일 삭제
+
+        // 4. REVIEW 테이블에서 해당 리뷰 삭제
+        reviewMapper.deleteReview(reviewId);
+
+        // 5. fileIdsToDelete에 포함된 FILE_ID 값들을 UPLOAD_FILE 테이블에서 삭제
+        for (Long fileId : fileIdsToDelete) {
+            // 해당 FILE_ID로 UPLOAD_FILE 테이블에서 파일 삭제
+            UploadFile fileToDelete = new UploadFile();
+            fileToDelete.setId(fileId); // 삭제할 파일 ID 설정
+
+            // 파일 삭제 메서드 호출
+            uploadFileMapper.deleteByFileByIdAndFileTarget(fileToDelete); // 해당 파일 삭제
+        }
+
         log.info("리뷰 삭제 완료, reserveId({})를 기준으로 관련 파일 삭제됨", reserveId);
     }
 

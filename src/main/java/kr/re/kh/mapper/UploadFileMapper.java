@@ -22,4 +22,6 @@ public interface UploadFileMapper {
 
     List<UploadFile> selectFileByBoardId(Long id);
 
+    void deleteOneFiles(Long id, Long reserveId);
+
 }

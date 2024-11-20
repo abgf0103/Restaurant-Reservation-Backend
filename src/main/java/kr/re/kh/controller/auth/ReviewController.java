@@ -35,6 +35,13 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.selectReview(request));
     }
 
+    @ApiOperation("리뷰 상세 조회")
+    @GetMapping("/view/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    public ResponseEntity<?> reviewView(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.reviewInfo(id));
+    }
+
     @ApiOperation("내가 작성한 리뷰 목록 조회")
     @GetMapping("/my-reviews")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
@@ -61,12 +68,7 @@ public class ReviewController {
         return ResponseEntity.ok(new ApiResponse(true, "리뷰가 수정되었습니다."));
     }
 
-    @ApiOperation("리뷰 상세 조회")
-    @GetMapping("/view/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
-    public ResponseEntity<?> reviewView(@PathVariable Long id) {
-        return ResponseEntity.ok(reviewService.reviewInfo(id));
-    }
+
 
     @ApiOperation("리뷰 저장")
     @PostMapping("/save")

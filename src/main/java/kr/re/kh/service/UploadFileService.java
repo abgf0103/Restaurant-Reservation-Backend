@@ -2,6 +2,7 @@ package kr.re.kh.service;
 
 import kr.re.kh.exception.BadRequestException;
 import kr.re.kh.mapper.FileMapMapper;
+import kr.re.kh.mapper.ReviewMapper;
 import kr.re.kh.mapper.UploadFileMapper;
 import kr.re.kh.model.payload.request.FileDeleteRequest;
 import kr.re.kh.model.vo.FileMap;
@@ -35,6 +36,7 @@ public class UploadFileService {
         this.rootLocation = Paths.get(uploadPath);
         this.uploadFileMapper = uploadFileMapper;
         this.fileMapMapper = fileMapMapper;
+
     }
 
     private Path loadPath(String fileName) {
@@ -138,6 +140,11 @@ public class UploadFileService {
             File deleteFile = new File(uploadFileVO.get().getFilePath());
             if (deleteFile.exists()) deleteFile.delete();
             uploadFileMapper.deleteByFileByIdAndFileTarget(uploadFile);
+            // filemap에도 삭제
+            uploadFileMapper.deleteOneFiles(fileDeleteRequest.getId(), fileDeleteRequest.getReserveId());
+
+            log.info("리뷰 삭제 완료, reserveId({})를 기준으로 관련 파일 삭제됨", fileDeleteRequest.getReserveId());
+
             return true;
         } else {
             return false;

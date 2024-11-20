@@ -36,6 +36,9 @@ public interface ReviewMapper {
     // 리뷰 첨부파일 삭제
     void deleteReviewFiles(Long reserveId);
 
+    // REVIEW_FILE_MAP에서 삭제된 FILE_ID를 기준으로, 해당 FILE_ID에 UPLOAD_FILE 테이블의 ID값 가져오기
+    List<Long> getFileIdsByReserveId(Long reserveId);
+
     // 좋아요 추가
     void likeReview(Long reviewId, Long userId);
 

@@ -13,5 +13,6 @@ public class FileDeleteRequest {
     @NullOrNotBlank(message = "id는 필수입니다.")
     private Long id;
     private String fileTarget;
+    private Long reserveId;
 
 }

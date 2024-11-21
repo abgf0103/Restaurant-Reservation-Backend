@@ -22,4 +22,8 @@ public interface ReservationService {
     void deleteReservation(Long reserveId);
 
     boolean isReservationOwner(Long reserveId, Long userId); // 사용자 권한 확인 메서드
+    
+    void confirmReservation(Long reserveId);    //예약 확정
+    
+    void cancelReservation(Long reserveId);     //예약 취소
 }

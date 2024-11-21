@@ -58,6 +58,24 @@
         WHERE reserve_id = #{reserveId}
     </update>
 
+    <!-- 예약 확정 업데이트 -->
+    <update id="confirmReservation"
+            parameterType="Long">
+        UPDATE RESERVE
+        SET reserve_status = '1',
+            updated_at = SYSDATE
+        WHERE reserve_id = #{reserveId}
+    </update>
+
+    <!-- 예약 취소 업데이트 -->
+    <update id="cancelReservation"
+            parameterType="Long">
+        UPDATE RESERVE
+        SET reserve_status = '3',
+            updated_at = SYSDATE
+        WHERE reserve_id = #{reserveId}
+    </update>
+
     <!-- 예약 삭제 -->
     <delete id="deleteReservation">
         DELETE FROM RESERVE

@@ -31,4 +31,10 @@ public interface ReservationMapper {
     void deleteReservation(@Param("reserveId") Long reserveId);
 
     List<ReservationVO> selectAllReservation();
+
+    // 예약 확정
+    void confirmReservation(Long reserveId);
+
+    // 예약 취소
+    void cancelReservation(Long reserveId);
 }

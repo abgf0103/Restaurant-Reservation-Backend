@@ -59,4 +59,22 @@ public class ReservationServiceImpl implements ReservationService {
         Optional<ReservationVO> reservation = reservationMapper.findReservationById(reserveId);
         return reservation.map(res -> res.getUserId().equals(userId)).orElse(false);
     }
+
+    /**
+     * 예약 확정
+     * @param reserveId
+     */
+    @Override
+    public void confirmReservation(Long reserveId) {
+        reservationMapper.confirmReservation(reserveId);
+    }
+
+    /**
+     * 예약 취소
+     * @param reserveId
+     */
+    @Override
+    public void cancelReservation(Long reserveId) {
+        reservationMapper.cancelReservation(reserveId);
+    }
 }

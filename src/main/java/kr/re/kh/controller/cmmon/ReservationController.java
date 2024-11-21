@@ -1,5 +1,7 @@
 package kr.re.kh.controller.cmmon;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.model.CustomUserDetails;
 import kr.re.kh.model.vo.ReservationVO;
@@ -83,5 +85,19 @@ public class ReservationController {
         }
         reservationService.deleteReservation(reserveId);
         return ResponseEntity.ok(new ApiResponse(true, "예약이 삭제되었습니다."));
+    }
+
+    // 예약 확정
+    @ApiOperation("예약 번호로 예약 확정")
+    @GetMapping("/confirmReservation")
+    public void confirmReservation(@RequestParam Long reserveId){
+        reservationService.confirmReservation(reserveId);
+    }
+
+    // 예약 취소
+    @ApiOperation("예약 번호로 예약 확정")
+    @GetMapping("/cancelReservation")
+    public void cancelReservation(@RequestParam Long reserveId){
+        reservationService.cancelReservation(reserveId);
     }
 }

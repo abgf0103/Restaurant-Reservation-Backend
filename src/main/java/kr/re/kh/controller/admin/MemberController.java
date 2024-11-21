@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -138,6 +139,50 @@ public class MemberController {
         }
 
 
+    }
+    //비밀번호 찾기
+    @PostMapping("/user/findPassword")
+
+    public Map<String, String> findTempPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String username = request.get("username");
+        String name = request.get("name");
+
+        String result = userService.generateTempPassword(email, username, name);
+
+
+        // JSON 형태로 응답
+        return Map.of("message", result);
+    }
+
+    @PostMapping("/user/verifyPassword")
+    public ResponseEntity<?> verifyPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String newPassword = request.get("newPassword");
+        String tempPassword = request.get("tempPassword");
+
+        // 사용자 정보를 데이터베이스에서 조회
+        Optional<User> userOpt = userService.findByEmail(email);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            // 비밀번호 확인
+            boolean isPasswordValid = userService.verifyPassword(tempPassword, user.getPassword());
+
+            if (isPasswordValid) {
+
+                userService.updatePassword(user, newPassword);
+
+                return ResponseEntity.ok(new ApiResponse(true, "비밀번호가 확인되었습니다.", null, null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(false, "비밀번호가 일치하지 않습니다.", null, null));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "이메일에 해당하는 사용자가 없습니다.", null, null));
+        }
     }
 
 }

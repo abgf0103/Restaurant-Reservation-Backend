@@ -40,6 +40,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -397,5 +398,46 @@ public class UserService {
         return userMapper.isAdminByUserId(userId);
     }
 
+    //비밀번호 생성
 
+    // 사용자 정보 조회 및 임시 비밀번호 생성
+    public String generateTempPassword(String email, String username, String name) {
+        // 1. 사용자 정보 조회
+        Map<String, String> params = Map.of("email", email, "username", username, "name", name);
+        User user = userMapper.findUserByInfo(params);
+
+        // 2. 사용자가 존재하는지 확인
+        if (user != null) {
+            // 3. 임시 비밀번호 생성
+            String tempPassword = generateTempPassword();
+
+            // 임시 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(tempPassword);
+
+            // 임시 비밀번호를 사용자에 저장
+            user.setPassword(encryptedPassword);
+            userMapper.updatePassword(user); // db에 저장
+
+            // 4. 임시 비밀번호를 반환 (웹 페이지에 출력하기 위한 용도)
+            return tempPassword;
+        } else {
+            return "이메일, 사용자 이름 또는 이름이 일치하지 않습니다.";
+        }
+    }
+
+    // 임시 비밀번호 생성
+    private String generateTempPassword() {
+        // UUID를 이용해 랜덤 8자리 임시 비밀번호 생성
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+
+    public boolean verifyPassword(String inputPassword, String storedPassword){
+        return passwordEncoder.matches(inputPassword,storedPassword);
+    }
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword)); // 새로운 비밀번호로 설정
+        log.info(passwordEncoder.encode(newPassword));
+        userRepository.save(user); // 변경된 사용자 정보를 DB에 저장
+    }
 }

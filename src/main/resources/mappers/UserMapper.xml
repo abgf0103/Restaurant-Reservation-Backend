@@ -46,4 +46,17 @@
         )
     </insert>
 
+    <select id="findUserByInfo" parameterType="java.util.Map" resultType="kr.re.kh.model.User">
+        SELECT USERNAME, NAME, EMAIL
+        FROM USERS
+        WHERE EMAIL = #{email} AND USERNAME = #{username} AND NAME = #{name}
+    </select>
+
+    <update id="updatePassword" parameterType="kr.re.kh.model.User">
+        UPDATE USERS
+        SET PASSWORD=#{password}
+        WHERE EMAIL=#{email}
+    </update>
+
+
 </mapper>

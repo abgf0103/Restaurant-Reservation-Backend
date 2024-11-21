@@ -217,6 +217,13 @@
             ORDER BY R.created_at DESC
     </select>
 
+    <!-- username으로 userId 조회 -->
+    <select id="getUserIdByUsername" parameterType="String" resultType="Long">
+        SELECT user_id
+        FROM users
+        WHERE username = #{username}
+    </select>
+
     <select id="checkReserveStatus" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM reserve

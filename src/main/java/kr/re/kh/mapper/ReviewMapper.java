@@ -19,6 +19,11 @@ public interface ReviewMapper {
 
     List<Review> selectReviewsByUserId(Long userId);
 
+    // 새로운 메서드: username으로 리뷰 조회
+    List<Review> getReviewsByUsername(String username);
+
+    Long getUserIdByUsername(String username);
+
     void reviewSave(Review review);  // REVIEW에 USERNAME 포함
 
     void insertFileMap(HashMap<String, Object> map);
@@ -54,8 +59,7 @@ public interface ReviewMapper {
     // REVIEW 테이블의  LIKE 수 감소
     void decrementLikeCount(Long reviewId);  // LIKE 수를 1 감소
 
-    // 새로운 메서드: username으로 리뷰 조회
-    List<Review> getReviewsByUsername(String username);
+
 
     // 특정 userId와 storeId에 대한 예약 상태 체크 (새로운 메서드)
     int checkReserveStatus(Long userId, Long storeId, Long reserveId);

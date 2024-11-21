@@ -111,8 +111,6 @@
         INSERT INTO REVIEW_FILE_MAP (USER_ID, FILE_ID, RESERVE_ID, STORE_ID) VALUES (#{userId}, #{fileId}, #{reserveId}, #{storeId})
     </insert>
 
-
-
     <!-- 리뷰 조회 -->
     <select id="reviewInfo" parameterType="Long" resultType="Review">
         SELECT
@@ -158,9 +156,6 @@
         FROM REVIEW_FILE_MAP
         WHERE RESERVE_ID = #{reserveId}
     </select>
-
-
-
 
     <!-- 리뷰 좋아요 추가 -->
     <insert id="likeReview" parameterType="map">
@@ -215,13 +210,6 @@
             LEFT JOIN store S ON R.store_id = S.store_id  <!-- store 테이블과 조인 -->
         WHERE R.username = #{username}
             ORDER BY R.created_at DESC
-    </select>
-
-    <!-- username으로 userId 조회 -->
-    <select id="getUserIdByUsername" parameterType="String" resultType="Long">
-        SELECT user_id
-        FROM users
-        WHERE username = #{username}
     </select>
 
     <select id="checkReserveStatus" parameterType="map" resultType="int">

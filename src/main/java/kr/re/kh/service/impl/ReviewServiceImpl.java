@@ -101,17 +101,10 @@ public class ReviewServiceImpl implements ReviewService {
     public HashMap<String, Object> getReviewsByUsername(String username) {
         HashMap<String, Object> response = new HashMap<>();
 
-        // username으로 userId를 조회
-        Long userId = reviewMapper.getUserIdByUsername(username);
-        if (userId == null) {
-            response.put("message", "User not found");
-            return response;  // 사용자가 존재하지 않으면 메시지 반환
-        }
-
         // 리뷰 목록을 username 기준으로 조회
         List<Review> reviews = reviewMapper.getReviewsByUsername(username);
 
-        // 각 리뷰에 대해 파일 정보 및 좋아요 수 조회
+        // 각 리뷰에 대해 파일 정보 조회
         for (Review review : reviews) {
             // 파일 정보 조회를 위한 SearchHelper 생성
             SearchHelper s = SearchHelper.builder()
@@ -122,16 +115,11 @@ public class ReviewServiceImpl implements ReviewService {
             // 리뷰에 대한 파일 정보 조회
             List<UploadFile> reviewFiles = reviewMapper.selectReviewsWithFiles(s);
             review.setFiles(reviewFiles);  // 리뷰에 파일 리스트 추가
-
-            // 좋아요 수 설정
-            int likeCount = reviewMapper.countLikes(review.getReviewId(), userId);  // userId를 사용하여 좋아요 수 조회
-            review.setLikeCount(likeCount);  // Review 객체에 likeCount 설정
         }
 
         response.put("data", reviews);  // 결과를 'data'로 반환
         return response;
     }
-
 
 
 
@@ -285,3 +273,4 @@ public class ReviewServiceImpl implements ReviewService {
         return count > 0;
     }
 }
+

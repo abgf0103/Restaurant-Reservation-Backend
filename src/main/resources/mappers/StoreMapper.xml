@@ -142,6 +142,7 @@
         FROM STORE
         WHERE STORE_NAME LIKE '%' || #{searchKeyword} || '%'
            OR DESCRIPTION LIKE '%' || #{searchKeyword} || '%'
+        ORDER BY STORE_ID DESC
     </select>
 
 

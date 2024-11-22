@@ -4,11 +4,11 @@
 
     <!-- 가게 목록 -->
     <select id="selectAllStore" parameterType="SearchHelper" resultType="StoreVO">
-        SELECT *
-        FROM STORE
-        WHERE IS_ACTIVE = 1
-
-        ORDER BY STORE_ID DESC
+        SELECT s.*, uf.file_name
+        FROM STORE s
+        INNER JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
+        WHERE s.IS_ACTIVE = 1
+        ORDER BY s.STORE_ID DESC
     </select>
 
     <!-- 가게 등록 -->

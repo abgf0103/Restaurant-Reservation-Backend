@@ -49,7 +49,19 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public List<StoreVO> selectAllStore() {
-        return storeMapper.selectAllStore();
+        List<StoreVO> stores = storeMapper.selectAllStore();  // 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
     }
 
     /**

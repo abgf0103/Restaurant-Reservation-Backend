@@ -100,4 +100,11 @@ public class ReservationController {
     public void cancelReservation(@RequestParam Long reserveId){
         reservationService.cancelReservation(reserveId);
     }
+
+    // 예약 완료
+    @ApiOperation("예약 번호로 예약 완료")
+    @GetMapping("/completeReservation")
+    public void completeReservation(@RequestParam Long reserveId){
+        reservationService.completeReservation(reserveId);
+    }
 }

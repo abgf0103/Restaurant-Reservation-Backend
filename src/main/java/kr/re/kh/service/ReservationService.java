@@ -26,4 +26,6 @@ public interface ReservationService {
     void confirmReservation(Long reserveId);    //예약 확정
     
     void cancelReservation(Long reserveId);     //예약 취소
+    
+    void completeReservation(Long reserveId);   //예약 완료
 }

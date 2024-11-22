@@ -37,4 +37,7 @@ public interface ReservationMapper {
 
     // 예약 취소
     void cancelReservation(Long reserveId);
+
+    // 예약 완료
+    void completeReservation(Long reserveId);
 }

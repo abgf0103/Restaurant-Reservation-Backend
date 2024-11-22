@@ -77,4 +77,9 @@ public class ReservationServiceImpl implements ReservationService {
     public void cancelReservation(Long reserveId) {
         reservationMapper.cancelReservation(reserveId);
     }
+
+    @Override
+    public void completeReservation(Long reserveId) {
+        reservationMapper.completeReservation(reserveId);
+    }
 }

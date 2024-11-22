@@ -25,4 +25,5 @@ public class StoreVO {
     private Long isActive;              //가게 활성화 여부
     private Long fileId;                //파일 ID
     private String saveFileName;        // 저장된 파일 이름
+    private String saveFileTarget;      // 저장된 파일 타겟
 }

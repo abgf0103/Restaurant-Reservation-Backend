@@ -6,7 +6,7 @@
     <select id="selectAllStore" parameterType="SearchHelper" resultType="StoreVO">
         SELECT s.*, uf.file_name
         FROM STORE s
-        INNER JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
+        LEFT  JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
         WHERE s.IS_ACTIVE = 1
         ORDER BY s.STORE_ID DESC
     </select>
@@ -43,6 +43,7 @@
                 <if test="storeStatus != null">STORE_STATUS = #{storeStatus}, </if>
                 <if test="phone != null">PHONE = #{phone}, </if>
                 <if test="description != null">DESCRIPTION = #{description}, </if>
+                <if test="fileId != null">FILE_ID = #{fileId}, </if>
                 UPDATED_AT = CURRENT_TIMESTAMP
             </set>
         WHERE STORE_ID = #{storeId}
@@ -106,9 +107,10 @@
     <select id="viewStore"
             parameterType="Long"
             resultType="StoreVO">
-        SELECT *
-        FROM STORE
-        WHERE STORE_ID = #{storeId} AND IS_ACTIVE = 1
+        SELECT s.*, uf.file_name
+        FROM STORE s
+        LEFT  JOIN UPLOAD_FILE uf ON S.FILE_ID = uf.ID
+        WHERE s.STORE_ID = #{storeId} AND s.IS_ACTIVE = 1
     </select>
 
     <!-- 내 가게 조회 -->
@@ -117,7 +119,7 @@
             resultType="StoreVO">
         SELECT *
         FROM STORE s
-        INNER JOIN UPLOAD_FILE uf ON S.FILE_ID = uf.ID
+        LEFT  JOIN UPLOAD_FILE uf ON S.FILE_ID = uf.ID
         WHERE s.USER_ID = #{userId}
     </select>
 
@@ -147,6 +149,13 @@
     <!-- 파일 ID로 파일 이름을 가져오기 -->
     <select id="getFileNameByFileId" parameterType="Long" resultType="String">
         SELECT save_file_name
+        FROM UPLOAD_FILE
+        WHERE id = #{fileId}
+    </select>
+
+    <!-- 파일 ID로 파일 타겟 가져오기 -->
+    <select id="getFileTargetByFileId" parameterType="Long" resultType="String">
+        SELECT FILE_TARGET
         FROM UPLOAD_FILE
         WHERE id = #{fileId}
     </select>

@@ -31,7 +31,9 @@
             save_file_name
         FROM upload_file
         WHERE id = #{id}
-          AND file_target = #{fileTarget}
+            <if test="fileTarget != '' and fileTarget != null">
+              AND file_target = #{fileTarget}
+            </if>
     </select>
 
     <!-- save_file_name으로 파일 조회 -->
@@ -91,7 +93,7 @@
 
     <!-- 첨부파일 삭제 -->
     <delete id="deleteByFileByIdAndFileTarget" parameterType="UploadFile">
-
+        -- deleteByFileByIdAndFileTarget
         DELETE FROM upload_file WHERE id = #{id}
         <if test="fileTarget != null and fileTarget != ''">
             AND file_target = #{fileTarget}

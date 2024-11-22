@@ -131,12 +131,25 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 가게 조회
-     * @param storeId
-     * @return
+     * @param storeId 가게 ID
+     * @return StoreVO 가게 정보 객체
+     * @fileName StoreServiceImpl.java  // 이 파일에서 정의된 메서드입니다.
      */
     @Override
     public StoreVO viewStore(Long storeId) {
-        return storeMapper.viewStore(storeId);
+        StoreVO storeVO = storeMapper.viewStore(storeId);  // 가게 정보 조회
+
+        //  파일 이름을 가져와서 설정
+        if (storeVO != null && storeVO.getFileId() != null) {
+            String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());
+            String fileTarget = storeMapper.getFileTargetByFileId(storeVO.getFileId());
+            if (fileName != null) {
+                storeVO.setSaveFileName(fileName);// 파일 이름 설정
+                storeVO.setSaveFileTarget((fileTarget));// 파일 타겟 설정
+            }
+        }
+
+        return storeVO;
     }
 
     /**

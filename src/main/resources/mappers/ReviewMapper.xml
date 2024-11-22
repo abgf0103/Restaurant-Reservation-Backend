@@ -146,9 +146,10 @@
     </delete>
 
     <!-- REVIEW_FILE_MAP에서 관련 파일 삭제 -->
+    <!-- reserveId를 기준으로 파일 삭제 -->
     <delete id="deleteReviewFiles" parameterType="Long">
         DELETE FROM REVIEW_FILE_MAP
-        WHERE RESERVE_ID = #{reserveId} <!-- reserveId를 기준으로 파일 삭제 -->
+        WHERE RESERVE_ID = #{reserveId}
     </delete>
 
     <select id="getFileIdsByReserveId" parameterType="Long" resultType="Long">

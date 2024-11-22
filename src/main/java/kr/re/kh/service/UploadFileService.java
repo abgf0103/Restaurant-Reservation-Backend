@@ -135,13 +135,20 @@ public class UploadFileService {
         uploadFile.setId(fileDeleteRequest.getId());
         if (fileDeleteRequest.getFileTarget() != null) uploadFile.setFileTarget(fileDeleteRequest.getFileTarget());
 
+        log.info("8888");
         Optional<UploadFile> uploadFileVO = uploadFileMapper.selectFileByIdAndFileTarget(uploadFile);
+        log.info("8ioioojioji");
         if (uploadFileVO.isPresent()) {
             File deleteFile = new File(uploadFileVO.get().getFilePath());
             if (deleteFile.exists()) deleteFile.delete();
             uploadFileMapper.deleteByFileByIdAndFileTarget(uploadFile);
             // filemap에도 삭제
-            uploadFileMapper.deleteOneFiles(fileDeleteRequest.getId(), fileDeleteRequest.getReserveId());
+            if (fileDeleteRequest.getReserveId() != null) {
+                uploadFileMapper.deleteOneFiles(fileDeleteRequest.getId(), fileDeleteRequest.getReserveId());
+            }
+
+            // store 테이블의 file_id 컬럼값 데이터 삭제
+
 
             log.info("리뷰 삭제 완료, reserveId({})를 기준으로 관련 파일 삭제됨", fileDeleteRequest.getReserveId());
 

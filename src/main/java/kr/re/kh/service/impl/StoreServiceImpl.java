@@ -5,8 +5,8 @@ import kr.re.kh.model.vo.StoreVO;
 import kr.re.kh.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 
 @Service
 @Slf4j
@@ -24,8 +24,22 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public void insertStore(StoreVO storeVO) {
+        // 파일 ID가 존재하면 파일 이름을 가져와서 저장
+        if (storeVO.getFileId() != null) {
+            String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());
+            if (fileName != null) {
+                storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+            }
+        }
         storeMapper.insertStore(storeVO);
+    }
 
+    /**
+     * 파일 ID로 파일 이름을 가져오는 메서드
+     */
+    @Override
+    public String getFileNameByFileId(Long fileId) {
+        return storeMapper.getFileNameByFileId(fileId);  // storeMapper에서 파일 이름을 가져옴
     }
 
     /**

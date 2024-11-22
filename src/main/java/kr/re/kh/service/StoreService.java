@@ -22,4 +22,6 @@ public interface StoreService {
     List<StoreVO> selectMyStoreByUserId(Long userId);       //내 가게 조회
     List<StoreVO> selectStoreByCategoryId(Long storeId);    //카테고리ID로 가게 조회
     List<StoreVO> searchStore(String searchKeyword);        //키워드로 가게 검색
+
+    String getFileNameByFileId(Long fileId);                // 파일 이름 가져오는 메서드
 }

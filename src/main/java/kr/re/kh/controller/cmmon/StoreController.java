@@ -108,4 +108,10 @@ public class StoreController {
         return ResponseEntity.ok(storeService.searchStore(searchKeyword));
     }
 
+    @ApiOperation("유저ID로 즐겨찾기 등록된 가게 리스트 조회")
+    @GetMapping("/getFavoriteStoreList")
+    public ResponseEntity<?> getFavoriteStoreList(@RequestParam Long userId) {
+        return ResponseEntity.ok(storeService.getFavoriteStoreList(userId));
+    }
+
 }

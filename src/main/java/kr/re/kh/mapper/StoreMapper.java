@@ -36,4 +36,6 @@ public interface StoreMapper {
 
     String getFileNameByFileId(Long fileId);
 
+    List<StoreVO> getFavoriteStoreList(Long userId);
+
 }

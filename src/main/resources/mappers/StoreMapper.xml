@@ -151,5 +151,18 @@
         WHERE id = #{fileId}
     </select>
 
+    <!-- 즐겨찾기 한 가게 목록 -->
+    <select id="getFavoriteStoreList" parameterType="SearchHelper" resultType="StoreVO">
+        SELECT s.*, uf.file_name
+        FROM (SELECT *
+              FROM STORE
+              WHERE STORE_ID IN (SELECT STORE_ID
+                                 FROM FAVORITE
+                                 WHERE USER_ID = #{userId})) S
+                 INNER JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
+        WHERE s.IS_ACTIVE = 1
+        ORDER BY s.STORE_ID DESC
+    </select>
+
 
 </mapper>

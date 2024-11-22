@@ -42,6 +42,11 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.getFileNameByFileId(fileId);  // storeMapper에서 파일 이름을 가져옴
     }
 
+    @Override
+    public List<StoreVO> getFavoriteStoreList(Long userId) {
+        return storeMapper.getFavoriteStoreList(userId);
+    }
+
     /**
      * 모든 가게 조회
      *

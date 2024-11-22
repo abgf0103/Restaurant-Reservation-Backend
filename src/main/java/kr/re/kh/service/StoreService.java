@@ -24,4 +24,6 @@ public interface StoreService {
     List<StoreVO> searchStore(String searchKeyword);        //키워드로 가게 검색
 
     String getFileNameByFileId(Long fileId);                // 파일 이름 가져오는 메서드
+
+    List<StoreVO> getFavoriteStoreList(Long userId);        // 유저ID로 즐겨찾기 한 가게 리스트 가져오기
 }

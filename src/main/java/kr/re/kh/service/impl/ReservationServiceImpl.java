@@ -45,7 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void updateReservationStatus(Long reserveId, String status) {
+    public void updateReservationStatus(Long reserveId, int status) {
         reservationMapper.updateReservationStatus(reserveId, status);
     }
 

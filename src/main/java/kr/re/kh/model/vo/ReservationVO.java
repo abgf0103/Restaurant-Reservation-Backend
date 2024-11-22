@@ -16,7 +16,7 @@ public class ReservationVO {
     private Long userId;           // 사용자 ID
     private Long storeId;          // 가게 ID
     private int partySize;         // 인원 수
-    private String reserveStatus;  // 예약 상태
+    private int reserveStatus;  // 예약 상태
     private LocalDateTime reserveDate; // 예약 날짜
     private String storeName;      // 가게 이름
 

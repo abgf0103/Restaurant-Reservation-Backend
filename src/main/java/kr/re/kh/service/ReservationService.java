@@ -17,7 +17,7 @@ public interface ReservationService {
 
     void updateReservation(ReservationVO reservation);
 
-    void updateReservationStatus(Long reserveId, String status);
+    void updateReservationStatus(Long reserveId, int status);
 
     void deleteReservation(Long reserveId);
 

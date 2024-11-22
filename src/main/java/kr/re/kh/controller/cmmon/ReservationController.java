@@ -70,7 +70,7 @@ public class ReservationController {
     @PutMapping("/update-status/{reserveId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,
-                                                     @RequestBody String status) {
+                                                     @RequestBody int status) {
         reservationService.updateReservationStatus(reserveId, status);
         return ResponseEntity.ok(new ApiResponse(true, "예약 상태가 업데이트되었습니다."));
     }

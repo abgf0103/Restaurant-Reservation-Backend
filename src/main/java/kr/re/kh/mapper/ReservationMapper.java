@@ -25,7 +25,7 @@ public interface ReservationMapper {
     void updateReservation(ReservationVO reservation);
 
     // 예약 삭제
-    void updateReservationStatus(@Param("reserveId") Long reserveId, @Param("status") String status);
+    void updateReservationStatus(@Param("reserveId") Long reserveId, @Param("status") int status);
     
     // 가게 회원 예약 상태 업데이트
     void deleteReservation(@Param("reserveId") Long reserveId);

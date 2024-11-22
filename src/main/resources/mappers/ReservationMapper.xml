@@ -22,11 +22,11 @@
         )
     </insert>
 
-
     <!-- 모든 예약 조회 -->
     <select id="selectAllReservation" parameterType="SearchHelper" resultType="StoreVO">
         SELECT *
         FROM RESERVE
+        ORDER BY reserve_status ASC, reserve_date DESC
     </select>
 
     <!-- 특정 예약 조회 by ID -->
@@ -41,20 +41,21 @@
         FROM RESERVE r
         JOIN STORE s ON r.store_id = s.store_id
         WHERE r.user_id = #{userId}
+        ORDER BY r.reserve_status ASC, r.reserve_date DESC
     </select>
-
 
     <!-- 특정 가게의 모든 예약 조회 -->
     <select id="findAllReservationsByStoreId" resultType="kr.re.kh.model.vo.ReservationVO">
         SELECT * FROM RESERVE
         WHERE store_id = #{storeId}
+        ORDER BY reserve_status ASC, reserve_date DESC
     </select>
 
     <!-- 예약 상태 업데이트 (가게 회원) -->
     <update id="updateReservationStatus">
         UPDATE RESERVE
         SET reserve_status = #{status},
-            updated_at = SYSDATE
+        updated_at = SYSDATE
         WHERE reserve_id = #{reserveId}
     </update>
 
@@ -62,8 +63,8 @@
     <update id="confirmReservation"
             parameterType="Long">
         UPDATE RESERVE
-        SET reserve_status = '1',
-            updated_at = SYSDATE
+        SET reserve_status = 1,
+        updated_at = SYSDATE
         WHERE reserve_id = #{reserveId}
     </update>
 
@@ -71,8 +72,8 @@
     <update id="cancelReservation"
             parameterType="Long">
         UPDATE RESERVE
-        SET reserve_status = '3',
-            updated_at = SYSDATE
+        SET reserve_status = 3,
+        updated_at = SYSDATE
         WHERE reserve_id = #{reserveId}
     </update>
 
@@ -80,8 +81,8 @@
     <update id="completeReservation"
             parameterType="Long">
         UPDATE RESERVE
-        SET reserve_status = '2',
-            updated_at = SYSDATE
+        SET reserve_status = 2,
+        updated_at = SYSDATE
         WHERE reserve_id = #{reserveId}
     </update>
 

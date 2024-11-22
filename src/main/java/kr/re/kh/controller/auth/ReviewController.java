@@ -183,6 +183,12 @@ public class ReviewController {
         boolean isExist = reviewService.isReviewExist(userId, storeId, reserveId);
         return ResponseEntity.ok(isExist);
     }
+
+    @ApiOperation("가게ID로 리뷰 평균 별점 조회")
+    @GetMapping("/getRatingAvgByStoreId")
+    public double getRatingAvgByStoreId(@RequestParam("storeId") Long storeId) {
+        return reviewService.getRatingAvgByStoreId(storeId);
+    }
 }
 
 

@@ -243,6 +243,14 @@
         AND reserve_date =
     </select>
 
+    <!-- 리뷰 별점 평균 조회 -->
+    <select id="getRatingAvgByStoreId"
+            parameterType="Long"
+            resultType="double">
+        SELECT ROUND(AVG(RATING), 1)
+        FROM REVIEW
+        WHERE STORE_ID = #{storeId}
+    </select>
 
 
 </mapper>

@@ -34,6 +34,6 @@ public interface ReviewService {
 
     boolean isReviewExist(Long userId, Long storeId, Long reserveId);  // 중복 리뷰 확인 메서드 추가
 
-
+    double getRatingAvgByStoreId(Long storeId); //가게ID로 리뷰 평균 별점 조회
 }
 

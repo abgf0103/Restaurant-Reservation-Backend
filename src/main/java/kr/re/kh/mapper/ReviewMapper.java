@@ -63,7 +63,7 @@ public interface ReviewMapper {
     // 특정 사용자의 매장에 대한 중복 리뷰 확인
     int countReviewsByUserAndStore(Long userId, Long storeId, Long reserveId);
 
-
+    double getRatingAvgByStoreId(Long storeId); //가게ID로 리뷰 평균 별점 조회
 }
 
 

@@ -272,5 +272,10 @@ public class ReviewServiceImpl implements ReviewService {
         int count = reviewMapper.countReviewsByUserAndStore(userId, storeId, reserveId);
         return count > 0;
     }
+
+    @Override
+    public double getRatingAvgByStoreId(Long storeId) {
+        return reviewMapper.getRatingAvgByStoreId(storeId);
+    }
 }
 

@@ -16,5 +16,7 @@ public class MenuVO {
     private String menuName;
     private String description;
     private int price;
-
+    private Long fileId;
+    private String saveFileName;
+    private String fileTarget;
 }

@@ -8,11 +8,13 @@
         INSERT INTO MENU (STORE_ID
                          , MENU_NAME
                          , PRICE
+                         , FILE_ID
                         <if test="description != null"> , DESCRIPTION</if>
         )
         VALUES(#{storeId}
             , #{menuName}
             , #{price}
+            , #{fileId}
         <if test="description != null">, #{description}</if>
         )
     </insert>
@@ -25,6 +27,7 @@
             <if test="menuName != null">MENU_NAME = #{menuName}, </if>
             <if test="description != null">DESCRIPTION = #{description}, </if>
             <if test="price != null">PRICE = #{price}, </if>
+            <if test="fileId != null">FILE_ID = #{fileId}, </if>
             UPDATED_AT = CURRENT_TIMESTAMP
         </set>
         WHERE MENU_ID = #{menuId}
@@ -34,8 +37,9 @@
     <select id="getMenuById"
             parameterType="Long"
             resultType="MenuVO">
-        SELECT *
-        FROM MENU
+        SELECT m.*, uf.file_name, UF.SAVE_FILE_NAME, uf.FILE_TARGET
+        FROM MENU m
+        LEFT JOIN UPLOAD_FILE uf ON m.FILE_ID = uf.ID
         WHERE MENU_ID = #{menuId}
     </select>
 
@@ -51,9 +55,11 @@
     <select id="getMenuListByStoreId"
             parameterType="SearchHelper"
             resultType="MenuVO">
-    SELECT *
-    FROM MENU
+        SELECT m.*, uf.file_name, uf.SAVE_FILE_NAME, uf.FILE_TARGET
+        FROM MENU m
+        LEFT JOIN UPLOAD_FILE uf ON m.FILE_ID = uf.ID
     WHERE STORE_ID = #{storeId} AND STATUS = 1
     </select>
+
 
 </mapper>

@@ -50,7 +50,7 @@ public class ReservationController {
     }
 
     // 가게 ID로 모든 예약 조회 (가게 측에서 사용)
-    @GetMapping("/store/{storeId}")
+    @GetMapping("/store/reserve/{storeId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<List<ReservationVO>> getAllReservationsByStoreId(@PathVariable Long storeId) {
         List<ReservationVO> reservations = reservationService.getAllReservationsByStoreId(storeId);
@@ -89,22 +89,26 @@ public class ReservationController {
 
     // 예약 확정
     @ApiOperation("예약 번호로 예약 확정")
-    @GetMapping("/confirmReservation")
-    public void confirmReservation(@RequestParam Long reserveId){
+    @PutMapping("/confirmReservation/{reserveId}")
+    public ResponseEntity<ApiResponse> confirmReservation(@PathVariable Long reserveId) {
         reservationService.confirmReservation(reserveId);
+        return ResponseEntity.ok(new ApiResponse(true, "예약이 확정되었습니다."));
     }
 
     // 예약 취소
-    @ApiOperation("예약 번호로 예약 확정")
-    @GetMapping("/cancelReservation")
-    public void cancelReservation(@RequestParam Long reserveId){
+    @ApiOperation("예약 번호로 예약 취소")
+    @PutMapping("/cancelReservation/{reserveId}")
+    public ResponseEntity<ApiResponse> cancelReservation(@PathVariable Long reserveId) {
         reservationService.cancelReservation(reserveId);
+        return ResponseEntity.ok(new ApiResponse(true, "예약이 취소되었습니다."));
     }
 
     // 예약 완료
     @ApiOperation("예약 번호로 예약 완료")
-    @GetMapping("/completeReservation")
-    public void completeReservation(@RequestParam Long reserveId){
+    @PutMapping("/completeReservation/{reserveId}")
+    public ResponseEntity<ApiResponse> completeReservation(@PathVariable Long reserveId) {
         reservationService.completeReservation(reserveId);
+        return ResponseEntity.ok(new ApiResponse(true, "예약이 완료되었습니다."));
     }
+
 }

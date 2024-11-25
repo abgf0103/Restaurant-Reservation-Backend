@@ -48,7 +48,7 @@
     <select id="findAllReservationsByStoreId" resultType="kr.re.kh.model.vo.ReservationVO">
         SELECT * FROM RESERVE
         WHERE store_id = #{storeId}
-        ORDER BY reserve_status ASC, reserve_date DESC
+        ORDER BY reserve_status ASC, reserve_date ASC
     </select>
 
     <!-- 예약 상태 업데이트 (가게 회원) -->

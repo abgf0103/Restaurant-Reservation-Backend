@@ -273,9 +273,24 @@ public class ReviewServiceImpl implements ReviewService {
         return count > 0;
     }
 
+    /**
+     * 가게ID로 리뷰 평균평점 조회
+     * @param storeId
+     * @return
+     */
     @Override
     public double getRatingAvgByStoreId(Long storeId) {
         return reviewMapper.getRatingAvgByStoreId(storeId);
+    }
+
+    /**
+     * 가게ID로 리뷰 개수 조회
+     * @param storeId
+     * @return
+     */
+    @Override
+    public Long getReviewCountByStoreId(Long storeId) {
+        return reviewMapper.getReviewCountByStoreId(storeId);
     }
 }
 

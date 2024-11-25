@@ -64,6 +64,8 @@ public interface ReviewMapper {
     int countReviewsByUserAndStore(Long userId, Long storeId, Long reserveId);
 
     double getRatingAvgByStoreId(Long storeId); //가게ID로 리뷰 평균 별점 조회
+
+    Long getReviewCountByStoreId(Long storeId); //가게ID로 리뷰 개수 조회
 }
 
 

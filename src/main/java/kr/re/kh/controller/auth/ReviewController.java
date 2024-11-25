@@ -189,6 +189,12 @@ public class ReviewController {
     public double getRatingAvgByStoreId(@RequestParam("storeId") Long storeId) {
         return reviewService.getRatingAvgByStoreId(storeId);
     }
+
+    @ApiOperation("가게ID로 리뷰 개수 조회")
+    @GetMapping("/getReviewCountByStoreId")
+    public long getReviewCountByStoreId(@RequestParam("storeId") Long storeId) {
+        return reviewService.getReviewCountByStoreId(storeId);
+    }
 }
 
 

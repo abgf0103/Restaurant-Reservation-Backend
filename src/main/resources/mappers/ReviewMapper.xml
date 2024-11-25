@@ -243,6 +243,16 @@
         AND reserve_date =
     </select>
 
+    <!-- 리뷰 개수 조회 -->
+
+    <select id="getReviewCountByStoreId"
+            parameterType="Long"
+            resultType="Long">
+        SELECT COUNT(*)
+        FROM REVIEW
+        WHERE STORE_ID = #{storeId}
+    </select>
+
     <!-- 리뷰 별점 평균 조회 -->
     <select id="getRatingAvgByStoreId"
             parameterType="Long"

@@ -23,6 +23,9 @@ public class StoreVO {
     private LocalDateTime updatedAt;    //수정 시간
     private String description;         //가게 소개글
     private Long isActive;              //가게 활성화 여부
+    private String identity;            //가게 정체성
+    
+    
     private Long fileId;                //파일 ID
     private String saveFileName;        // 저장된 파일 이름
     private String saveFileTarget;      // 저장된 파일 타겟

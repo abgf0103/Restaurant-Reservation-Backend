@@ -257,7 +257,7 @@
     <select id="getRatingAvgByStoreId"
             parameterType="Long"
             resultType="double">
-        SELECT ROUND(AVG(RATING), 1)
+        SELECT ROUND(NVL(AVG(RATING), 0), 1) AS AVG_RATING --NULL일 경우 0 반환
         FROM REVIEW
         WHERE STORE_ID = #{storeId}
     </select>

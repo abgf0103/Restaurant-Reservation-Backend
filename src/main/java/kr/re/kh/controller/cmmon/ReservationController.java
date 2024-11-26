@@ -51,7 +51,7 @@ public class ReservationController {
 
     // 가게 ID로 모든 예약 조회 (가게 측에서 사용)
     @GetMapping("/store/reserve/{storeId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<List<ReservationVO>> getAllReservationsByStoreId(@PathVariable Long storeId) {
         List<ReservationVO> reservations = reservationService.getAllReservationsByStoreId(storeId);
         return ResponseEntity.ok(reservations);
@@ -68,7 +68,7 @@ public class ReservationController {
 
     // 예약 상태 업데이트 (가게 회원 전용)
     @PutMapping("/update-status/{reserveId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,
                                                      @RequestBody int status) {
         reservationService.updateReservationStatus(reserveId, status);

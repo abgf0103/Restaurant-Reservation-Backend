@@ -169,7 +169,19 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public List<StoreVO> selectStoreByCategoryId(Long storeId) {
-        return storeMapper.selectStoreByCategoryId(storeId);
+        List<StoreVO> stores = storeMapper.selectStoreByCategoryId(storeId);  // 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
     }
 
     /**
@@ -179,6 +191,18 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public List<StoreVO> searchStore(String searchKeyword) {
-        return storeMapper.searchStore(searchKeyword);
+        List<StoreVO> stores = storeMapper.searchStore(searchKeyword);  // 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
     }
 }

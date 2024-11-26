@@ -42,11 +42,32 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.getFileNameByFileId(fileId);  // storeMapper에서 파일 이름을 가져옴
     }
 
+    /**
+     * 즐겨찾기한 가게 리스트 조회
+     * @param userId
+     * @return
+     */
     @Override
     public List<StoreVO> getFavoriteStoreList(Long userId) {
-        return storeMapper.getFavoriteStoreList(userId);
+        List<StoreVO> stores = storeMapper.getFavoriteStoreList(userId);  // 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
     }
 
+    /**
+     * 모든 가게 리스트 조회(어드민)
+     * @return
+     */
     @Override
     public List<StoreVO> getStoreListForAdmin() {
         return storeMapper.getStoreListForAdmin();
@@ -102,6 +123,11 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.hasStoreName(storeName);
     }
 
+    /**
+     * 가게 이름으로 가게 ID 조회
+     * @param storeName
+     * @return
+     */
     @Override
     public Long findStoreIdByStoreName(String storeName) {
         return storeMapper.findStoreIdByStoreName(storeName);

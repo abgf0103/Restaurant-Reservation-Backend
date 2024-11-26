@@ -47,6 +47,11 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.getFavoriteStoreList(userId);
     }
 
+    @Override
+    public List<StoreVO> getStoreListForAdmin() {
+        return storeMapper.getStoreListForAdmin();
+    }
+
     /**
      * 모든 가게 조회
      *

@@ -114,4 +114,10 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getFavoriteStoreList(userId));
     }
 
+    @ApiOperation("가게 리스트 조회(어드민)")
+    @GetMapping("getStoreListForAdmin")
+    public ResponseEntity<?> getStoreListForAdmin() {
+        return ResponseEntity.ok(storeService.getStoreListForAdmin());
+    }
+
 }

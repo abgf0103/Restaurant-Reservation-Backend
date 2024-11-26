@@ -45,6 +45,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -440,4 +441,32 @@ public class UserService {
         log.info(passwordEncoder.encode(newPassword));
         userRepository.save(user); // 변경된 사용자 정보를 DB에 저장
     }
+
+    /**
+     * 모든 유저 조회(어드민)
+     * @return
+     */
+    public List<User> getAllUsers() {
+
+        return userMapper.findAllUsers();
+    }
+
+    /**
+     * 유저 비활성화(어드민)
+     * @param userId
+     */
+    public void deactiveUser(Long userId){
+        userMapper.deactiveUser(userId);
+    }
+
+    /**
+     * 유저 활성 여부
+     * @param userId
+     * @return
+     */
+    public boolean userIsActive(Long userId){
+        //isActive = 1이면 true
+        return userMapper.userIsActive(userId);
+    }
+
 }

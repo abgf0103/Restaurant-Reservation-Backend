@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.event.OnUserLogoutSuccessEvent;
 import kr.re.kh.model.CustomUserDetails;
+import kr.re.kh.model.User;
 import kr.re.kh.model.payload.request.LogOutRequest;
 import kr.re.kh.model.payload.response.ApiResponse;
 import kr.re.kh.model.payload.response.UserResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -77,4 +79,24 @@ public class UserController {
     public Long isAdminByUserId(@RequestParam Long userId) {
         return userService.isAdminByUserId(userId);
     }
+
+    @ApiOperation("모든 유저 리스트")
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SYSTEM')")
+    public List<User> getUserList() {
+        return userService.findAll();
+    }
+
+    @ApiOperation("유저 비활성화(어드민)")
+    @GetMapping("/deactiveUser")
+    public void deactiveUser(@RequestParam Long userId){
+        userService.deactiveUser(userId);
+    }
+
+    @ApiOperation("유저 활성 여부")
+    @GetMapping("/userIsActive")
+    public boolean isUserActive(@RequestParam Long userId){
+        return userService.userIsActive(userId);
+    }
+
 }

@@ -45,7 +45,7 @@ public class User extends DateAudit {
     @NullOrNotBlank(message = "사업자번호는 필수 항목입니다.")
     private String businessNum;
 
-    @Column(name = "IS_ACTIVE", nullable = false)
+    @Column(name = "IS_ACTIVE")
     private Boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

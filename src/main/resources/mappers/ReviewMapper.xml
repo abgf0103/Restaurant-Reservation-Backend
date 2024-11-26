@@ -262,5 +262,11 @@
         WHERE STORE_ID = #{storeId}
     </select>
 
+    <!-- 해당 리뷰에 대한 좋아요 삭제(어드민) -->
+    <delete id="reviewLikeDeleteForAdmin"
+            parameterType="Long">
+        DELETE FROM review_like
+        WHERE review_id = #{reviewId}
+    </delete>
 
 </mapper>

@@ -40,4 +40,5 @@ public interface StoreMapper {
 
     String getFileTargetByFileId(Long fileId);
 
+    List<StoreVO> getStoreListForAdmin();                   //모든 가게 조회(어드민)
 }

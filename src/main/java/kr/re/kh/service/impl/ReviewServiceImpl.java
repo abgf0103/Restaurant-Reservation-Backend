@@ -292,5 +292,15 @@ public class ReviewServiceImpl implements ReviewService {
     public Long getReviewCountByStoreId(Long storeId) {
         return reviewMapper.getReviewCountByStoreId(storeId);
     }
+
+    /**
+     * 리뷰 삭제(어드민)
+     * @param reviewId
+     */
+    @Override
+    public void deleteReviewForAdmin(Long reviewId) {
+        reviewMapper.reviewLikeDeleteForAdmin(reviewId);
+        reviewMapper.deleteReview(reviewId);
+    }
 }
 

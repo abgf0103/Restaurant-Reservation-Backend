@@ -66,6 +66,8 @@ public interface ReviewMapper {
     double getRatingAvgByStoreId(Long storeId); //가게ID로 리뷰 평균 별점 조회
 
     Long getReviewCountByStoreId(Long storeId); //가게ID로 리뷰 개수 조회
+
+    void reviewLikeDeleteForAdmin(Long reviewId); //리뷰ID로 리뷰 삭제(어드민)
 }
 
 

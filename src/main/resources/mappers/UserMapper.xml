@@ -58,5 +58,29 @@
         WHERE EMAIL=#{email}
     </update>
 
+    <!--  모든 유저 조회(어드민)  -->
+    <select id="findAllUsers">
+        SELECT *
+        FROM USERS
+        ORDER BY IS_ACTIVE DESC, USER_ID DESC
+    </select>
+
+    <!--  유저 비활성화(어드민)  -->
+    <update id="deactiveUser"
+            parameterType="Long">
+        UPDATE USERS
+        SET IS_ACTIVE = 0
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <!--  유저 활성여부  -->
+    <select id="userIsActive"
+            parameterType="Long"
+            resultType="boolean">
+        SELECT IS_ACTIVE
+        FROM USERS
+        WHERE USER_ID = #{userId}
+    </select>
+
 
 </mapper>

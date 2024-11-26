@@ -8,6 +8,7 @@ import kr.re.kh.model.payload.response.ApiResponse;
 import kr.re.kh.model.vo.Review;
 import kr.re.kh.model.vo.SearchHelper;
 import kr.re.kh.service.ReviewService;
+import kr.re.kh.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    private final UserService userService;
+
 
     @ApiOperation("리뷰 목록 조회")
     @GetMapping("/list")
@@ -112,7 +116,12 @@ public class ReviewController {
 
         // 사용자 정보 검증
         if (!currentUser.getId().equals(userId)) {
-            return ResponseEntity.status(403).body(new ApiResponse(false, "사용자 권한이 일치하지 않습니다."));
+            Long isAdmin = userService.isAdminByUserId(userId);
+            log.info(isAdmin.toString());
+            log.info(currentUser.getRoles().toString());
+            if (isAdmin != 2L && isAdmin != 3L) {
+                return ResponseEntity.status(403).body(new ApiResponse(false, "사용자 권한이 일치하지 않습니다."));
+            }
         }
 
         try {
@@ -194,6 +203,12 @@ public class ReviewController {
     @GetMapping("/getReviewCountByStoreId")
     public long getReviewCountByStoreId(@RequestParam("storeId") Long storeId) {
         return reviewService.getReviewCountByStoreId(storeId);
+    }
+
+    @ApiOperation("리뷰 삭제(어드민)")
+    @DeleteMapping("/deleteReviewForAdmin")
+    public void deleteReviewForAdmin(@RequestParam Long reviewId) {   //리뷰 삭제(어드민)
+        reviewService.deleteReviewForAdmin(reviewId);
     }
 }
 

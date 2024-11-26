@@ -183,5 +183,19 @@
         ORDER BY s.STORE_ID DESC
     </select>
 
+    <!--  모든 가게 조회(어드민)  -->
+    <select id="getStoreListForAdmin"
+            parameterType="SearchHelper"
+            resultType="StoreVO">
+        SELECT *
+        FROM STORE
+        ORDER BY
+            CASE
+                WHEN IS_ACTIVE IN (0, 2) THEN 0   -- IS_ACTIVE가 0 또는 2일 경우 우선순위 0 (위로)
+                WHEN IS_ACTIVE = 3 THEN 2          -- IS_ACTIVE가 3일 경우 우선순위 2 (맨 아래)
+                ELSE 1                             -- 나머지 값은 우선순위 1
+                END,
+            STORE_ID DESC  -- 그 후 STORE_ID 역순으로 정렬
+    </select>
 
 </mapper>

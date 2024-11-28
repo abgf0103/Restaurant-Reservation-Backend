@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +71,8 @@ public class ReservationController {
     @PutMapping("/update-status/{reserveId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,
-                                                     @RequestBody int status) {
+                                                     @RequestBody HashMap<String, Object> statusMap) {
+        int status = (int) statusMap.get("status");
         reservationService.updateReservationStatus(reserveId, status);
         return ResponseEntity.ok(new ApiResponse(true, "예약 상태가 업데이트되었습니다."));
     }

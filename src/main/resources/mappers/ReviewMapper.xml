@@ -205,6 +205,7 @@
             R.created_at AS createdAt,
             R.updated_at AS updatedAt,
             R.username,
+            R."LIKE" AS likeCount,
             S.store_name AS storeName,  <!-- STORE 테이블과 조인하여 store_name 가져오기 -->
             R.RESERVE_ID AS reserveId
         FROM review R

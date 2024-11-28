@@ -58,11 +58,8 @@ public class ReviewServiceImpl implements ReviewService {
         // 내가 작성한 리뷰 목록 조회
         List<Review> reviews = reviewMapper.selectReviewsByUserId(userId);
 
-        // 각 리뷰에 대한 좋아요 수와 파일 정보를 설정
+        // 각 리뷰에  파일 정보를 설정
         for (Review review : reviews) {
-            // 좋아요 수 설정
-            int likeCount = reviewMapper.countLikes(review.getReviewId(), userId); // 현재 사용자가 좋아요를 눌렀는지 체크
-            review.setLikeCount(likeCount); // Review 객체에 likeCount 설정
 
             // 리뷰에 대한 파일 정보 조회
             SearchHelper s = SearchHelper.builder()
@@ -74,6 +71,31 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return reviews;
+    }
+
+    @Override
+    public HashMap<String, Object> getReviewsByUsername(String username) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        // 리뷰 목록을 username 기준으로 조회
+        List<Review> reviews = reviewMapper.getReviewsByUsername(username);
+
+        // 각 리뷰에 대해 파일 정보 조회
+        for (Review review : reviews) {
+
+            // 파일 정보 조회를 위한 SearchHelper 생성
+            SearchHelper s = SearchHelper.builder()
+                    .username(username)  // username 기준으로 파일 정보 조회
+                    .reserveId(review.getReserveId())  // 리뷰의 reserveId 사용
+                    .build();
+
+            // 리뷰에 대한 파일 정보 조회
+            List<UploadFile> reviewFiles = reviewMapper.selectReviewsWithFiles(s);
+            review.setFiles(reviewFiles);  // 리뷰에 파일 리스트 추가
+        }
+
+        response.put("data", reviews);  // 결과를 'data'로 반환
+        return response;
     }
 
     @Override
@@ -97,29 +119,7 @@ public class ReviewServiceImpl implements ReviewService {
         return response;
     }
 
-    @Override
-    public HashMap<String, Object> getReviewsByUsername(String username) {
-        HashMap<String, Object> response = new HashMap<>();
 
-        // 리뷰 목록을 username 기준으로 조회
-        List<Review> reviews = reviewMapper.getReviewsByUsername(username);
-
-        // 각 리뷰에 대해 파일 정보 조회
-        for (Review review : reviews) {
-            // 파일 정보 조회를 위한 SearchHelper 생성
-            SearchHelper s = SearchHelper.builder()
-                    .username(username)  // username 기준으로 파일 정보 조회
-                    .reserveId(review.getReserveId())  // 리뷰의 reserveId 사용
-                    .build();
-
-            // 리뷰에 대한 파일 정보 조회
-            List<UploadFile> reviewFiles = reviewMapper.selectReviewsWithFiles(s);
-            review.setFiles(reviewFiles);  // 리뷰에 파일 리스트 추가
-        }
-
-        response.put("data", reviews);  // 결과를 'data'로 반환
-        return response;
-    }
 
 
 

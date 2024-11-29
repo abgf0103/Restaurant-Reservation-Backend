@@ -25,7 +25,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    // 예약 생성 
+    // 예약 생성
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> createReservation(@RequestBody ReservationVO reservation,

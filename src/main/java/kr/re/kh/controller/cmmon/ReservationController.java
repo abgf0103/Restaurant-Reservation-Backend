@@ -1,6 +1,5 @@
 package kr.re.kh.controller.cmmon;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.model.CustomUserDetails;
@@ -50,7 +49,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    // 가게 ID로 모든 예약 조회 (가게 측에서 사용)
+    // 가게 ID로 모든 예약 조회 (가게 측에서 사용) 추후 유저권한 삭제
     @GetMapping("/store/reserve/{storeId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<List<ReservationVO>> getAllReservationsByStoreId(@PathVariable Long storeId) {
@@ -67,7 +66,7 @@ public class ReservationController {
         return reservation.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // 예약 상태 업데이트 (가게 회원 전용)
+    // 예약 상태 업데이트 (가게 회원 전용) 추후 유저권한 삭제
     @PutMapping("/update-status/{reserveId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,

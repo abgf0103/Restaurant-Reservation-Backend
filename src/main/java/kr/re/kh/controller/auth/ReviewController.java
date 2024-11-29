@@ -34,21 +34,21 @@ public class ReviewController {
 
     @ApiOperation("리뷰 목록 조회")
     @GetMapping("/list")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> reviewList(@ModelAttribute SearchHelper request) {
         return ResponseEntity.ok(reviewService.selectReview(request));
     }
 
     @ApiOperation("리뷰 상세 조회")
     @GetMapping("/view/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> reviewView(@PathVariable Long id) {
         return ResponseEntity.ok(reviewService.reviewInfo(id));
     }
 
     @ApiOperation("내가 작성한 리뷰 목록 조회")
     @GetMapping("/my-reviews")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> getMyReviews(@CurrentUser CustomUserDetails currentUser) {
         Long userId = currentUser.getId();
         List<Review> reviews = reviewService.getReviewsByUserId(userId);
@@ -58,7 +58,7 @@ public class ReviewController {
     //  username으로 특정 사용자의 리뷰 조회
     @ApiOperation("특정 사용자 리뷰 목록 조회 (username 기준)")
     @GetMapping("/view-by-username/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> getReviewsByUsername(@PathVariable String username) {
         log.info("Fetching reviews for username: " + username); // 로그 추가
         return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
@@ -163,7 +163,7 @@ public class ReviewController {
 
     @ApiOperation("리뷰 좋아요 상태 확인")
     @GetMapping("/likes/status")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> getLikeStatus(@RequestParam Long reviewId, @CurrentUser CustomUserDetails currentUser) {
         Long userId = currentUser.getId(); // 로그인된 사용자의 ID
 

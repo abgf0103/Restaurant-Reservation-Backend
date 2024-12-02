@@ -68,6 +68,13 @@ public interface ReviewMapper {
     Long getReviewCountByStoreId(Long storeId); //가게ID로 리뷰 개수 조회
 
     void reviewLikeDeleteForAdmin(Long reviewId); //리뷰ID로 리뷰 삭제(어드민)
+
+    // 사용자 ID에 해당하는 좋아요 총합을 구하는 메서드
+    Long getRankingbyLiked(Long userId);
+
+    // 해당 좋아요 총합을 기준으로 사용자 랭킹을 계산하는 메서드
+    Long getUserRankingByLikes(Long userLikes);
+
 }
 
 

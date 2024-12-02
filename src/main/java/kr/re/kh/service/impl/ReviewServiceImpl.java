@@ -74,6 +74,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Long getRankingByLikes(Long userId) {
+        // 해당 사용자가 받은 좋아요 총합을 가져옴
+        Long userLikes = reviewMapper.getRankingbyLiked(userId);
+
+        // 모든 사용자의 좋아요 총합을 기반으로 해당 사용자의 랭킹을 계산
+        return reviewMapper.getUserRankingByLikes(userLikes);  // 해당 사용자의 랭킹 반환
+    }
+
+
+
+    @Override
     public HashMap<String, Object> getReviewsByUsername(String username) {
         HashMap<String, Object> response = new HashMap<>();
 

@@ -84,8 +84,8 @@ public class MemberController {
     }
     //id찾기
     @GetMapping("/user/findID")
-    public ResponseEntity<?> findUserId(@RequestParam("email") String email) {
-        Optional<User> userOpt = userService.findByEmail(email);
+    public ResponseEntity<?> findUserId(@RequestParam("email") String email, @RequestParam("name") String name) {
+        Optional<User> userOpt = userService.findByEmailAndName(email, name);
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -93,8 +93,7 @@ public class MemberController {
             ApiResponse response = new ApiResponse(true, "아이디 찾기 성공", user.getUsername(), null);
             return ResponseEntity.ok(response);
         } else {
-
-            ApiResponse response = new ApiResponse(false, "이메일에 해당하는 아이디가 없습니다.", null, null);
+            ApiResponse response = new ApiResponse(false, "이메일 또는 이름에 해당하는 아이디가 없습니다.", null, null);
             return ResponseEntity.ok(response);
         }
     }
@@ -143,16 +142,17 @@ public class MemberController {
     //비밀번호 찾기
     @PostMapping("/user/findPassword")
 
-    public Map<String, String> findTempPassword(@RequestBody Map<String, String> request) {
+    public Map<String, Object> findTempPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         String username = request.get("username");
         String name = request.get("name");
 
         String result = userService.generateTempPassword(email, username, name);
 
+        boolean success = !result.startsWith("이메일, 사용자 이름 또는 이름이 일치하지 않습니다.");
 
         // JSON 형태로 응답
-        return Map.of("message", result);
+        return Map.of("success", success, "message", result);
     }
 
     @PostMapping("/user/verifyPassword")

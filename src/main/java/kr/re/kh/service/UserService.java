@@ -81,6 +81,9 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    public Optional<User> findByEmailAndName(String email, String name) {
+        return userRepository.findByEmailAndName(email, name);  // 두 조건을 모두 만족하는 사용자 검색
+    }
 
     /**
      * id로 찾기

@@ -6,6 +6,7 @@ import kr.re.kh.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -100,8 +101,8 @@ public class StoreServiceImpl implements StoreService {
      * @return
      */
     @Override
-    public List<StoreVO> getSimilarStoreList(Long categoryId) {
-        List<StoreVO> stores = storeMapper.getSimilarStoreList(categoryId);   //비슷한 가게 목록 조회
+    public List<StoreVO> getSimilarStoreList(Map<String, Long> params) {
+        List<StoreVO> stores = storeMapper.getSimilarStoreList(params.get("categoryId"), params.get("storeId")); //비슷한 가게 목록 조회
 
         // 각 가게마다 파일 이름을 추가
         for (StoreVO storeVO : stores) {

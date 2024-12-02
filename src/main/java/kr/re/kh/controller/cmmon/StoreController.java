@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 가게 정보 Controller
@@ -38,8 +39,10 @@ public class StoreController {
 
     @ApiOperation("비슷한 가게 조회")
     @GetMapping("/getSimilarStoreList")
-    public ResponseEntity<?> getSimilarStoreList(@RequestParam Long categoryId) {
-        return ResponseEntity.ok(storeService.getSimilarStoreList(categoryId));
+    public ResponseEntity<?> getSimilarStoreList(@RequestParam Long categoryId,
+                                                 @RequestParam Long storeId) {
+        Map<String, Long> params = Map.of("categoryId", categoryId, "storeId", storeId);
+        return ResponseEntity.ok(storeService.getSimilarStoreList(params));
     }
 
     @ApiOperation("가게 수정")

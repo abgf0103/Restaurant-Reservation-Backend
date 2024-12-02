@@ -303,6 +303,11 @@ public class UserService {
         }
         if (registrationRequest.getId() == 0) {
             // 저장
+            
+            if (registrationRequest.getId()==null) {
+                throw new BadRequestException("id를 입력해주세요.");
+            }
+
             if (registrationRequest.getUsername().isBlank()) {
                 throw new BadRequestException("아이디를 입력해주세요.");
             }
@@ -315,9 +320,9 @@ public class UserService {
             if (registrationRequest.getPassword().isBlank()) {
                 throw new BadRequestException("비밀번호를 입력해주세요.");
             }
-            if (registrationRequest.getRoleNum().isBlank()) {
-                throw new BadRequestException("권한을 선택해주세요.");
-            }
+//            if (registrationRequest.getRoleNum() == null || registrationRequest.getRoleNum().isBlank()) {
+//                throw new BadRequestException("권한을 선택해주세요.");
+//            }
             if (!Objects.equals(registrationRequest.getPassword(), registrationRequest.getPasswordConfirm())) {
                 throw new BadRequestException("비밀번호가 일치하지 않습니다.");
             }

@@ -8,7 +8,7 @@
         FROM STORE s
         LEFT  JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
         WHERE s.IS_ACTIVE = 1
-        ORDER BY s.STORE_ID DESC
+        ORDER BY DBMS_RANDOM.VALUE
     </select>
 
     <!-- 가게 등록 -->

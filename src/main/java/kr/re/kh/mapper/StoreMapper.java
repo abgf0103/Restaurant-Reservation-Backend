@@ -11,6 +11,8 @@ public interface StoreMapper {
     void insertStore(StoreVO storeVO);                      //가게 추가
 
     List<StoreVO> selectAllStore();                         //모든 가게 조회
+    
+    List<StoreVO> getSimilarStoreList(Long categoryId);                    //비슷한 가게 조회
 
     void updateStore(StoreVO storeVO);                      //가게 수정
 

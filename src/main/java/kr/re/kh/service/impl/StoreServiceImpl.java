@@ -96,6 +96,27 @@ public class StoreServiceImpl implements StoreService {
     }
 
     /**
+     * 비슷한 가게 조회
+     * @return
+     */
+    @Override
+    public List<StoreVO> getSimilarStoreList(Long categoryId) {
+        List<StoreVO> stores = storeMapper.getSimilarStoreList(categoryId);   //비슷한 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
+    }
+
+    /**
      * 가게 업데이트
      * @param storeVO
      */

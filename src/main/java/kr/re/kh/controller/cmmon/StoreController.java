@@ -36,6 +36,12 @@ public class StoreController {
         return ResponseEntity.ok(storeService.selectAllStore());
     }
 
+    @ApiOperation("비슷한 가게 조회")
+    @GetMapping("/getSimilarStoreList")
+    public ResponseEntity<?> getSimilarStoreList(@RequestParam Long categoryId) {
+        return ResponseEntity.ok(storeService.getSimilarStoreList(categoryId));
+    }
+
     @ApiOperation("가게 수정")
     @PostMapping("/update")
     public void updateStore(@RequestBody StoreVO storeVO) {

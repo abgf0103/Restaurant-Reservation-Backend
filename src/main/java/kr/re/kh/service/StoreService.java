@@ -8,6 +8,7 @@ import java.util.List;
 public interface StoreService {
     void insertStore(StoreVO store);                        //가게 등록
     List<StoreVO> selectAllStore();                         //모든 가게 조회
+    List<StoreVO> getSimilarStoreList(Long categoryId);                    //비슷한 가게 조회
     void updateStore(StoreVO store);                        //가게 수정
     void deleteStore(Long storeId);                         //가게 삭제
 

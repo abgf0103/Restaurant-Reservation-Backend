@@ -11,6 +11,21 @@
         ORDER BY DBMS_RANDOM.VALUE
     </select>
 
+    <!--  비슷한 가게 목록  -->
+    <select id="getSimilarStoreList"
+            parameterType="Long"
+            resultType="StoreVO">
+        SELECT s.*, uf.file_name
+        FROM (SELECT S.*
+              FROM STORE S
+                       JOIN STORE_CATEGORY SC ON S.STORE_ID = SC.STORE_ID
+              WHERE SC.CATEGORY_ID = #{categoryId}) S
+                 LEFT  JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
+        WHERE s.IS_ACTIVE = 1
+        ORDER BY DBMS_RANDOM.VALUE
+
+    </select>
+
     <!-- 가게 등록 -->
     <insert id="insertStore"
             parameterType="StoreVO">
@@ -30,7 +45,7 @@
                 , #{address} -- 주소
                 , #{storeHours} -- 가게 영업 시간
                 , #{phone} -- 가게 연락처
-                ,#{description}  -- 가게 소개글
+                , #{description}  -- 가게 소개글
                 , #{identity}  -- 가게 정체성
                 , #{fileId} -- 업로드한 파일 id
                 , #{guideLines}   --안내 및 유의사항 여부

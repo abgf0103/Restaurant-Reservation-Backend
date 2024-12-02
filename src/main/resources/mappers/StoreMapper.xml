@@ -22,7 +22,8 @@
             PHONE,
             DESCRIPTION,
             IDENTITY,
-            FILE_ID
+            FILE_ID,
+            GUIDE_LINES
         ) VALUES (
                 #{userId} -- 사업자 ID
                 , #{storeName} -- 가게 이름
@@ -32,6 +33,7 @@
                 ,#{description}  -- 가게 소개글
                 , #{identity}  -- 가게 정체성
                 , #{fileId} -- 업로드한 파일 id
+                , #{guideLines}   --안내 및 유의사항 여부
         )
     </insert>
 
@@ -48,6 +50,7 @@
                 <if test="description != null">DESCRIPTION = #{description}, </if>
                 <if test="identity != null">IDENTITY = #{identity}, </if>
                 <if test="fileId != null">FILE_ID = #{fileId}, </if>
+                <if test="guideLines != null">GUIDE_LINES = #{guideLines}, </if>
                 UPDATED_AT = CURRENT_TIMESTAMP
             </set>
         WHERE STORE_ID = #{storeId}

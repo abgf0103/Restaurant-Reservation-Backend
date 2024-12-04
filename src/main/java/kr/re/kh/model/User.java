@@ -57,6 +57,9 @@ public class User extends DateAudit {
     @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
     private Boolean isEmailVerified;
 
+    @Column(name = "FILE_ID")
+    private Long fileId;
+
     public User() {
         super();
     }
@@ -71,6 +74,7 @@ public class User extends DateAudit {
         roles = user.getRoles();
         isEmailVerified = user.getEmailVerified();
         phone = user.getPhone();
+        fileId = user.getFileId();
     }
 
     public void addRole(Role role) {
@@ -167,5 +171,13 @@ public class User extends DateAudit {
 
     public void setBusinessNum(String businessNum) {
         this.businessNum = businessNum;
+    }
+
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
+
+    public Long getFileId() {
+        return  fileId;
     }
 }

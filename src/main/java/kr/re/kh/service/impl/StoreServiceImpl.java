@@ -6,6 +6,7 @@ import kr.re.kh.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -81,6 +82,27 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<StoreVO> selectAllStore() {
         List<StoreVO> stores = storeMapper.selectAllStore();  // 가게 목록 조회
+
+        // 각 가게마다 파일 이름을 추가
+        for (StoreVO storeVO : stores) {
+            if (storeVO.getFileId() != null) {
+                String fileName = storeMapper.getFileNameByFileId(storeVO.getFileId());  // 파일 이름 조회
+                if (fileName != null) {
+                    storeVO.setSaveFileName(fileName);  // 파일 이름 설정
+                }
+            }
+        }
+
+        return stores;
+    }
+
+    /**
+     * 비슷한 가게 조회
+     * @return
+     */
+    @Override
+    public List<StoreVO> getSimilarStoreList(Map<String, Long> params) {
+        List<StoreVO> stores = storeMapper.getSimilarStoreList(params.get("categoryId"), params.get("storeId")); //비슷한 가게 목록 조회
 
         // 각 가게마다 파일 이름을 추가
         for (StoreVO storeVO : stores) {

@@ -24,6 +24,7 @@ public class StoreVO {
     private String description;         //가게 소개글
     private Long isActive;              //가게 활성화 여부
     private String identity;            //가게 정체성
+    private String guideLines;          //가게 유의사항 여부
     
     
     private Long fileId;                //파일 ID

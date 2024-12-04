@@ -74,6 +74,23 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Long getRankingByLikes(Long userId) {
+        // 해당 사용자가 받은 좋아요 총합을 가져옴
+        Long userLikes = reviewMapper.getRankingbyLiked(userId);
+
+        // 사용자가 좋아요를 받은 총합이 0 또는 null이 아닐 경우에만 랭킹을 계산
+        if (userLikes != null && userLikes > 0) {
+            // 모든 사용자의 좋아요 총합을 기반으로 해당 사용자의 랭킹을 계산
+            return reviewMapper.getUserRankingByLikes(userLikes);  // 해당 사용자의 랭킹 반환
+        }
+
+        // 좋아요가 없을 경우 null 또는 기본값 반환
+        return null;  // 또는 0L 또는 다른 기본값을 반환할 수 있습니다.
+    }
+
+
+
+    @Override
     public HashMap<String, Object> getReviewsByUsername(String username) {
         HashMap<String, Object> response = new HashMap<>();
 

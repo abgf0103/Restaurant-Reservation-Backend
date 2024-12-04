@@ -33,6 +33,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByEmailAndName(String name, String email);
+
     Boolean existsByUsername(String username);
 
     @Query(value = "SELECT * FROM user WHERE username LIKE CONCAT('%', :searchKeyword, '%') ORDER BY user_id DESC", countQuery = "SELECT COUNT(*) FROM users WHERE username LIKE CONCAT('%', :searchKeyword, '%')", nativeQuery = true)

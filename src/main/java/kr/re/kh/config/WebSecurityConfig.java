@@ -118,6 +118,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/**/api/member/save").permitAll()
                 .antMatchers("/**/api/file/view/**").permitAll()
+                .antMatchers("/**/api/file/viewId/**").permitAll()
                 .antMatchers("/**/api/store/list").permitAll()
                 .antMatchers("/**/api/category/list").permitAll()
                 .antMatchers("/**/api/member/user/findID").permitAll()
@@ -135,6 +136,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/api/review/list").permitAll()
                 .antMatchers("/**/api/review/likes/status").permitAll()
                 .antMatchers("/**/api/store/view/**").permitAll()
+                .antMatchers("/**/api/store/search").permitAll()
+                .antMatchers("/**/api/category/getCategoryIdByStoreId").permitAll()
+                .antMatchers("/**/api/store/getSimilarStoreList").permitAll()
+
 
 
 

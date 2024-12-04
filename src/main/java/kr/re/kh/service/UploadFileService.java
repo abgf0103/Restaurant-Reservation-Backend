@@ -4,9 +4,13 @@ import kr.re.kh.exception.BadRequestException;
 import kr.re.kh.mapper.FileMapMapper;
 import kr.re.kh.mapper.ReviewMapper;
 import kr.re.kh.mapper.UploadFileMapper;
+import kr.re.kh.model.CustomUserDetails;
+import kr.re.kh.model.User;
 import kr.re.kh.model.payload.request.FileDeleteRequest;
+import kr.re.kh.model.payload.response.UserResponse;
 import kr.re.kh.model.vo.FileMap;
 import kr.re.kh.model.vo.UploadFile;
+import kr.re.kh.repository.UserRepository;
 import kr.re.kh.util.UploadFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -32,11 +36,13 @@ public class UploadFileService {
 
     private final FileMapMapper fileMapMapper;
 
-    public UploadFileService(String uploadPath, UploadFileMapper uploadFileMapper, FileMapMapper fileMapMapper) {
+    private  final UserRepository userRepository;
+
+    public UploadFileService(String uploadPath, UploadFileMapper uploadFileMapper, FileMapMapper fileMapMapper, UserRepository userRepository) {
         this.rootLocation = Paths.get(uploadPath);
         this.uploadFileMapper = uploadFileMapper;
         this.fileMapMapper = fileMapMapper;
-
+        this.userRepository = userRepository;
     }
 
     private Path loadPath(String fileName) {
@@ -81,7 +87,7 @@ public class UploadFileService {
      * @return
      * @throws Exception
      */
-    public List<UploadFile> store(List<MultipartFile> files, String fileTarget, String username) throws Exception {
+    public List<UploadFile> store(List<MultipartFile> files, String fileTarget, String username, CustomUserDetails currentUser) throws Exception {
         if (files.isEmpty()) throw new BadRequestException("저장할 파일이 없습니다.");
 
         List<UploadFile> uploadFileList = new ArrayList<>();
@@ -118,6 +124,30 @@ public class UploadFileService {
 
 
             uploadFileMapper.insertFile(saveFile);
+
+            // user 테이블에 file_id 컬럼 값을 넣는다.
+            //  User user = new User();
+            //  user.setFileId(saveFile.getId());
+            // 토큰값에서 user_id 값 취득
+            // currentUser.getId();
+            // user.setId(currentUser.getId());
+            // userRepository.save(user);
+
+            // 파일이 프로필 이미지인 경우
+            if (fileTarget.equals("profileImage")) {
+                // user 테이블에 file_id 컬럼 값을 넣는다.
+                Long currentUserId = currentUser.getId(); // currentUser 객체로부터 user_id 취득
+
+                // User 객체 생성
+                User user = userRepository.findById(currentUserId).orElse(null); // ID로 사용자 조회
+                if (user != null) {
+                    user.setFileId(saveFile.getId()); // file_id 저장
+
+                    userRepository.save(user); // User 테이블 업데이트
+                } else {
+                    log.error("User not found with ID: {}", currentUserId);
+                }
+            }
 
             uploadFileList.add(saveFile);
         }

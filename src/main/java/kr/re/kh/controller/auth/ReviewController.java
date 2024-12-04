@@ -55,6 +55,14 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    @ApiOperation("사용자 리뷰 랭킹(좋아요 수에 의한 순위)")
+    @GetMapping("/LikedRanking")
+    public ResponseEntity<?> getRankingByLikes(@CurrentUser CustomUserDetails currentUser) {
+        Long userId = currentUser.getId();
+        Long ranking = reviewService.getRankingByLikes(userId);  // 랭킹 계산을 위한 서비스 호출
+        return ResponseEntity.ok(ranking);  // 랭킹 반환
+    }
+
     //  username으로 특정 사용자의 리뷰 조회
     @ApiOperation("특정 사용자 리뷰 목록 조회 (username 기준)")
     @GetMapping("/view-by-username/{username}")
@@ -211,5 +219,7 @@ public class ReviewController {
         reviewService.deleteReviewForAdmin(reviewId);
     }
 }
+
+
 
 

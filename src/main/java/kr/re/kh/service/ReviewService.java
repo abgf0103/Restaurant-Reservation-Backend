@@ -39,5 +39,8 @@ public interface ReviewService {
     Long getReviewCountByStoreId(Long storeId); //가게ID로 리뷰 개수 조회
 
     void deleteReviewForAdmin(Long reviewId);   //리뷰 삭제(어드민)
+
+    // 사용자 ID에 해당하는 랭킹을 반환하는 메서드
+    Long getRankingByLikes(Long userId);
 }
 

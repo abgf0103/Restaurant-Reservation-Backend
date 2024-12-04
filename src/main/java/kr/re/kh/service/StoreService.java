@@ -4,10 +4,12 @@ package kr.re.kh.service;
 import kr.re.kh.model.vo.StoreVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StoreService {
     void insertStore(StoreVO store);                        //가게 등록
     List<StoreVO> selectAllStore();                         //모든 가게 조회
+    List<StoreVO> getSimilarStoreList(Map<String, Long> params);   // 비슷한 가게 조회
     void updateStore(StoreVO store);                        //가게 수정
     void deleteStore(Long storeId);                         //가게 삭제
 
@@ -28,4 +30,5 @@ public interface StoreService {
     List<StoreVO> getFavoriteStoreList(Long userId);        // 유저ID로 즐겨찾기 한 가게 리스트 가져오기
 
     List<StoreVO> getStoreListForAdmin();                   //모든 가게 조회(어드민)
+
 }

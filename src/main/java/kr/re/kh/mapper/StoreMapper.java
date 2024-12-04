@@ -2,8 +2,10 @@ package kr.re.kh.mapper;
 
 import kr.re.kh.model.vo.StoreVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface StoreMapper {
@@ -11,6 +13,9 @@ public interface StoreMapper {
     void insertStore(StoreVO storeVO);                      //가게 추가
 
     List<StoreVO> selectAllStore();                         //모든 가게 조회
+    
+    List<StoreVO> getSimilarStoreList(@Param("categoryId") Long categoryId,
+                                      @Param("storeId") Long storeId);                    //비슷한 가게 조회
 
     void updateStore(StoreVO storeVO);                      //가게 수정
 

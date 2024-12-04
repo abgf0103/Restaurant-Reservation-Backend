@@ -51,7 +51,9 @@ public class FileController {
                 uploadFileService
                         .store(files,
                                 fileTarget,
-                                currentUser.getUsername()));
+                                currentUser.getUsername(),
+                                currentUser));
+
     }
 
     /**

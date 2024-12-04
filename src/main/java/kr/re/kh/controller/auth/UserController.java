@@ -45,7 +45,7 @@ public class UserController {
     public ResponseEntity<?> getUserProfile(@CurrentUser CustomUserDetails currentUser) {
         log.info(currentUser.getEmail() + " has role: " + currentUser.getRoles() + " username: " + currentUser.getUsername());
         log.info(currentUser.getPhone());
-        UserResponse userResponse = new UserResponse(currentUser.getUsername(), currentUser.getEmail(), currentUser.getRoles(), currentUser.getId(), currentUser.getPhone() , currentUser.getName());
+        UserResponse userResponse = new UserResponse(currentUser.getUsername(), currentUser.getEmail(), currentUser.getRoles(), currentUser.getId(), currentUser.getPhone() , currentUser.getName() ,  currentUser.getFileId() );
         return ResponseEntity.ok(userResponse);
     }
 

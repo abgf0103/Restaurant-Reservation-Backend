@@ -3,8 +3,8 @@ package kr.re.kh.controller.cmmon;
 import io.swagger.annotations.ApiOperation;
 import kr.re.kh.annotation.CurrentUser;
 import kr.re.kh.model.CustomUserDetails;
-import kr.re.kh.model.vo.ReservationVO;
 import kr.re.kh.model.payload.response.ApiResponse;
+import kr.re.kh.model.vo.ReservationVO;
 import kr.re.kh.service.ReservationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,12 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    // 예약 생성
+    /**
+     * 예약 생성
+     * @param reservation
+     * @param currentUser
+     * @return
+     */
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> createReservation(@RequestBody ReservationVO reservation,
@@ -40,8 +45,11 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse(true, "예약이 생성되었습니다."));
     }
 
-
-    // 사용자의 모든 예약 조회
+    /**
+     * 사용자의 모든 예약 조회
+     * @param currentUser
+     * @return
+     */
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<List<ReservationVO>> getUserReservations(@CurrentUser CustomUserDetails currentUser) {
@@ -49,7 +57,11 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    // 가게 ID로 모든 예약 조회 (가게 측에서 사용) 추후 유저권한 삭제
+    /**
+     * 가게 ID로 모든 예약 조회 (가게 측에서 사용)
+     * @param storeId
+     * @return
+     */
     @GetMapping("/store/reserve/{storeId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<List<ReservationVO>> getAllReservationsByStoreId(@PathVariable Long storeId) {
@@ -57,7 +69,12 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    // 예약 ID로 특정 예약 조회
+    /**
+     * 예약 ID로 특정 예약 조회
+     * @param reserveId
+     * @param currentUser
+     * @return
+     */
     @GetMapping("/view/{reserveId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> getReservationById(@PathVariable Long reserveId,
@@ -66,17 +83,29 @@ public class ReservationController {
         return reservation.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // 예약 상태 업데이트 (가게 회원 전용) 추후 유저권한 삭제
+    /**
+     * 예약 상태 업데이트 (가게 회원 전용)
+     * @param reserveId
+     * @param statusMap
+     * @param currentUser
+     * @return
+     */
     @PutMapping("/update-status/{reserveId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> updateReservationStatus(@PathVariable Long reserveId,
-                                                     @RequestBody HashMap<String, Object> statusMap) {
+                                                     @RequestBody HashMap<String, Object> statusMap,
+                                                     @CurrentUser CustomUserDetails currentUser) {
         int status = (int) statusMap.get("status");
-        reservationService.updateReservationStatus(reserveId, status);
-        return ResponseEntity.ok(new ApiResponse(true, "예약 상태가 업데이트되었습니다."));
+        reservationService.updateReservationStatus(reserveId, status, currentUser.getId());
+        return ResponseEntity.ok(new ApiResponse(true, "예약 상태가 업데이트되었고, 알림이 전송되었습니다."));
     }
 
-    // 예약 삭제
+    /**
+     * 예약 삭제
+     * @param reserveId
+     * @param currentUser
+     * @return
+     */
     @DeleteMapping("/delete/{reserveId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SYSTEM')")
     public ResponseEntity<?> deleteReservation(@PathVariable Long reserveId,
@@ -88,7 +117,11 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse(true, "예약이 삭제되었습니다."));
     }
 
-    // 예약 확정
+    /**
+     * 예약 확정
+     * @param reserveId
+     * @return
+     */
     @ApiOperation("예약 번호로 예약 확정")
     @PutMapping("/confirmReservation/{reserveId}")
     public ResponseEntity<ApiResponse> confirmReservation(@PathVariable Long reserveId) {
@@ -96,7 +129,11 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse(true, "예약이 확정되었습니다."));
     }
 
-    // 예약 취소
+    /**
+     * 예약 취소
+     * @param reserveId
+     * @return
+     */
     @ApiOperation("예약 번호로 예약 취소")
     @PutMapping("/cancelReservation/{reserveId}")
     public ResponseEntity<ApiResponse> cancelReservation(@PathVariable Long reserveId) {
@@ -104,7 +141,11 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse(true, "예약이 취소되었습니다."));
     }
 
-    // 예약 완료
+    /**
+     * 예약 완료
+     * @param reserveId
+     * @return
+     */
     @ApiOperation("예약 번호로 예약 완료")
     @PutMapping("/completeReservation/{reserveId}")
     public ResponseEntity<ApiResponse> completeReservation(@PathVariable Long reserveId) {

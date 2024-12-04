@@ -6,11 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
+@EnableScheduling
 @EntityScan(basePackageClasses = {
         KeitiApplication.class,
         Jsr310JpaConverters.class

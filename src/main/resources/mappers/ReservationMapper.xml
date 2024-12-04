@@ -31,9 +31,12 @@
 
     <!-- 특정 예약 조회 by ID -->
     <select id="findReservationById" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM RESERVE
-        WHERE reserve_id = #{reserveId}
+        SELECT r.*, s.store_name AS storeName
+        FROM RESERVE r
+        LEFT JOIN STORE s ON r.store_id = s.store_id
+        WHERE r.reserve_id = #{reserveId}
     </select>
+
 
     <!-- 특정 사용자의 모든 예약 조회 -->
     <select id="findAllReservationsByUserId" resultType="kr.re.kh.model.vo.ReservationVO">

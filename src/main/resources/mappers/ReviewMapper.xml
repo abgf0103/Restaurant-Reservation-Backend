@@ -204,9 +204,11 @@
         R.username,
         R.LIKE_COUNT AS likeCount, <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         S.store_name AS storeName,  <!-- STORE 테이블과 조인하여 store_name 가져오기 -->
-        R.RESERVE_ID AS reserveId
+        R.RESERVE_ID AS reserveId,
+        U.FILE_ID AS fileId
         FROM review R
         LEFT JOIN store S ON R.store_id = S.store_id  <!-- store 테이블과 조인 -->
+        LEFT OUTER JOIN USERS U ON U.username = R.username
         WHERE R.username = #{username}
         ORDER BY R.created_at DESC
     </select>

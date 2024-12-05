@@ -48,4 +48,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByUsernameIsContaining(String searchKeyword);
     List<User> findByNameIsContaining(String searchKeyword);
 
+    User findByFileId(Long fileId);
 }

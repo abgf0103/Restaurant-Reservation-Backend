@@ -172,12 +172,31 @@ public class UploadFileService {
             File deleteFile = new File(uploadFileVO.get().getFilePath());
             if (deleteFile.exists()) deleteFile.delete();
             uploadFileMapper.deleteByFileByIdAndFileTarget(uploadFile);
+
             // filemap에도 삭제
             if (fileDeleteRequest.getReserveId() != null) {
                 uploadFileMapper.deleteOneFiles(fileDeleteRequest.getId(), fileDeleteRequest.getReserveId());
+
             }
 
-            // store 테이블의 file_id 컬럼값 데이터 삭제
+            // USER 테이블에서 fileId 값을 NULL로 설정
+            if (fileDeleteRequest.getFileTarget().equals("profileImage")) {
+                Long fileId = fileDeleteRequest.getId();  // 삭제할 파일의 ID
+
+                log.info("파일 삭제 요청을 받은 fileId: {}", fileId);
+
+                // USER 테이블에서 해당 fileId 값을 가진 사용자를 찾고, 해당 사용자의 fileId를 null로 설정
+                User user = userRepository.findByFileId(fileId);  // fileId로 사용자 찾기
+
+                if (user != null) {
+                    // 파일 ID를 null로 설정
+                    user.setFileId(null);
+                    userRepository.save(user);  // 업데이트된 User 정보 저장
+                    log.info("USER 테이블에서 fileId 값을 null로 설정 완료, userId: {}", user.getId());
+                } else {
+                    log.error("사용자를 찾을 수 없습니다. fileId: {}", fileId);
+                }
+            }
 
 
             log.info("리뷰 삭제 완료, reserveId({})를 기준으로 관련 파일 삭제됨", fileDeleteRequest.getReserveId());

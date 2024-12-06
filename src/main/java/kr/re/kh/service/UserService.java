@@ -81,8 +81,8 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    public Optional<User> findByEmailAndName(String email, String name) {
-        return userRepository.findByEmailAndName(email, name);  // 두 조건을 모두 만족하는 사용자 검색
+    public Optional<User> findByPhoneAndEmail(String email, String phone) {
+        return userRepository.findByPhoneAndEmail(phone, email);  // 두 조건을 모두 만족하는 사용자 검색
     }
 
     /**
@@ -418,9 +418,9 @@ public class UserService {
     //비밀번호 생성
 
     // 사용자 정보 조회 및 임시 비밀번호 생성
-    public String generateTempPassword(String email, String username, String name) {
+    public String generateTempPassword(String email, String username, String phone) {
         // 1. 사용자 정보 조회
-        Map<String, String> params = Map.of("email", email, "username", username, "name", name);
+        Map<String, String> params = Map.of("email", email, "username", username, "phone", phone);
         User user = userMapper.findUserByInfo(params);
 
         // 2. 사용자가 존재하는지 확인

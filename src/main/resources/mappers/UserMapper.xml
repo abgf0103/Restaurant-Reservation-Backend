@@ -47,9 +47,9 @@
     </insert>
 
     <select id="findUserByInfo" parameterType="java.util.Map" resultType="kr.re.kh.model.User">
-        SELECT USERNAME, NAME, EMAIL
+        SELECT USERNAME, PHONE, EMAIL
         FROM USERS
-        WHERE EMAIL = #{email} AND USERNAME = #{username} AND NAME = #{name}
+        WHERE EMAIL = #{email} AND USERNAME = #{username} AND PHONE = #{phone}
     </select>
 
     <update id="updatePassword" parameterType="kr.re.kh.model.User">

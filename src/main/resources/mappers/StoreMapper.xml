@@ -7,13 +7,14 @@
         SELECT S.*, CNT.CNT, CNT.AVG
         FROM         (SELECT s.*, uf.file_name
                       FROM STORE s
-                               LEFT  JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
+                               LEFT JOIN UPLOAD_FILE uf
+                                   ON s.FILE_ID = uf.ID
                       WHERE s.IS_ACTIVE = 1) S
                          LEFT JOIN (
-            SELECT COUNT(*) AS CNT, AVG(RATING) AS AVG, STORE_ID
-            FROM REVIEW
-            GROUP BY STORE_ID) CNT
-                                   ON S.STORE_ID = CNT.STORE_ID
+                            SELECT COUNT(*) AS CNT, AVG(RATING) AS AVG, STORE_ID
+                            FROM REVIEW
+                            GROUP BY STORE_ID) CNT
+                             ON S.STORE_ID = CNT.STORE_ID
         ORDER BY CNT DESC NULLS LAST, AVG DESC NULLS LAST, DBMS_RANDOM.VALUE
     </select>
 

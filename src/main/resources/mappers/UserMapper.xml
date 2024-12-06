@@ -27,14 +27,14 @@
     <select id="isAdminByUserId"
             parameterType="Long"
             resultType="Long">
-        SELECT ROLE_ID
+        SELECT COUNT(ROLE_ID)
         FROM USER_AUTHORITY UA
                 JOIN USERS U
                     ON UA.USER_ID = U.USER_ID
-        WHERE UA.USER_ID = #{userId}
+        WHERE UA.USER_ID = #{userId} AND UA.ROLE_ID IN (2,3)
     </select>
-    
-    
+
+
     <insert id="insertManager"
             parameterType="Long"
            >

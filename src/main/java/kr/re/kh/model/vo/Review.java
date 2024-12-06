@@ -29,5 +29,6 @@ public class Review {
     private Long reserveId;
     private List<UploadFile> files;   // 파일 정보 리스트 (파일명 등)
     private Long fileId; // 사용자 프로필사진을 조회하기 위한 파일 번호
+    private String name;
 
 }

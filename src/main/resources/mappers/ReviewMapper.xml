@@ -16,7 +16,8 @@
         R.username,
         R.RESERVE_ID,
         S.store_name AS storeName,
-        U.FILE_ID AS fileId  <!-- USERS 테이블과 조인하여 fileId 가져오기 -->
+        U.FILE_ID AS fileId,  <!-- USERS 테이블과 조인하여 fileId 가져오기 -->
+        U.NAME AS name  <!-- USERS 테이블과 조인하여 name 가져오기 -->
         FROM review R
         JOIN store S ON R.store_id = S.store_id
         LEFT JOIN USERS U ON U.username = R.username  <!-- USERS 테이블을 LEFT JOIN하여 fileId 가져오기 -->
@@ -68,9 +69,11 @@
         R.username,
         R.LIKE_COUNT AS likeCount, <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         S.store_name AS storeName,
-        R.RESERVE_ID
+        R.RESERVE_ID,
+        U.NAME AS name  <!-- USERS 테이블과 조인하여 name 가져오기 -->
         FROM review R
         LEFT JOIN store S ON R.store_id = S.store_id
+        LEFT JOIN USERS U ON U.username = R.username
         <where>
             AND R.user_id = #{userId}
         </where>
@@ -207,7 +210,8 @@
         R.LIKE_COUNT AS likeCount, <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         S.store_name AS storeName,  <!-- STORE 테이블과 조인하여 store_name 가져오기 -->
         R.RESERVE_ID AS reserveId,
-        U.FILE_ID AS fileId
+        U.FILE_ID AS fileId,
+        U.NAME AS name
         FROM review R
         LEFT JOIN store S ON R.store_id = S.store_id  <!-- store 테이블과 조인 -->
         LEFT OUTER JOIN USERS U ON U.username = R.username
@@ -268,20 +272,39 @@
         WHERE review_id = #{reviewId}
     </delete>
 
-    <!-- 사용자 ID에 해당하는 좋아요 받은 총 갯수를 구하는 쿼리 -->
+    <!-- 내 ID에 해당하는 좋아요 받은 총 갯수를 구하는 쿼리 -->
     <select id="getRankingbyLiked" parameterType="Long" resultType="Long">
         SELECT SUM(LIKE_COUNT) <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         FROM REVIEW
         WHERE user_id = #{userId}
     </select>
 
-    <!-- 해당 사용자의 좋아요 총합을 기준으로 랭킹을 계산하는 쿼리 -->
-    <select id="getUserRankingByLikes" parameterType="Long" resultType="Long">
+    <!-- 내가받은 좋아요 총합을 기준으로 랭킹을 계산하는 쿼리 -->
+    <select id="getRankingByLikes" parameterType="Long" resultType="Long">
         SELECT COUNT(*) + 1
         FROM (
         SELECT SUM(LIKE_COUNT) AS total_likes <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         FROM REVIEW
         GROUP BY user_id
+        ) temp
+        WHERE temp.total_likes > #{userLikes}
+    </select>
+
+    <!-- 사용자 ID에 해당하는 좋아요 받은 총 갯수를 구하는 쿼리 -->
+    <select id="getUserRankingbyLiked" parameterType="String" resultType="Long">
+        SELECT SUM(LIKE_COUNT) <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
+        FROM REVIEW
+        WHERE username = #{username}
+    </select>
+
+
+    <!-- 사용자가 받은 좋아요 총합을 기준으로 랭킹을 계산하는 쿼리 -->
+    <select id="getUserRankingByLikes" parameterType="Long" resultType="Long">
+        SELECT COUNT(*) + 1
+        FROM (
+        SELECT SUM(LIKE_COUNT) AS total_likes <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
+        FROM REVIEW
+        GROUP BY username
         ) temp
         WHERE temp.total_likes > #{userLikes}
     </select>

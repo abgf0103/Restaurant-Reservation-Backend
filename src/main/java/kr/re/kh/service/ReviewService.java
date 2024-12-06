@@ -42,5 +42,7 @@ public interface ReviewService {
 
     // 사용자 ID에 해당하는 랭킹을 반환하는 메서드
     Long getRankingByLikes(Long userId);
+
+    Long getUserRankingByLikes(String username);
 }
 

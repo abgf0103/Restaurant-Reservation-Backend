@@ -69,10 +69,16 @@ public interface ReviewMapper {
 
     void reviewLikeDeleteForAdmin(Long reviewId); //리뷰ID로 리뷰 삭제(어드민)
 
-    // 사용자 ID에 해당하는 좋아요 총합을 구하는 메서드
+    // 내 ID에 해당하는 좋아요 총합을 구하는 메서드
     Long getRankingbyLiked(Long userId);
 
-    // 해당 좋아요 총합을 기준으로 사용자 랭킹을 계산하는 메서드
+    // 내 좋아요 총합을 기준으로 사용자 랭킹을 계산하는 메서드
+    Long getRankingByLikes(Long userLikes);
+
+    // 사용자 ID에 해당하는 좋아요 총합을 구하는 메서드
+    Long getUserRankingbyLiked(String username);
+
+    // 해당 사용자의 좋아요 총합을 기준으로 사용자 랭킹을 계산하는 메서드
     Long getUserRankingByLikes(Long userLikes);
 
 }

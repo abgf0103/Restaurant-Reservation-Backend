@@ -55,7 +55,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @ApiOperation("사용자 리뷰 랭킹(좋아요 수에 의한 순위)")
+    @ApiOperation("내 리뷰 랭킹(좋아요 수에 의한 순위)")
     @GetMapping("/LikedRanking")
     public ResponseEntity<?> getRankingByLikes(@CurrentUser CustomUserDetails currentUser) {
         Long userId = currentUser.getId();
@@ -70,6 +70,13 @@ public class ReviewController {
     public ResponseEntity<?> getReviewsByUsername(@PathVariable String username) {
         log.info("Fetching reviews for username: " + username); // 로그 추가
         return ResponseEntity.ok(reviewService.getReviewsByUsername(username));
+    }
+
+    @ApiOperation("특정 사용자 리뷰 랭킹(좋아요 수에 의한 순위)")
+    @GetMapping("/UserLikedRanking/{username}")
+    public ResponseEntity<?> getRankingByLikes(@PathVariable String username) {
+        Long ranking = reviewService.getUserRankingByLikes(username);  // 랭킹 계산을 위한 서비스 호출
+        return ResponseEntity.ok(ranking);  // 랭킹 반환
     }
 
     @ApiOperation("리뷰 수정")

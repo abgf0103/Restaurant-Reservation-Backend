@@ -82,5 +82,15 @@
         WHERE USER_ID = #{userId}
     </select>
 
+    <update id="userPwUpdate" parameterType="kr.re.kh.model.User">
+        UPDATE USERS
+        SET NAME = #{name},
+        PHONE = #{phone}
+        <if test="password != null">
+            , PASSWORD = #{password}
+        </if>
+        WHERE EMAIL = #{email}
+    </update>
+
 
 </mapper>

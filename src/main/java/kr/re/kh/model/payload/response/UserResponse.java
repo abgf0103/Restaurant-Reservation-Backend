@@ -24,7 +24,7 @@ public class UserResponse {
     private Long fileId;
 
 
-    public UserResponse(String username, String email, Set<Role> roles, Long id, String phone , String name , Long fileId) {
+    public UserResponse(String username, String email, Set<Role> roles, Long id, String phone , String name , Long fileId, boolean active) {
         this.username = username;
         this.email = email;
         this.roles = roles;
@@ -32,6 +32,7 @@ public class UserResponse {
         this.phone = phone;
         this.name = name;
         this.fileId = fileId; // 파일아이디 추가
+        this.active = active;
     }
 
     public UserResponse(String username, String email, Set<Role> roles, Long id, boolean active, String name, String phone , Long fileId) {

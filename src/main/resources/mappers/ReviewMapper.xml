@@ -15,9 +15,11 @@
         R.LIKE_COUNT AS likeCount, <!-- LIKE 컬럼을 LIKE_COUNT로 변경 -->
         R.username,
         R.RESERVE_ID,
-        S.store_name AS storeName
+        S.store_name AS storeName,
+        U.FILE_ID AS fileId  <!-- USERS 테이블과 조인하여 fileId 가져오기 -->
         FROM review R
         JOIN store S ON R.store_id = S.store_id
+        LEFT JOIN USERS U ON U.username = R.username  <!-- USERS 테이블을 LEFT JOIN하여 fileId 가져오기 -->
         <where>
             <if test="searchCode != null and searchCode != ''">
                 AND R.store_id = #{searchCode}

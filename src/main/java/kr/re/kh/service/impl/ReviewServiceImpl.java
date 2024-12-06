@@ -38,7 +38,11 @@ public class ReviewServiceImpl implements ReviewService {
         // 기존 리뷰 목록 조회 (기본 리뷰 정보)
         List<Review> reviews = reviewMapper.selectReview(searchHelper);
 
+
+
         for (Review item : reviews) {
+            // 로그 추가: 각 리뷰의 fileId 출력
+            log.info("Review ID: {}, File ID: {}", item.getReviewId(), item.getFileId());
             // 리뷰와 파일 목록 조회
             SearchHelper s = SearchHelper.builder()
                     .userId(item.getUserId())

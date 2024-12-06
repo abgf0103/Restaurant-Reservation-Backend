@@ -1,23 +1,24 @@
 package kr.re.kh.service.impl;
 
 import kr.re.kh.mapper.ReservationMapper;
+import kr.re.kh.model.vo.NotificationVO;
 import kr.re.kh.model.vo.ReservationVO;
+import kr.re.kh.service.NotificationService;
 import kr.re.kh.service.ReservationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationMapper reservationMapper;
-
-    @Autowired
-    public ReservationServiceImpl(ReservationMapper reservationMapper) {
-        this.reservationMapper = reservationMapper;
-    }
+    private final NotificationService notificationService;
 
     @Override
     public void createReservation(ReservationVO reservation) {
@@ -26,7 +27,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Optional<ReservationVO> getReservationById(Long reserveId) {
-        return reservationMapper.findReservationById(reserveId);
+        Optional<ReservationVO> reservation = reservationMapper.findReservationById(reserveId);
+        log.info("Reservation fetched: {}", reservation); // 쿼리 결과 로그 추가
+        return reservation;
     }
 
     @Override
@@ -45,8 +48,40 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void updateReservationStatus(Long reserveId, int status) {
+    public void updateReservationStatus(Long reserveId, int status, Long userId) {
         reservationMapper.updateReservationStatus(reserveId, status);
+
+        // 예약 정보 가져오기
+        Optional<ReservationVO> reservationOpt = reservationMapper.findReservationById(reserveId);
+        if (!reservationOpt.isPresent()) {
+            throw new RuntimeException("예약을 찾을 수 없습니다: ID = " + reserveId);
+        }
+
+        ReservationVO reservation = reservationOpt.get();
+
+        // 알림 메시지 설정
+        String message;
+        switch (status) {
+            case 1:
+                message = reservation.getStoreName() + "의 예약이 확정되었습니다.";
+                break;
+            case 3:
+                message = reservation.getStoreName() + "의 예약이 취소되었습니다.";
+                break;
+            case 2:
+                message = reservation.getStoreName() + "의 예약이 완료되었습니다.";
+                break;
+            default:
+                message = reservation.getStoreName() + "의 예약 상태가 업데이트되었습니다.";
+                break;
+        }
+
+        // 알림 생성
+        NotificationVO notification = NotificationVO.builder()
+                .userId(userId)
+                .message(message)
+                .build();
+        notificationService.createNotification(notification);
     }
 
     @Override
@@ -60,19 +95,11 @@ public class ReservationServiceImpl implements ReservationService {
         return reservation.map(res -> res.getUserId().equals(userId)).orElse(false);
     }
 
-    /**
-     * 예약 확정
-     * @param reserveId
-     */
     @Override
     public void confirmReservation(Long reserveId) {
         reservationMapper.confirmReservation(reserveId);
     }
 
-    /**
-     * 예약 취소
-     * @param reserveId
-     */
     @Override
     public void cancelReservation(Long reserveId) {
         reservationMapper.cancelReservation(reserveId);

@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByEmailAndName(String name, String email);
+    Optional<User> findByPhoneAndEmail(String phone, String email); // 아이디찾기
 
     Boolean existsByUsername(String username);
 
@@ -48,4 +48,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByUsernameIsContaining(String searchKeyword);
     List<User> findByNameIsContaining(String searchKeyword);
 
+    User findByFileId(Long fileId);
 }

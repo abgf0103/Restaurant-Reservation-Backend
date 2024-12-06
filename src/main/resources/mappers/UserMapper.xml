@@ -27,14 +27,14 @@
     <select id="isAdminByUserId"
             parameterType="Long"
             resultType="Long">
-        SELECT ROLE_ID
+        SELECT COUNT(ROLE_ID)
         FROM USER_AUTHORITY UA
                 JOIN USERS U
                     ON UA.USER_ID = U.USER_ID
-        WHERE UA.USER_ID = #{userId}
+        WHERE UA.USER_ID = #{userId} AND UA.ROLE_ID IN (2,3)
     </select>
-    
-    
+
+
     <insert id="insertManager"
             parameterType="Long"
            >
@@ -47,9 +47,9 @@
     </insert>
 
     <select id="findUserByInfo" parameterType="java.util.Map" resultType="kr.re.kh.model.User">
-        SELECT USERNAME, NAME, EMAIL
+        SELECT USERNAME, PHONE, EMAIL
         FROM USERS
-        WHERE EMAIL = #{email} AND USERNAME = #{username} AND NAME = #{name}
+        WHERE EMAIL = #{email} AND USERNAME = #{username} AND PHONE = #{phone}
     </select>
 
     <update id="updatePassword" parameterType="kr.re.kh.model.User">
@@ -81,6 +81,16 @@
         FROM USERS
         WHERE USER_ID = #{userId}
     </select>
+
+    <update id="userPwUpdate" parameterType="kr.re.kh.model.User">
+        UPDATE USERS
+        SET NAME = #{name},
+        PHONE = #{phone}
+        <if test="password != null">
+            , PASSWORD = #{password}
+        </if>
+        WHERE EMAIL = #{email}
+    </update>
 
 
 </mapper>

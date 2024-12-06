@@ -4,11 +4,18 @@
 
     <!-- 가게 목록 -->
     <select id="selectAllStore" parameterType="SearchHelper" resultType="StoreVO">
-        SELECT s.*, uf.file_name
-        FROM STORE s
-        LEFT  JOIN UPLOAD_FILE uf ON s.FILE_ID = uf.ID
-        WHERE s.IS_ACTIVE = 1
-        ORDER BY DBMS_RANDOM.VALUE
+        SELECT S.*, CNT.CNT, CNT.AVG
+        FROM         (SELECT s.*, uf.file_name
+                      FROM STORE s
+                               LEFT JOIN UPLOAD_FILE uf
+                                   ON s.FILE_ID = uf.ID
+                      WHERE s.IS_ACTIVE = 1) S
+                         LEFT JOIN (
+                            SELECT COUNT(*) AS CNT, AVG(RATING) AS AVG, STORE_ID
+                            FROM REVIEW
+                            GROUP BY STORE_ID) CNT
+                             ON S.STORE_ID = CNT.STORE_ID
+        ORDER BY CNT DESC NULLS LAST, AVG DESC NULLS LAST, DBMS_RANDOM.VALUE
     </select>
 
     <!--  비슷한 가게 목록  -->

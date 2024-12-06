@@ -81,8 +81,8 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    public Optional<User> findByEmailAndName(String email, String name) {
-        return userRepository.findByEmailAndName(email, name);  // 두 조건을 모두 만족하는 사용자 검색
+    public Optional<User> findByPhoneAndEmail(String email, String phone) {
+        return userRepository.findByPhoneAndEmail(phone, email);  // 두 조건을 모두 만족하는 사용자 검색
     }
 
     /**
@@ -363,6 +363,7 @@ public class UserService {
                 return true;
             }
         } else if (registrationRequest.getId() > 0) {
+            log.info(registrationRequest.toString());
             // 수정
 //            if (registrationRequest.getPassword().isBlank()) {
 //                throw new BadRequestException("비밀번호를 입력해 주세요.");
@@ -376,7 +377,11 @@ public class UserService {
             User user = new User();
             user.setId(registrationRequest.getId());
             user.setUsername(registrationRequest.getUsername());
-            if (!registrationRequest.getPassword().isEmpty()) user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+
+            if (registrationRequest.getPassword() != null && !registrationRequest.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+
+            }
             if (!registrationRequest.getEmail().isEmpty()) user.setEmail(registrationRequest.getEmail());
             user.setName(registrationRequest.getName());
             user.setActive(registrationRequest.isActive());
@@ -391,7 +396,10 @@ public class UserService {
                 roleName = "ADMIN";
             }
             user.addRoles(getUserRoles(roleName));
-            userRepository.save(user);
+            userMapper.userPwUpdate(user);
+//            userRepository.save(user); // 여기를 삭제
+
+
             return true;
         } else {
             throw new BadRequestException("잘못된 요청입니다.");
@@ -410,9 +418,9 @@ public class UserService {
     //비밀번호 생성
 
     // 사용자 정보 조회 및 임시 비밀번호 생성
-    public String generateTempPassword(String email, String username, String name) {
+    public String generateTempPassword(String email, String username, String phone) {
         // 1. 사용자 정보 조회
-        Map<String, String> params = Map.of("email", email, "username", username, "name", name);
+        Map<String, String> params = Map.of("email", email, "username", username, "phone", phone);
         User user = userMapper.findUserByInfo(params);
 
         // 2. 사용자가 존재하는지 확인
@@ -476,5 +484,6 @@ public class UserService {
         //isActive = 1이면 true
         return userMapper.userIsActive(userId);
     }
+
 
 }

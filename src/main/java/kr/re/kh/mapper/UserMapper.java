@@ -25,4 +25,6 @@ public interface UserMapper {
     void deactiveUser(Long userId); //유저 비활성화(어드민)
 
     boolean userIsActive(Long userId); //유저 활성여부
+
+    void userPwUpdate(User user);
     }

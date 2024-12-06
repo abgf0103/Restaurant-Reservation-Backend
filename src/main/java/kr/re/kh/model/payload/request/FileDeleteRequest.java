@@ -15,4 +15,5 @@ public class FileDeleteRequest {
     private String fileTarget;
     private Long reserveId;
 
+
 }

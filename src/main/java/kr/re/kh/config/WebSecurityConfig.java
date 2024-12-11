@@ -135,6 +135,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/api/review/getRatingAvgByStoreId").permitAll()
                 .antMatchers("/**/api/review/list").permitAll()
                 .antMatchers("/**/api/review/likes/status").permitAll()
+                .antMatchers("/**/api/review/view-by-username/{username}").permitAll()
+                .antMatchers("/**/api/review/UserLikedRanking/{username}").permitAll()
                 .antMatchers("/**/api/store/view/**").permitAll()
                 .antMatchers("/**/api/store/search").permitAll()
                 .antMatchers("/**/api/category/getCategoryIdByStoreId").permitAll()

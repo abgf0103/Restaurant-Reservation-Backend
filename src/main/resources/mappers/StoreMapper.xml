@@ -156,12 +156,20 @@
     <select id="selectStoreByCategoryId"
             parameterType="Long"
             resultType="StoreVO">
-        SELECT S.*, UF.FILE_NAME
-        FROM STORE S
-                 JOIN UPLOAD_FILE UF ON S.FILE_ID = UF.ID
-                 JOIN STORE_CATEGORY SC
-                      ON S.STORE_ID = SC.STORE_ID
-        WHERE SC.CATEGORY_ID = #{cateogryId} AND S.IS_ACTIVE = 1
+        SELECT S.*, CNT.CNT, CNT.AVG
+        FROM         (        SELECT S.*, UF.FILE_NAME
+                              FROM STORE S
+                                       JOIN UPLOAD_FILE UF ON S.FILE_ID = UF.ID
+                                       JOIN STORE_CATEGORY SC
+                                            ON S.STORE_ID = SC.STORE_ID
+                              WHERE SC.CATEGORY_ID = #{cateogryId} AND S.IS_ACTIVE = 1) S
+                         LEFT JOIN (
+            SELECT COUNT(*) AS CNT, AVG(RATING) AS AVG, STORE_ID
+            FROM REVIEW
+            GROUP BY STORE_ID) CNT
+                                   ON S.STORE_ID = CNT.STORE_ID
+        ORDER BY CNT DESC NULLS LAST, AVG DESC NULLS LAST, DBMS_RANDOM.VALUE
+
     </select>
 
 
@@ -169,13 +177,22 @@
     <select id="searchStore"
             parameterType="String"
             resultType="StoreVO">
-        SELECT S.*, UF.FILE_NAME
-        FROM STORE S
-                 JOIN UPLOAD_FILE UF ON S.FILE_ID = UF.ID
+        SELECT S.*, CNT.CNT, CNT.AVG
+        FROM         (SELECT s.*, uf.file_name
+                      FROM STORE s
+                               LEFT JOIN UPLOAD_FILE uf
+                                         ON s.FILE_ID = uf.ID
+                      WHERE s.IS_ACTIVE = 1) S
+                         LEFT JOIN (
+            SELECT COUNT(*) AS CNT, AVG(RATING) AS AVG, STORE_ID
+            FROM REVIEW
+            GROUP BY STORE_ID) CNT
+            ON S.STORE_ID = CNT.STORE_ID
+
         WHERE STORE_NAME LIKE '%' || #{searchKeyword} || '%'
            OR DESCRIPTION LIKE '%' || #{searchKeyword} || '%'
-            OR IDENTITY LIKE '%' || #{searchKeyword} || '%'
-        ORDER BY STORE_ID DESC
+           OR IDENTITY LIKE '%' || #{searchKeyword} || '%'
+        ORDER BY CNT DESC NULLS LAST, AVG DESC NULLS LAST, DBMS_RANDOM.VALUE
     </select>
 
     <!-- 파일 ID로 파일 이름을 가져오기 -->

@@ -49,10 +49,18 @@
 
     <!-- 특정 가게의 모든 예약 조회 -->
     <select id="findAllReservationsByStoreId" resultType="kr.re.kh.model.vo.ReservationVO">
-        SELECT * FROM RESERVE
-        WHERE store_id = #{storeId}
-        ORDER BY reserve_status ASC, created_at DESC, reserve_date ASC
+        SELECT
+        r.*,
+        u.NAME AS username
+        FROM
+        RESERVE r
+        JOIN USERS u ON r.USER_ID = u.USER_ID
+        WHERE r.STORE_ID = #{storeId}
+        ORDER BY r.RESERVE_STATUS ASC,
+        r.CREATED_AT DESC,
+        r.RESERVE_DATE ASC
     </select>
+
 
     <!-- 예약 상태 업데이트 (가게 회원) -->
     <update id="updateReservationStatus">

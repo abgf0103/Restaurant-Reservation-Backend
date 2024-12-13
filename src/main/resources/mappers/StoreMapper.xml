@@ -150,6 +150,7 @@
         LEFT  JOIN UPLOAD_FILE uf ON S.FILE_ID = uf.ID
         WHERE S.USER_ID = #{userId}
         AND S.IS_ACTIVE IN (0, 1)
+        ORDER BY S.UPDATED_AT DESC NULLS LAST
     </select>
 
     <!--  카테고리로 가게 조회  -->
